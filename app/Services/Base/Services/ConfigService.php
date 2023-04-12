@@ -460,16 +460,6 @@ class ConfigService implements ConfigServiceInterface
     }
 
     /**
-     * 获取高德地图应用key
-     *
-     * @return string
-     */
-    public function getAmapkey(): string
-    {
-        return config('meedu.services.amap.key', '');
-    }
-
-    /**
      * 获取微信扫码登录成功回复语
      *
      * @return \Illuminate\Config\Repository|\Illuminate\Contracts\Foundation\Application|mixed

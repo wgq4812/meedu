@@ -45,11 +45,6 @@ class UserRegisterIpToAreaJob implements ShouldQueue
             }
 
             $area = Ip::ip2area($user['register_ip']);
-            if (!$area) {
-                Log::info(__METHOD__ . '|无法将ip转换为area');
-                return;
-            }
-
             $userService->setRegisterArea($this->userId, $area);
         } catch (\Exception $e) {
             exception_record($e);
