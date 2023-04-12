@@ -71,4 +71,9 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('meedu.system.logo') ?? '';
     }
+
+    public function getAliCallbackKey(): string
+    {
+        return config('meedu.upload.video.aliyun.callback_key') ?? '';
+    }
 }

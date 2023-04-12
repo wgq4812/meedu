@@ -97,6 +97,7 @@ return [
                 'host' => '',
                 'access_key_id' => '',
                 'access_key_secret' => '',
+                'callback_key' => '',
             ],
         ],
         'attach' => [

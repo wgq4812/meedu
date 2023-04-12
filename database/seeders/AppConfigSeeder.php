@@ -752,6 +752,14 @@ class AppConfigSeeder extends Seeder
                 'key' => 'meedu.upload.video.aliyun.host',
                 'value' => '',
             ],
+            [
+                'group' => '视频',
+                'name' => '阿里云点播回调密钥',
+                'field_type' => 'text',
+                'sort' => 50,
+                'key' => 'meedu.upload.video.aliyun.callback_key',
+                'value' => '',
+            ],
 
             // 腾讯云视频
             [
