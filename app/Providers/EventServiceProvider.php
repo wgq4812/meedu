@@ -103,6 +103,7 @@ class EventServiceProvider extends ServiceProvider
         // 阿里云点播回调时间
         'App\Events\AliVodCallbackEvent' => [
             'App\Listeners\AliVodCallbackEvent\VideoCreatedListener',
+            'App\Listeners\AliVodCallbackEvent\DestroyListener',
         ],
     ];
 }
