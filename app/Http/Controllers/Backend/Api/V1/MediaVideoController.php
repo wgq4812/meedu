@@ -84,7 +84,7 @@ class MediaVideoController extends BaseController
         return $this->successData($mediaVideo);
     }
 
-    public function deleteVideos(Request $request, Vod $aliyunVod, \App\Meedu\Tencent\Vod $tencentVod)
+    public function destroy(Request $request, Vod $aliyunVod, \App\Meedu\Tencent\Vod $tencentVod)
     {
         $ids = $request->input('ids');
         if (!$ids || !is_array($ids)) {
