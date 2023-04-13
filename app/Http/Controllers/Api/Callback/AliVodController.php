@@ -24,7 +24,7 @@ class AliVodController
         $key = $configService->getAliCallbackKey();
         $localSign = md5($url . '|' . $timestamp . '|' . $key);
         if ($localSign !== $vodSign) {
-//            abort(403);
+            abort(403);
         }
 
         // 事件类型参考:https://help.aliyun.com/document_detail/55627.html

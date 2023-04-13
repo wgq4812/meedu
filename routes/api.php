@@ -11,3 +11,5 @@ Route::any('/wechat/serve', 'Api\\Wechat\\MpWechatController@serve');
 Route::any('/wechat/refund/notify', 'Api\\Wechat\\RefundController@notify')->name('wechat.pay.refund.notify');
 
 Route::any('/callback/ali/vod', 'Api\\Callback\\AliVodController@handle');
+
+Route::any('/callback/tencent/vod/{key}', 'Api\\Callback\\TencentVodController@handle');

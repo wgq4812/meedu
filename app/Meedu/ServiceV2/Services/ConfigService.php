@@ -76,4 +76,9 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('meedu.upload.video.aliyun.callback_key') ?? '';
     }
+
+    public function getTencentVodCallbackKey(): string
+    {
+        return config('tencent.vod.callback_key') ?? '';
+    }
 }
