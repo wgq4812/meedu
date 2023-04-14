@@ -13,11 +13,14 @@ use App\Constant\FrontendConstant;
 use App\Events\AliVodCallbackEvent;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\InteractsWithQueue;
 use App\Services\Course\Models\MediaVideo;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class VideoCreatedListener implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     public function handle(AliVodCallbackEvent $event)
     {
         if ('success' !== $event->params['Status']) {

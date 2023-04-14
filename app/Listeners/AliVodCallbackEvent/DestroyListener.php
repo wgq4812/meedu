@@ -11,11 +11,14 @@ namespace App\Listeners\AliVodCallbackEvent;
 use App\Constant\FrontendConstant;
 use App\Events\AliVodCallbackEvent;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Queue\InteractsWithQueue;
 use App\Services\Course\Models\MediaVideo;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class DestroyListener implements ShouldQueue
 {
+    use InteractsWithQueue;
+
     public function handle(AliVodCallbackEvent $event)
     {
         if ('DeleteMediaComplete' !== $event->event) {
