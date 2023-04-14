@@ -35,4 +35,6 @@ interface ConfigServiceInterface
     public function getLogo(): string;
 
     public function getAliCallbackKey(): string;
+
+    public function getTencentVodCallbackKey(): string;
 }

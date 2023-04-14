@@ -100,10 +100,15 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UserVerifyFaceSuccessEvent\UserNotifyListener',
             'App\Listeners\UserVerifyFaceSuccessEvent\UserProfileUpdateListener',
         ],
-        // 阿里云点播回调时间
+        // 阿里云点播回调
         'App\Events\AliVodCallbackEvent' => [
             'App\Listeners\AliVodCallbackEvent\VideoCreatedListener',
             'App\Listeners\AliVodCallbackEvent\DestroyListener',
+        ],
+        // 腾讯云点播回调
+        'App\Events\TencentVodCallbackEvent' => [
+            'App\Listeners\TencentVodCallbackEvent\VideoCreatedListener',
+            'App\Listeners\TencentVodCallbackEvent\DestroyListener',
         ],
     ];
 }
