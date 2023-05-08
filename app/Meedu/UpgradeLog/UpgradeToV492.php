@@ -9,12 +9,14 @@
 namespace App\Meedu\UpgradeLog;
 
 use App\Services\Base\Model\AppConfig;
+use App\Models\AdministratorPermission;
 
 class UpgradeToV492
 {
     public static function handle()
     {
         self::deleteConfig();
+        self::deletePermissions();
     }
 
     public static function deleteConfig()
@@ -22,6 +24,15 @@ class UpgradeToV492
         AppConfig::query()
             ->whereIn('key', [
                 'meedu.services.amap.key',
+            ])
+            ->delete();
+    }
+
+    public static function deletePermissions()
+    {
+        AdministratorPermission::query()
+            ->whereIn('slug', [
+                'administrator_role.edit',
             ])
             ->delete();
     }
