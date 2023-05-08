@@ -10,6 +10,11 @@ namespace App\Exceptions;
 
 use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
 
+/**
+ * 影响到系统正常运行的异常
+ * 该异常会记录到log中
+ * 响应代码为500
+ */
 class SystemException extends \Exception
 {
     use ResponseTrait;
@@ -21,9 +26,6 @@ class SystemException extends \Exception
      */
     public function render()
     {
-        if (request()->wantsJson()) {
-            return $this->error(__('错误'));
-        }
-        abort(500, $this->getMessage());
+        return $this->error(__('错误'));
     }
 }

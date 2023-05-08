@@ -12,7 +12,6 @@ use Illuminate\Support\Str;
 use App\Constant\ApiV2Constant;
 use App\Constant\BackendApiConstant;
 use Illuminate\Auth\AuthenticationException;
-use App\Exceptions\Backend\ValidateException;
 use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -27,9 +26,9 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        ApiV2Exception::class,
         ServiceException::class,
-        ValidateException::class,
+        BackendValidateException::class,
+        SucAndReturnException::class,
     ];
 
     /**
@@ -44,7 +43,7 @@ class Handler extends ExceptionHandler
 
     public function render($request, \Throwable $e)
     {
-        if ($e instanceof ServiceException || $e instanceof ApiV2Exception) {
+        if ($e instanceof ServiceException) {
             return parent::render($request, $e);
         }
 

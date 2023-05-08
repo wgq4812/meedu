@@ -6,9 +6,9 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Exceptions\Backend;
+namespace App\Exceptions;
 
-class ValidateException extends \Exception
+class BackendValidateException extends \Exception
 {
     /**
      * @return \Illuminate\Http\JsonResponse

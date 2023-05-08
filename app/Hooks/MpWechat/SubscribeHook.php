@@ -9,17 +9,17 @@
 namespace App\Hooks\MpWechat;
 
 use App\Bus\AuthBus;
+use App\Meedu\Wechat;
 use App\Bus\WechatBindBus;
 use App\Bus\WechatScanBus;
 use App\Constant\CacheConstant;
-use App\Exceptions\ServiceException;
 use App\Meedu\Hooks\HookParams;
+use App\Exceptions\ServiceException;
 use App\Meedu\Hooks\HookRuntimeInterface;
-use App\Meedu\Wechat;
-use App\Services\Base\Interfaces\CacheServiceInterface;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Base\Services\CacheService;
 use App\Services\Base\Services\ConfigService;
+use App\Services\Base\Interfaces\CacheServiceInterface;
+use App\Services\Base\Interfaces\ConfigServiceInterface;
 
 // @Deprecated
 class SubscribeHook implements HookRuntimeInterface
