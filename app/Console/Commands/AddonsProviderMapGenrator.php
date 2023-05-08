@@ -10,6 +10,7 @@ namespace App\Console\Commands;
 
 use App\Meedu\Addons;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class AddonsProviderMapGenrator extends Command
 {
@@ -18,7 +19,7 @@ class AddonsProviderMapGenrator extends Command
     protected $description = '重新生成已安装插件的map文件';
 
 
-    public function handle()
+    public function handle(): int
     {
         $except = $this->argument('except');
         /**
@@ -27,6 +28,6 @@ class AddonsProviderMapGenrator extends Command
         $addons = app()->make(Addons::class);
         $addons->reGenProvidersMap($except);
 
-        return 0;
+        return CommandAlias::SUCCESS;
     }
 }

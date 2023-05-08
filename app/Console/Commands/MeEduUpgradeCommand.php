@@ -11,6 +11,7 @@ namespace App\Console\Commands;
 use App\Meedu\Upgrade;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class MeEduUpgradeCommand extends Command
 {
@@ -38,12 +39,7 @@ class MeEduUpgradeCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function handle()
+    public function handle(): int
     {
         // 数据库迁移命令
         $this->info('执行数据库迁移...');
@@ -73,6 +69,6 @@ class MeEduUpgradeCommand extends Command
         $this->info('清除视图缓存...');
         Artisan::call('view:clear');
 
-        return 0;
+        return CommandAlias::SUCCESS;
     }
 }

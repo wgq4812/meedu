@@ -12,6 +12,8 @@ use App\Bus\RefundBus;
 use Illuminate\Console\Command;
 use App\Services\Order\Services\OrderService;
 use App\Services\Order\Interfaces\OrderServiceInterface;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class RefundQueryCommand extends Command
 {
@@ -29,7 +31,10 @@ class RefundQueryCommand extends Command
      */
     protected $description = '退款订单状态查询命令';
 
-    public function handle()
+    /**
+     * @throws BindingResolutionException
+     */
+    public function handle(): int
     {
         /**
          * @var OrderService $orderService
@@ -39,7 +44,7 @@ class RefundQueryCommand extends Command
         $refundOrders = $orderService->takeProcessingRefundOrders(10);
         if (!$refundOrders) {
             $this->line('暂无退款订单需要处理');
-            return Command::SUCCESS;
+            return CommandAlias::SUCCESS;
         }
 
         /**
@@ -52,6 +57,6 @@ class RefundQueryCommand extends Command
             $refundBus->queryHandler($refundOrder);
         }
 
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

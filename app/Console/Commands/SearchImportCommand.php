@@ -10,6 +10,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Meedu\UpgradeLog\UpgradeToV45;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class SearchImportCommand extends Command
 {
@@ -42,9 +43,9 @@ class SearchImportCommand extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         UpgradeToV45::courseAndVideoMigrateMeiliSearch();
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

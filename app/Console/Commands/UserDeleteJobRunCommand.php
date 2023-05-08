@@ -10,6 +10,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class UserDeleteJobRunCommand extends Command
 {
@@ -27,7 +28,7 @@ class UserDeleteJobRunCommand extends Command
      */
     protected $description = '用户注销任务执行程序';
 
-    public function handle()
+    public function handle(): int
     {
         /**
          * @var UserServiceInterface $userService
@@ -35,6 +36,6 @@ class UserDeleteJobRunCommand extends Command
         $userService = app()->make(UserServiceInterface::class);
         $userService->userDeleteBatchHandle();
 
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

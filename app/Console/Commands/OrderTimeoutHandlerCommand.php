@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\Services\Order\Services\OrderService;
 use App\Services\Order\Interfaces\OrderServiceInterface;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class OrderTimeoutHandlerCommand extends Command
 {
@@ -48,19 +49,19 @@ class OrderTimeoutHandlerCommand extends Command
     /**
      * @throws \App\Exceptions\ServiceException
      */
-    public function handle()
+    public function handle(): int
     {
         // 超时一个小时未支付订单
         $now = Carbon::now()->subMinutes(60);
         $orders = $this->orderService->getTimeoutOrders($now->toDateTimeString());
         if (!$orders) {
-            return;
+            return CommandAlias::SUCCESS;
         }
         foreach ($orders as $order) {
             $this->line($order['order_id']);
             $this->orderService->cancel($order['id']);
         }
 
-        return 0;
+        return CommandAlias::SUCCESS;
     }
 }

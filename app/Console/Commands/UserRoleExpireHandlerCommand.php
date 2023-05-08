@@ -11,6 +11,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Services\Member\Services\UserService;
 use App\Services\Member\Interfaces\UserServiceInterface;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class UserRoleExpireHandlerCommand extends Command
 {
@@ -18,7 +19,7 @@ class UserRoleExpireHandlerCommand extends Command
 
     protected $description = '用户VIP过期自动清除命令';
 
-    public function handle()
+    public function handle(): int
     {
         /**
          * @var UserService $userService
@@ -26,6 +27,7 @@ class UserRoleExpireHandlerCommand extends Command
         $userService = app()->make(UserServiceInterface::class);
         $count = $userService->resetRoleExpiredUsers();
         $this->line(sprintf(__('本次处理%d位VIP已过期用户'), $count));
-        return 0;
+
+        return CommandAlias::SUCCESS;
     }
 }
