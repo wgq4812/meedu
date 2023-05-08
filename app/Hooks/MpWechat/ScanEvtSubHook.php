@@ -6,19 +6,19 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Hooks;
+namespace App\Hooks\MpWechat;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
 use App\Bus\WechatScanBus;
-use App\Meedu\Hooks\HookParams;
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
+use App\Meedu\Hooks\HookParams;
 use App\Meedu\Hooks\HookRuntimeInterface;
 use App\Meedu\ServiceV2\Services\UserService;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
+use App\Meedu\Wechat;
 
-class MpWechatScanEvtSubHook implements HookRuntimeInterface
+class ScanEvtSubHook implements HookRuntimeInterface
 {
     public function handle(HookParams $params, \Closure $next)
     {

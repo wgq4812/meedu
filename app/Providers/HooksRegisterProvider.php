@@ -8,21 +8,21 @@
 
 namespace App\Providers;
 
-use App\Meedu\Hooks\HookContainer;
-use App\Hooks\MpWechatSubscribeHook;
-use App\Hooks\MpWechatScanEvtSubHook;
-use App\Hooks\MpWechatMessageReplyHook;
-use Illuminate\Support\ServiceProvider;
+use App\Hooks\MpWechat\MessageReplyHook;
+use App\Hooks\MpWechat\ScanEvtSubHook;
+use App\Hooks\MpWechat\SubscribeHook;
 use App\Hooks\ViewBlock\Data\VodV1DataHook;
 use App\Meedu\Hooks\Constant\PositionConstant;
+use App\Meedu\Hooks\HookContainer;
+use Illuminate\Support\ServiceProvider;
 
 class HooksRegisterProvider extends ServiceProvider
 {
     protected $hooks = [
         PositionConstant::MP_WECHAT_RECEIVER_MESSAGE => [
-            MpWechatSubscribeHook::class,
-            MpWechatMessageReplyHook::class,
-            MpWechatScanEvtSubHook::class,
+            SubscribeHook::class,
+            MessageReplyHook::class,
+            ScanEvtSubHook::class,
         ],
         PositionConstant::VIEW_BLOCK_DATA_RENDER => [
             VodV1DataHook::class,

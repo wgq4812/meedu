@@ -6,23 +6,23 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Hooks;
+namespace App\Hooks\MpWechat;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
 use App\Bus\WechatBindBus;
 use App\Bus\WechatScanBus;
 use App\Constant\CacheConstant;
-use App\Meedu\Hooks\HookParams;
 use App\Exceptions\ServiceException;
+use App\Meedu\Hooks\HookParams;
 use App\Meedu\Hooks\HookRuntimeInterface;
-use App\Services\Base\Services\CacheService;
-use App\Services\Base\Services\ConfigService;
+use App\Meedu\Wechat;
 use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Services\Base\Services\CacheService;
+use App\Services\Base\Services\ConfigService;
 
 // @Deprecated
-class MpWechatSubscribeHook implements HookRuntimeInterface
+class SubscribeHook implements HookRuntimeInterface
 {
     public function handle(HookParams $params, \Closure $next)
     {

@@ -6,14 +6,14 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Hooks;
+namespace App\Hooks\MpWechat;
 
 use App\Meedu\Hooks\HookParams;
 use App\Meedu\Hooks\HookRuntimeInterface;
-use App\Services\Other\Services\MpWechatService;
 use App\Services\Other\Interfaces\MpWechatServiceInterface;
+use App\Services\Other\Services\MpWechatService;
 
-class MpWechatMessageReplyHook implements HookRuntimeInterface
+class MessageReplyHook implements HookRuntimeInterface
 {
     public const MSG_TYPE_TEXT = 'text';
     public const MSG_TYPE_EVENT = 'event';
