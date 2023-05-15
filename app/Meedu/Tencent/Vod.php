@@ -8,7 +8,9 @@
 
 namespace App\Meedu\Tencent;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\ServiceException;
 use App\Meedu\Tencent\Sub\RefererAuthPolicy;
 use App\Services\Base\Services\ConfigService;
 use App\Meedu\Tencent\Sub\UrlSignatureAuthPolicy;
@@ -24,11 +26,67 @@ use TencentCloud\Vod\V20180717\Models\DescribeVodDomainsRequest;
 use TencentCloud\Vod\V20180717\Models\DescribeEventConfigRequest;
 use TencentCloud\Vod\V20180717\Models\ModifyVodDomainConfigRequest;
 use TencentCloud\Vod\V20180717\Models\CreateProcedureTemplateRequest;
+use TencentCloud\Vod\V20180717\Models\ProcessMediaByProcedureRequest;
 use TencentCloud\Vod\V20180717\Models\DescribeProcedureTemplatesRequest;
 
 class Vod
 {
     protected $client;
+
+    /**
+     * @param string $fileId
+     * @param $isTry
+     * @return string
+     * @throws ServiceException
+     */
+    public function getPlaySign(string $fileId, $isTry = false): string
+    {
+        $config = $this->config();
+        if (!$config['secret_id'] || !$config['secret_key']) {
+            throw new ServiceException(__('腾讯云点播未配置：:msg', ['msg' => 'SecretId和SecretKey']));
+        }
+        if (!$config['domain']) {
+            throw new ServiceException(__('腾讯云点播未配置：:msg', ['msg' => '播放域名']));
+        }
+        if (!$config['play_key']) {
+            throw new ServiceException(__('腾讯云点播未配置：:msg', ['msg' => '播放域名的key未配置']));
+        }
+
+        $header = [
+            'alg' => 'HS256',
+            'typ' => 'JWT',
+        ];
+        $now = time();
+        // 试看逻辑
+        $trySeeSeconds = 0;
+        if ($isTry && $freeSeconds = ($video['free_seconds'] ?? 0)) {
+            $trySeeSeconds = max($freeSeconds, 30);
+        }
+        // 加密参数
+        $data = [
+            'appId' => (int)$config['app_id'],
+            'fileId' => $fileId,
+            'contentInfo' => [
+                // todo - 决定输入什么样的视频源[原始:Original、转码未加密:Transcode、自适应码流:ProtectedAdaptive]
+            ],
+            'currentTimeStamp' => $now,
+            'expireTimeStamp' => $now + 3600 * 3, //3小时
+            'urlAccessInfo' => [
+                'rlimit' => 1,//仅允许1个ip访问
+                'us' => Str::random(6),//随机字符串
+                'exper' => $trySeeSeconds, //试看秒数
+            ],
+        ];
+        $headerEncode = $this->base64UrlEncode(json_encode($header));
+        $dataEncode = $this->base64UrlEncode(json_encode($data));
+        $sign = $this->base64UrlEncode(hash_hmac('sha256', $headerEncode . '.' . $dataEncode, $config['secret_key'], true));
+        return $headerEncode . '.' . $dataEncode . '.' . $sign;
+    }
+
+    private function base64UrlEncode(string $input)
+    {
+        return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
+    }
 
     /**
      * 获取上传签名
@@ -54,13 +112,22 @@ class Vod
     /**
      * 删除视频文件
      * @param array $fileIds
+     * @param array $rules
      * @return void
      */
-    public function deleteVideos(array $fileIds): void
+    public function deleteVideos(array $fileIds, array $rules = []): void
     {
         foreach ($fileIds as $fileId) {
             $req = new DeleteMediaRequest();
             $req->setFileId($fileId);
+            if ($rules) {
+                $parts = [];
+                // OriginalFiles,TranscodeFiles,AdaptiveDynamicStreamingFiles,WechatPublishFiles
+                foreach ($rules as $ruleItem) {
+                    $parts[] = ['Type' => $ruleItem];
+                }
+                $req->setDeleteParts($parts);
+            }
             try {
                 // 这里只管提交不关注是否成功处理
                 $this->initClient()->DeleteMedia($req);
@@ -219,13 +286,25 @@ class Vod
         $this->initClient()->CreateProcedureTemplate($req);
     }
 
+    public function transcodeSubmit(string $fileId, string $name)
+    {
+        $config = $this->config();
+        $req = new ProcessMediaByProcedureRequest();
+        $req->setSubAppId((int)$config['app_id']);
+        $req->setFileId($fileId);
+        $req->setProcedureName($name);
+        $this->initClient()->ProcessMediaByProcedure($req);
+    }
+
     protected function config(): array
     {
         /**
          * @var ConfigService $configService
          */
         $configService = app()->make(ConfigServiceInterface::class);
-        return $configService->getTencentVodConfig();
+        $config = $configService->getTencentVodConfig();
+        $config['play_key'] = $configService->getTencentVodPlayKey();
+        return $config;
     }
 
     protected function initClient()

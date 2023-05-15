@@ -15,4 +15,8 @@ interface CourseDaoInterface
     public function videoChunk(array $ids, array $fields, array $params, array $with, array $withCount): array;
 
     public function getCoursePublishedVideoIds(int $courseId): array;
+
+    public function findOrFail(int $id): array;
+
+    public function videoFindOrFail(int $videoId, int $courseId): array;
 }

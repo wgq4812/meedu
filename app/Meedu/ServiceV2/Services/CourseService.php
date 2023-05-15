@@ -34,4 +34,14 @@ class CourseService implements CourseServiceInterface
         $videoIds = $this->courseDao->getCoursePublishedVideoIds($courseId);
         return $this->courseDao->videoChunk($videoIds, $fields, [], [], []);
     }
+
+    public function findOrFail(int $id): array
+    {
+        return $this->courseDao->findOrFail($id);
+    }
+
+    public function videoFindOrFail(int $videoId, int $courseId): array
+    {
+        return $this->courseDao->videoFindOrFail($videoId, $courseId);
+    }
 }

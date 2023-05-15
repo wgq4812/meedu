@@ -9,6 +9,7 @@
 namespace App\Meedu\ServiceV2\Services;
 
 use App\Meedu\Tencent\Vod;
+use App\Constant\TencentConstant;
 use App\Exceptions\ServiceException;
 use App\Meedu\Tencent\Sub\RefererAuthPolicy;
 use App\Meedu\Tencent\Sub\UrlSignatureAuthPolicy;
@@ -104,7 +105,7 @@ class TencentVodService implements TencentVodServiceInterface
     {
         $data = $this->vod->procedureTemplatesList($subAppId);
         $names = array_column($data['data'], 'name');
-        return in_array('MeEduSimple', $names);
+        return in_array(TencentConstant::VOD_TRANSCODE_SIMPLE_TASK, $names);
     }
 
     /**
@@ -115,5 +116,21 @@ class TencentVodService implements TencentVodServiceInterface
     public function transcodeSimpleTaskSet(string $subAppId)
     {
         $this->vod->procedureTemplateStoreSimple($subAppId);
+    }
+
+    /**
+     * 删除视频文件
+     * @param array $fileIds
+     * @param array $parts
+     * @return void
+     */
+    public function deleteVideo(array $fileIds, array $parts)
+    {
+        $this->vod->deleteVideos($fileIds, $parts);
+    }
+
+    public function transcodeSubmit(string $fileId, string $templateName)
+    {
+        $this->vod->transcodeSubmit($fileId, $templateName);
     }
 }

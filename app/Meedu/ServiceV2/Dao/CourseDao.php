@@ -81,4 +81,14 @@ class CourseDao implements CourseDaoInterface
             ->pluck('id')
             ->toArray();
     }
+
+    public function findOrFail(int $id): array
+    {
+        return Course::query()->where('id', $id)->firstOrFail()->toArray();
+    }
+
+    public function videoFindOrFail(int $videoId, int $courseId): array
+    {
+        return CourseVideo::query()->where('id', $videoId)->where('course_id', $courseId)->firstOrFail()->toArray();
+    }
 }

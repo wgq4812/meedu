@@ -36,11 +36,16 @@ Route::group([
     Route::group(['prefix' => 'runtime'], function () {
         Route::group(['prefix' => 'tencent-vod'], function () {
             Route::get('/check', 'TencentVodController@check');
+
             Route::get('/app/index', 'TencentVodController@apps');
             Route::post('/app/create', 'TencentVodController@appConfirm');
+
             Route::get('/domain/index', 'TencentVodController@domains');
             Route::post('/domain/create', 'TencentVodController@domainSwitch');
             Route::post('/domain/key', 'TencentVodController@domainKeyReset');
+
+            Route::post('/transcode', 'TencentVodController@transcodeSubmit');
+            Route::delete('/transcode', 'TencentVodController@transcodeDestroy');
         });
     });
 });

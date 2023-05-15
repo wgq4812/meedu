@@ -25,4 +25,8 @@ interface TencentVodServiceInterface
     public function isTranscodeSimpleTaskExists(string $subAppId): bool;
 
     public function transcodeSimpleTaskSet(string $subAppId);
+
+    public function deleteVideo(array $fileIds, array $parts);
+
+    public function transcodeSubmit(string $fileId, string $templateName);
 }

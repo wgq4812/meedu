@@ -45,7 +45,7 @@ class Vod
         try {
             $this->initClient();
 
-            $response = AlibabaCloud::rpc()
+            AlibabaCloud::rpc()
                 ->product('vod')
                 ->host($this->host)
                 ->version(self::API_VERSION)
