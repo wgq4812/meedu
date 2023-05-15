@@ -793,6 +793,15 @@ class AppConfigSeeder extends Seeder
             ],
             [
                 'group' => '视频',
+                'name' => '腾讯云播放域名',
+                'field_type' => 'text',
+                'sort' => 128,
+                'default_value' => '',
+                'key' => 'tencent.vod.domain',
+                'value' => '',
+            ],
+            [
+                'group' => '视频',
                 'name' => '腾讯云播放key',
                 'field_type' => 'text',
                 'sort' => 130,

@@ -12,4 +12,4 @@ Route::any('/wechat/refund/notify', 'Api\\Wechat\\RefundController@notify')->nam
 
 Route::any('/callback/ali/vod', 'Api\\Callback\\AliVodController@handle');
 
-Route::any('/callback/tencent/vod/{key}', 'Api\\Callback\\TencentVodController@handle');
+Route::any('/callback/tencent/vod/{key}', 'Api\\Callback\\TencentVodController@handle')->name('tencent.vod.callback');

@@ -20,8 +20,6 @@ interface ConfigServiceInterface
 
     public function getMpWechatScanLoginAlert(): string;
 
-    public function getTencentFaceConfig(): array;
-
     public function enabledFaceVerify(): bool;
 
     public function getVideoDefaultService(): string;
@@ -36,5 +34,11 @@ interface ConfigServiceInterface
 
     public function getAliCallbackKey(): string;
 
+    public function getTencentFaceConfig(): array;
+
+    public function getTencentVodConfig(): array;
+
     public function getTencentVodCallbackKey(): string;
+
+    public function getTencentVodPlayKey(): string;
 }

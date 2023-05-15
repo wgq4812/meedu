@@ -81,4 +81,14 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('tencent.vod.callback_key') ?? '';
     }
+
+    public function getTencentVodConfig(): array
+    {
+        return config('tencent.vod') ?? [];
+    }
+
+    public function getTencentVodPlayKey(): string
+    {
+        return config('meedu.system.player.tencent_play_key') ?? '';
+    }
 }

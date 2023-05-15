@@ -14,6 +14,7 @@ use Illuminate\Database\Seeder;
 use App\Models\AdministratorRole;
 use Illuminate\Support\Facades\Hash;
 use Database\Seeders\AppConfigSeeder;
+use Database\Seeders\RuntimeStatusSeeder;
 use Database\Seeders\AdministratorSuperSeeder;
 use Database\Seeders\AdministratorPermissionSeeder;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -114,6 +115,8 @@ class ApplicationInstallCommand extends Command
         $seeder = new class() extends Seeder {
         };
         $seeder->call(AppConfigSeeder::class);
+
+        $seeder->call(RuntimeStatusSeeder::class);
 
         $this->info('配置初始化完成');
 

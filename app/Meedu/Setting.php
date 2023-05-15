@@ -72,6 +72,21 @@ class Setting
     }
 
     /**
+     * @param array $config
+     * @return array
+     */
+    protected function removeUnChange(array $config): array
+    {
+        $privateVal = str_pad('', 12, '*');
+        foreach ($config as $key => $val) {
+            if ($val === $privateVal) {
+                unset($config[$key]);
+            }
+        }
+        return $config;
+    }
+
+    /**
      * 读取配置
      * @return array
      */
@@ -96,20 +111,5 @@ class Setting
     public function getCanEditConfig(): array
     {
         return $this->configService->all();
-    }
-
-    /**
-     * @param array $config
-     * @return array
-     */
-    protected function removeUnChange(array $config): array
-    {
-        $privateVal = str_pad('', 12, '*');
-        foreach ($config as $key => $val) {
-            if ($val === $privateVal) {
-                unset($config[$key]);
-            }
-        }
-        return $config;
     }
 }
