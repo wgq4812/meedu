@@ -60,4 +60,29 @@ class RuntimeStatusStatusService implements RuntimeStatusServiceInterface
     {
         return $this->rsDao->nameChunks(RC::TENCENT_VOD_NAMES);
     }
+
+    public function aliVodStatus(): array
+    {
+        return $this->rsDao->nameChunks(RC::ALI_VOD_NAMES);
+    }
+
+    public function setAliVodSecret(bool $isOk)
+    {
+        $this->rsDao->save(RC::ALI_VOD_SECRET, $isOk ? RC::STATUS_OK : '');
+    }
+
+    public function setAliVodDomain(string $domain)
+    {
+        $this->rsDao->save(RC::ALI_VOD_DOMAIN, $domain);
+    }
+
+    public function setAliVodEvent(string $url)
+    {
+        $this->rsDao->save(RC::ALI_VOD_EVENT, $url);
+    }
+
+    public function setAliVodTranscodeSimpleTask(bool $isOk)
+    {
+        $this->rsDao->save(RC::ALI_VOD_TRANSCODE, $isOk ? RC::STATUS_OK : '');
+    }
 }

@@ -91,4 +91,9 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('meedu.system.player.tencent_play_key') ?? '';
     }
+
+    public function getAliVodConfig(): array
+    {
+        return config('meedu.upload.video.aliyun');
+    }
 }

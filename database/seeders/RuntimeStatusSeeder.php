@@ -10,7 +10,7 @@ namespace Database\Seeders;
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
-use App\Constant\RuntimeConstant;
+use App\Constant\RuntimeConstant as RC;
 use App\Meedu\ServiceV2\Models\RuntimeStatus;
 
 class RuntimeStatusSeeder extends Seeder
@@ -23,16 +23,22 @@ class RuntimeStatusSeeder extends Seeder
     public function run()
     {
         $data = [
-            RuntimeConstant::SYSTEM_VERSION => '',
-            RuntimeConstant::SYSTEM_SCHEDULE => '',
-            RuntimeConstant::SYSTEM_QUEUE => '',
+            RC::SYSTEM_VERSION => '',
+            RC::SYSTEM_SCHEDULE => '',
+            RC::SYSTEM_QUEUE => '',
 
-            RuntimeConstant::TENCENT_VOD_SECRET => '',
-            RuntimeConstant::TENCENT_VOD_APP => '',
-            RuntimeConstant::TENCENT_VOD_EVENT => '',
-            RuntimeConstant::TENCENT_VOD_DOMAIN => '',
-            RuntimeConstant::TENCENT_VOD_DOMAIN_KEY => '',
-            RuntimeConstant::TENCENT_VOD_TRANSCODE_TASK_SIMPLE => '',
+            RC::TENCENT_VOD_SECRET => '',
+            RC::TENCENT_VOD_APP => '',
+            RC::TENCENT_VOD_EVENT => '',
+            RC::TENCENT_VOD_DOMAIN => '',
+            RC::TENCENT_VOD_DOMAIN_KEY => '',
+            RC::TENCENT_VOD_TRANSCODE_TASK_SIMPLE => '',
+
+            RC::ALI_VOD_SECRET => '',
+            RC::ALI_VOD_APP => '',
+            RC::ALI_VOD_EVENT => '',
+            RC::ALI_VOD_DOMAIN => '',
+            RC::ALI_VOD_TRANSCODE => '',
         ];
 
         $runtime = RuntimeStatus::query()->get()->pluck('status', 'name')->toArray();

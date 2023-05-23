@@ -754,6 +754,22 @@ class AppConfigSeeder extends Seeder
             ],
             [
                 'group' => '视频',
+                'name' => '阿里云视频-AppId',
+                'field_type' => 'text',
+                'sort' => 42,
+                'key' => 'meedu.upload.video.aliyun.app_id',
+                'value' => '',
+            ],
+            [
+                'group' => '视频',
+                'name' => '阿里云视频-加速域名',
+                'field_type' => 'text',
+                'sort' => 45,
+                'key' => 'meedu.upload.video.aliyun.domain',
+                'value' => '',
+            ],
+            [
+                'group' => '视频',
                 'name' => '阿里云点播回调密钥',
                 'field_type' => 'text',
                 'sort' => 50,

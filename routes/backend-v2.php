@@ -47,5 +47,9 @@ Route::group([
             Route::post('/transcode', 'TencentVodController@transcodeSubmit');
             Route::delete('/transcode', 'TencentVodController@transcodeDestroy');
         });
+
+        Route::group(['prefix' => 'ali-vod'], function () {
+            Route::get('/check', 'AliVodController@check');
+        });
     });
 });

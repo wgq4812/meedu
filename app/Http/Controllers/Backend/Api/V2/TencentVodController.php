@@ -63,7 +63,7 @@ class TencentVodController extends BaseController
                     $settingService->saveTencentVodCallbackKey($callbackKey);
                     $rsService->setTencentVodEvent($pushUrl);
                 } catch (\Exception $e) {
-                    $msg = __('事件回调配置失败,错误信息：:msg', ['msg' => $e->getMessage(), 'pushUrl' => $pushUrl]);
+                    $msg = __('事件回调配置失败,错误信息：:msg', ['msg' => $e->getMessage()]);
                     Log::error(__METHOD__ . '|' . $msg);
                     return $this->error($msg);
                 }

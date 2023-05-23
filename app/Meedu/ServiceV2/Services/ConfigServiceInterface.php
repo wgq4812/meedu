@@ -41,4 +41,6 @@ interface ConfigServiceInterface
     public function getTencentVodCallbackKey(): string;
 
     public function getTencentVodPlayKey(): string;
+
+    public function getAliVodConfig(): array;
 }

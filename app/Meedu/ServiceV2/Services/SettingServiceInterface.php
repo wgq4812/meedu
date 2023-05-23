@@ -18,6 +18,7 @@ interface SettingServiceInterface
 
     public function saveTencentVodCallbackKey(string $key);
 
-
     public function saveTencentVodAppId(string $appId);
+
+    public function saveAliVodCallbackKey(string $key);
 }

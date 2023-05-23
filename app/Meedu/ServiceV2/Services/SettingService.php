@@ -46,4 +46,9 @@ class SettingService implements SettingServiceInterface
     {
         $this->settingSource->put(['tencent.vod.callback_key' => $key]);
     }
+
+    public function saveAliVodCallbackKey(string $key)
+    {
+        $this->settingSource->put(['meedu.upload.video.aliyun.callback_key' => $key]);
+    }
 }

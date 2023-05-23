@@ -25,4 +25,13 @@ interface RuntimeStatusServiceInterface
     public function chunks(array $names): array;
 
     public function tencentVodStatus(): array;
+
+    public function aliVodStatus(): array;
+
+    public function setAliVodSecret(bool $isOk);
+
+    public function setAliVodDomain(string $domain);
+
+    public function setAliVodEvent(string $url);
+    public function setAliVodTranscodeSimpleTask(bool $isOk);
 }

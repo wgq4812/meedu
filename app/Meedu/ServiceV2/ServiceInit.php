@@ -17,6 +17,7 @@ use App\Meedu\ServiceV2\Services\UserService;
 use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
 use App\Meedu\ServiceV2\Services\OtherService;
 use App\Meedu\ServiceV2\Dao\CourseDaoInterface;
+use App\Meedu\ServiceV2\Services\AliVodService;
 use App\Meedu\ServiceV2\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\CourseService;
 use App\Meedu\ServiceV2\Services\SettingService;
@@ -24,6 +25,7 @@ use App\Meedu\ServiceV2\Services\TencentVodService;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDaoInterface;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 use App\Meedu\ServiceV2\Services\OtherServiceInterface;
+use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
@@ -46,6 +48,7 @@ class ServiceInit
         UserServiceInterface::class => UserService::class,
         CourseServiceInterface::class => CourseService::class,
         TencentVodServiceInterface::class => TencentVodService::class,
+        AliVodServiceInterface::class => AliVodService::class,
         SettingServiceInterface::class => SettingService::class,
         RuntimeStatusServiceInterface::class => RuntimeStatusStatusService::class,
     ];

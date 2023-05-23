@@ -93,11 +93,13 @@ return [
         'video' => [
             'default_service' => '',
             'aliyun' => [
+                'app_id' => '',//子应用id
                 'region' => 'cn-shanghai',
                 'host' => '',
                 'access_key_id' => '',
                 'access_key_secret' => '',
-                'callback_key' => '',
+                'callback_key' => '',//回调key
+                'domain' => '',//加速域名
             ],
         ],
         'attach' => [
