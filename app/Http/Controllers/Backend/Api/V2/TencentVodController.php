@@ -10,10 +10,8 @@ namespace App\Http\Controllers\Backend\Api\V2;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Constant\TencentConstant;
 use Illuminate\Support\Facades\Log;
 use App\Constant\RuntimeConstant as RC;
-use App\Meedu\ServiceV2\Models\TencentVideoTranscode;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
@@ -185,75 +183,26 @@ class TencentVodController extends BaseController
 
     public function transcodeDestroy(Request $request, TencentVodServiceInterface $tvService)
     {
-        $fileIds = $request->input('file_ids');
-        if (!$fileIds || !is_array($fileIds)) {
+        $fileId = $request->input('file_id');
+        if (!$fileId) {
             return $this->error(__('参数错误'));
         }
 
-        try {
-            $tvService->deleteVideo($fileIds, [TencentConstant::VOD_DELETE_PART_TRANSCODE, TencentConstant::VOD_DELETE_PART_ADAPTIVE]);
-            TencentVideoTranscode::query()->whereIn('file_id', $fileIds)->delete();
-            return $this->success();
-        } catch (\Exception $e) {
-            $msg = __('腾讯云视频删除失败，错误信息：:msg', ['msg' => $e->getMessage()]);
-            return $this->error($msg);
-        }
+        $tvService->deleteVideo([$fileId]);
+
+        return $this->success();
     }
 
     public function transcodeSubmit(Request $request, TencentVodServiceInterface $tvService)
     {
-        $fileIds = $request->input('file_ids');
+        $fileId = $request->input('file_id');
         $templateName = $request->input('template_name');
-        if (!$fileIds || !is_array($fileIds) || !$templateName) {
+        if (!$fileId || !$templateName) {
             return $this->error(__('参数错误'));
         }
 
-        if (!in_array($templateName, TencentConstant::VOD_TRANSCODE_NAMES)) {
-            return $this->error(__('参数错误'));
-        }
+        $tvService->transcodeSubmit($fileId, $templateName);
 
-        if (count($fileIds) > 20) {
-            return $this->error(__('参数错误'));
-        }
-
-        $records = TencentVideoTranscode::query()->whereIn('file_id', $fileIds)->where('template_name', $templateName)->get()->keyBy('file_id');
-
-        $suc = [];
-        $fail = [];
-
-        foreach ($fileIds as $fileIdItem) {
-            if (isset($records[$fileIdItem])) {
-                $fail = [
-                    'file_id' => $fileIdItem,
-                    'msg' => __('请勿重复提交转码。最近提交时间：:date', ['date' => $records[$fileIdItem]['created_at']]),
-                ];
-                continue;
-            }
-
-            try {
-                $tvService->transcodeSubmit($fileIdItem, $templateName);
-                $suc[] = [
-                    'file_id' => $fileIdItem,
-                    'msg' => 'ok',
-                ];
-                // 写入到数据库
-                TencentVideoTranscode::create([
-                    'file_id' => $fileIdItem,
-                    'template_name' => $templateName,
-                ]);
-            } catch (\Exception $e) {
-                $msg = __('提交转码出错，错误信息：:msg', ['msg' => $e->getMessage()]);
-                Log::error(__METHOD__ . '|' . $msg, compact('fileIdItem', 'templateName'));
-                $fail[] = [
-                    'file_id' => $fileIdItem,
-                    'msg' => $msg,
-                ];
-            }
-        }
-
-        return $this->successData([
-            'suc' => $suc,
-            'fail' => $fail,
-        ]);
+        return $this->success();
     }
 }

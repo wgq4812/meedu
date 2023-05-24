@@ -17,4 +17,10 @@ interface AliVodServiceInterface
     public function isTranscodeSimpleTaskExists(string $appId): bool;
 
     public function domains(int $page = 1, int $size = 50): array;
+
+    public function transcodeSubmit(string $appid, string $fileId, string $templateName): void;
+
+    public function transcodeDestroy(string $videoId): void;
+
+    public function transcodeTemplates(string $appId): array;
 }

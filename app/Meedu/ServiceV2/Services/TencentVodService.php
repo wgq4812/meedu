@@ -11,6 +11,7 @@ namespace App\Meedu\ServiceV2\Services;
 use App\Meedu\Tencent\Vod;
 use App\Constant\TencentConstant;
 use App\Exceptions\ServiceException;
+use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 use App\Meedu\Tencent\Sub\RefererAuthPolicy;
 use App\Meedu\Tencent\Sub\UrlSignatureAuthPolicy;
 
@@ -20,10 +21,13 @@ class TencentVodService implements TencentVodServiceInterface
 
     private $vod;
 
-    public function __construct(ConfigServiceInterface $configService, Vod $vod)
+    private $vodDao;
+
+    public function __construct(ConfigServiceInterface $configService, Vod $vod, VodDaoInterface $vodDao)
     {
         $this->configService = $configService;
         $this->vod = $vod;
+        $this->vodDao = $vodDao;
     }
 
     /**
@@ -121,16 +125,35 @@ class TencentVodService implements TencentVodServiceInterface
     /**
      * 删除视频文件
      * @param array $fileIds
-     * @param array $parts
      * @return void
      */
-    public function deleteVideo(array $fileIds, array $parts)
+    public function deleteVideo(array $fileIds)
     {
-        $this->vod->deleteVideos($fileIds, $parts);
+        $this->vod->deleteVideos($fileIds, [
+            TencentConstant::VOD_DELETE_PART_TRANSCODE,
+            TencentConstant::VOD_DELETE_PART_ADAPTIVE,
+        ]);
+        $this->vodDao->clearTencentTranscodeRecords($fileIds);
     }
 
-    public function transcodeSubmit(string $fileId, string $templateName)
+    /**
+     * @param string $fileId
+     * @param string $templateName
+     * @return void
+     * @throws ServiceException
+     */
+    public function transcodeSubmit(string $fileId, string $templateName): void
     {
+        $templates = $this->vod->defaultProcedureTemplatesList();
+        if (!in_array($templateName, array_column($templates['data'], 'name'))) {
+            throw new ServiceException(__('转码模板不存在'));
+        }
+
+        // 删除已转码文件，不管是否存在
+        $this->deleteVideo([$fileId]);
+        // 提交转码
         $this->vod->transcodeSubmit($fileId, $templateName);
+        // 状态记录
+        $this->vodDao->storeTencentTranscodeRecord($fileId, $templateName);
     }
 }

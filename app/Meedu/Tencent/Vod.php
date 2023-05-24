@@ -258,6 +258,16 @@ class Vod
     }
 
     /**
+     * 获取默认任务流列表
+     * @return array
+     */
+    public function defaultProcedureTemplatesList()
+    {
+        $config = $this->config();
+        return $this->procedureTemplatesList($config['app_id']);
+    }
+
+    /**
      * 创建多清晰度的不加密的任务
      * @param string $subAppId
      * @return void

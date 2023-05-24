@@ -26,7 +26,7 @@ interface TencentVodServiceInterface
 
     public function transcodeSimpleTaskSet(string $subAppId);
 
-    public function deleteVideo(array $fileIds, array $parts);
+    public function deleteVideo(array $fileIds);
 
-    public function transcodeSubmit(string $fileId, string $templateName);
+    public function transcodeSubmit(string $fileId, string $templateName): void;
 }

@@ -10,6 +10,7 @@ namespace App\Meedu\Ali;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\ServiceException;
 use AlibabaCloud\Client\AlibabaCloud;
 use App\Services\Base\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
@@ -140,7 +141,12 @@ class Vod
         }
     }
 
-    public function domainDefaultConfig(string $domain)
+    /**
+     * 域名配置
+     * @param string $domain
+     * @return bool
+     */
+    public function domainDefaultConfig(string $domain): bool
     {
         try {
             $this->client()
@@ -185,6 +191,8 @@ class Vod
                     ],
                 ])
                 ->request();
+
+            return true;
         } catch (\Exception $e) {
             $this->setErrMsg($e->getMessage());
             exception_record($e);
@@ -374,6 +382,100 @@ class Vod
             return false;
         }
     }
+
+    /**
+     * 获取视频的播放地址
+     * @param string $videoId
+     * @param array $params
+     * @return false|mixed
+     */
+    public function playInfo(string $videoId, array $params = [])
+    {
+        try {
+            $data = ['VideoId' => $videoId];
+            $params && $data = array_merge($data, $params);
+            $result = $this->client()
+                ->action('GetPlayInfo')
+                ->method('POST')
+                ->options(['form_params' => $data])
+                ->request();
+            return $result['PlayInfoList'];
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
+    /**
+     * @param string $videoId
+     * @return bool
+     * @throws ServiceException
+     */
+    public function deleteStream(string $videoId): bool
+    {
+        $playList = $this->playInfo($videoId, ['ResultType' => 'Multiple']);
+        if ($playList === false) {
+            if (Str::startsWith($this->getErrMsg(), 'InvalidVideo.NoneStream')) {//该视频只有源文件
+                return true;
+            }
+            throw new ServiceException($this->getErrMsg());
+        }
+
+        $jobIds = array_column($playList['PlayInfo'], 'JobId');
+        if (!$jobIds) {
+            return true;
+        }
+
+        try {
+            $this->client()
+                ->action('DeleteStream')
+                ->method('POST')
+                ->options([
+                    'form_params' => [
+                        'VideoId' => $videoId,
+                        'JobIds' => implode(',', $jobIds),
+                    ],
+                ])
+                ->request();
+            return true;
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
+    /**
+     * @param string $videoId
+     * @param string $templateId
+     * @param array $extra
+     * @return bool
+     */
+    public function transcodeSubmit(string $videoId, string $templateId, array $extra = []): bool
+    {
+        try {
+            $data = [
+                'VideoId' => $videoId,
+                'TemplateGroupId' => $templateId,
+            ];
+            $extra && $data = array_merge($data, $extra);
+            $result = $this->client()
+                ->action('SubmitTranscodeJobs')
+                ->method('POST')
+                ->options(['form_params' => $data])
+                ->request();
+
+            Log::info(__METHOD__ . '|阿里云转码任务提交', ['videoId' => $videoId, 'templateId' => $templateId, 'taskId' => $result['TranscodeTaskId']]);
+
+            return true;
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
 
     /**
      * 阿里云请求client

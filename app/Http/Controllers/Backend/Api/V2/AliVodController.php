@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Backend\Api\V2;
 
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Constant\RuntimeConstant as RC;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
@@ -75,5 +76,50 @@ class AliVodController extends BaseController
         $runtime = $rsService->aliVodStatus();
 
         return $this->successData($runtime);
+    }
+
+    public function transcodeConfig(ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
+    {
+        $config = $configService->getAliVodConfig();
+
+        $templates = $avServ->transcodeTemplates($config['app_id']);
+
+        $data = [];
+        foreach ($templates as $templateItem) {
+            $name = $templateItem['Name'];
+            if (!Str::startsWith($name, 'MeEdu')) {
+                continue;
+            }
+            $data[] = $templateItem;
+        }
+
+        return $this->successData($data);
+    }
+
+    public function transcodeSubmit(Request $request, ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
+    {
+        $fileId = $request->input('file_id');
+        $templateName = $request->input('template_name');
+        if (!$fileId || !$templateName) {
+            return $this->error(__('参数错误'));
+        }
+
+        $config = $configService->getAliVodConfig();
+
+        $avServ->transcodeSubmit($config['app_id'], $fileId, $templateName);
+
+        return $this->success();
+    }
+
+    public function transcodeDestroy(Request $request, AliVodServiceInterface $avServ)
+    {
+        $fileId = $request->input('file_id');
+        if (!$fileId) {
+            return $this->error(__('参数错误'));
+        }
+
+        $avServ->transcodeDestroy($fileId);
+
+        return $this->success();
     }
 }

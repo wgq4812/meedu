@@ -8,9 +8,11 @@
 
 namespace App\Meedu\ServiceV2;
 
+use App\Meedu\ServiceV2\Dao\VodDao;
 use App\Meedu\ServiceV2\Dao\UserDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
+use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDao;
 use App\Meedu\ServiceV2\Dao\UserDaoInterface;
 use App\Meedu\ServiceV2\Services\UserService;
@@ -40,6 +42,7 @@ class ServiceInit
         CourseDaoInterface::class => CourseDao::class,
         OtherDaoInterface::class => OtherDao::class,
         RuntimeStatusDaoInterface::class => RuntimeStatusDao::class,
+        VodDaoInterface::class => VodDao::class,
     ];
 
     public $service = [

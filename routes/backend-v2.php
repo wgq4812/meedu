@@ -44,12 +44,16 @@ Route::group([
             Route::post('/domain/create', 'TencentVodController@domainSwitch');
             Route::post('/domain/key', 'TencentVodController@domainKeyReset');
 
-            Route::post('/transcode', 'TencentVodController@transcodeSubmit');
-            Route::delete('/transcode', 'TencentVodController@transcodeDestroy');
+            Route::post('/transcode-submit', 'TencentVodController@transcodeSubmit');
+            Route::post('/transcode-destroy', 'TencentVodController@transcodeDestroy');
         });
 
         Route::group(['prefix' => 'ali-vod'], function () {
             Route::get('/check', 'AliVodController@check');
+
+            Route::get('/transcode-config', 'AliVodController@transcodeConfig');
+            Route::post('/transcode-submit', 'AliVodController@transcodeSubmit');
+            Route::post('/transcode-destroy', 'AliVodController@transcodeDestroy');
         });
     });
 });
