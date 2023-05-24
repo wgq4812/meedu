@@ -11,7 +11,7 @@ namespace App\Meedu\UpgradeLog;
 use App\Services\Base\Model\AppConfig;
 use App\Models\AdministratorPermission;
 
-class UpgradeToV492
+class UpgradeToV500
 {
     public static function handle()
     {
