@@ -331,26 +331,27 @@ if (!function_exists('get_play_url')) {
     /**
      * 获取播放地址
      * @param array $video
-     * @param bool $isTry
+     * @param $isTry
      * @return \Illuminate\Support\Collection
+     * @throws \App\Exceptions\ServiceException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     function get_play_url(array $video, $isTry = false)
     {
         $playUrl = [];
-        if ($video['aliyun_video_id']) {
-            // 阿里云
+        if ($video['aliyun_video_id']) {//阿里云点播
             $playUrl = aliyun_play_url($video, $isTry);
-        } elseif ($video['tencent_video_id']) {
-            // 腾讯云
+        } elseif ($video['tencent_video_id']) {//腾讯云点播
             $playUrl = get_tencent_play_url($video['tencent_video_id']);
-            // 开启播放key
-            $tencentKey = app()->make(\App\Meedu\Player\TencentKey::class);
-            $playUrl = array_map(function ($item) use ($tencentKey, $isTry, $video) {
-                $item['url'] = $tencentKey->url($item['url'], $isTry, $video);
+            /**
+             * @var \App\Meedu\Tencent\Vod $vod
+             */
+            $vod = app()->make(\App\Meedu\Tencent\Vod::class);
+            $playUrl = array_map(function ($item) use ($vod, $isTry, $video) {
+                $item['url'] = $vod->url($item['url'], $isTry ? $video['free_seconds'] : 0);
                 return $item;
             }, $playUrl);
-        } else {
+        } else {//视频URL直链
             $playUrl[] = [
                 'url' => $video['url'],
                 'format' => pathinfo($video['url'], PATHINFO_EXTENSION),
@@ -358,7 +359,6 @@ if (!function_exists('get_play_url')) {
                 'duration' => 0,
             ];
         }
-
         return collect($playUrl);
     }
 }

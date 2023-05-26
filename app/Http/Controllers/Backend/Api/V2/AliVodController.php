@@ -8,9 +8,12 @@
 
 namespace App\Http\Controllers\Backend\Api\V2;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Constant\AliConstant;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\ServiceException;
 use App\Constant\RuntimeConstant as RC;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
@@ -61,10 +64,21 @@ class AliVodController extends BaseController
             // 多清晰度任务的创建
             if (!$runtime[RC::ALI_VOD_TRANSCODE]['status']) {
                 try {
-                    if (!$avService->isTranscodeSimpleTaskExists($config['app_id'])) {
-                        $avService->transcodeTemplateStore($config['app_id']);
+                    $templates = array_column($avService->transcodeTemplates($config['app_id']), null, 'Name');
+                    $simpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_SIMPLE . '.TranscodeTemplateGroupId');
+                    $hlsSimpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_HLS_SIMPLE . '.TranscodeTemplateGroupId');
+
+                    if (!$simpleTempId) {
+                        $simpleTempId = $avService->transcodeTemplateStore($config['app_id'], false);
                     }
-                    $rsService->setAliVodTranscodeSimpleTask(true);
+                    if (!$hlsSimpleTempId) {
+                        $hlsSimpleTempId = $avService->transcodeTemplateStore($config['app_id'], true);
+                    }
+
+                    $rsService->setAliVodTranscodeSimpleTask(json_encode([
+                        'simple_id' => $simpleTempId,
+                        'hls_simple_id' => $hlsSimpleTempId,
+                    ]));
                 } catch (\Exception $e) {
                     $msg = __('转码任务创建失败,错误信息：:msg', ['msg' => $e->getMessage()]);
                     Log::error(__METHOD__ . '|' . $msg);
@@ -83,15 +97,32 @@ class AliVodController extends BaseController
         $config = $configService->getAliVodConfig();
 
         $templates = $avServ->transcodeTemplates($config['app_id']);
+        $templates = array_column($templates, null, 'Name');
 
-        $data = [];
-        foreach ($templates as $templateItem) {
-            $name = $templateItem['Name'];
-            if (!Str::startsWith($name, 'MeEdu')) {
-                continue;
-            }
-            $data[] = $templateItem;
+        $simpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_SIMPLE . '.TranscodeTemplateGroupId');
+        $hlsSimpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_HLS_SIMPLE . '.TranscodeTemplateGroupId');
+
+        if (!$simpleTempId || !$hlsSimpleTempId) {
+            throw new ServiceException(__('转码模板不存在'));
         }
+
+        $data = [
+            [
+                'name' => '默认转码(不加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_SIMPLE,
+                'template_id' => $simpleTempId,
+            ],
+            [
+                'name' => '默认转码(标准加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_HLS_SIMPLE,
+                'template_id' => $hlsSimpleTempId,
+            ],
+            [
+                'name' => '默认转码(私有加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_HLS_PRIVATE,
+                'template_id' => $hlsSimpleTempId,
+            ],
+        ];
 
         return $this->successData($data);
     }
@@ -99,14 +130,15 @@ class AliVodController extends BaseController
     public function transcodeSubmit(Request $request, ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
     {
         $fileId = $request->input('file_id');
-        $templateName = $request->input('template_name');
-        if (!$fileId || !$templateName) {
+        $tempName = $request->input('template_name');
+        $tempId = $request->input('template_id');
+        if (!$fileId || !$tempName || !$tempId) {
             return $this->error(__('参数错误'));
         }
 
         $config = $configService->getAliVodConfig();
 
-        $avServ->transcodeSubmit($config['app_id'], $fileId, $templateName);
+        $avServ->transcodeSubmit($config['app_id'], $fileId, $tempName, $tempId);
 
         return $this->success();
     }

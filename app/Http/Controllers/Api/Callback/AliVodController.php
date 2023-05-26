@@ -8,12 +8,37 @@
 
 namespace App\Http\Controllers\Api\Callback;
 
+use App\Meedu\Ali\Vod;
 use Illuminate\Http\Request;
 use App\Events\AliVodCallbackEvent;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class AliVodController
 {
+    use ResponseTrait;
+
+    public function hls(Request $request, Vod $vod)
+    {
+        $key = $request->input('Ciphertext');
+        if (!$key) {
+            return $this->error(__('参数错误'));
+        }
+
+        $cacheKeyName = md5($key);
+        $text = Cache::get($cacheKeyName);
+        if (!$text) {
+            $text = $vod->decryptKMSDataKey($key);
+            if ($text === false) {
+                return $this->error(__('系统错误'));
+            }
+            Cache::forever($cacheKeyName, $text);
+        }
+
+        return base64_decode($text);
+    }
+
     public function handle(Request $request, ConfigServiceInterface $configService)
     {
         $url = $request->fullUrl();

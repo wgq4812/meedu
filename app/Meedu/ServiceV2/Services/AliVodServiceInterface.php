@@ -12,15 +12,15 @@ interface AliVodServiceInterface
 {
     public function saveEventConfig(string $callbackKey, string $callbackUrl, string $appId);
 
-    public function transcodeTemplateStore(string $appId);
+    public function transcodeTemplates(string $appId): array;
 
-    public function isTranscodeSimpleTaskExists(string $appId): bool;
+    public function transcodeTemplateStore(string $appId, bool $isEncrypt): string;
 
     public function domains(int $page = 1, int $size = 50): array;
 
-    public function transcodeSubmit(string $appid, string $fileId, string $templateName): void;
+    public function transcodeSubmit(string $appId, string $fileId, string $tempName, string $tempId): void;
 
     public function transcodeDestroy(string $videoId): void;
 
-    public function transcodeTemplates(string $appId): array;
+    public function getTranscodeRecords(string $fileId): array;
 }

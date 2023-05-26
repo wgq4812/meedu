@@ -149,9 +149,10 @@ class BusinessState
     /**
      * 是否购买了课程
      *
-     * @param integer $userId
-     * @param integer $courseId
-     * @return boolean
+     * @param int $userId
+     * @param int $courseId
+     * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function isBuyCourse(int $userId, int $courseId): bool
     {
@@ -177,11 +178,27 @@ class BusinessState
         return false;
     }
 
+    /**
+     * 课程是否可以评论
+     *
+     * @param array $user
+     * @param array $course
+     * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function courseCanComment(array $user, array $course): bool
     {
         return $this->isBuyCourse($user['id'], $course['id']);
     }
 
+    /**
+     * 课时是否可以评论
+     *
+     * @param array $user
+     * @param array $video
+     * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function videoCanComment(array $user, array $video): bool
     {
         /**
@@ -192,6 +209,12 @@ class BusinessState
         return $this->canSeeVideo($user, $course, $video);
     }
 
+    /**
+     * 是否开启了微信公众号授权登录
+     *
+     * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function isEnabledMpOAuthLogin(): bool
     {
         /**
@@ -203,6 +226,12 @@ class BusinessState
         return $enabledOAuthLogin === 1;
     }
 
+    /**
+     * 是否开启了微信公众号扫码登录
+     *
+     * @return bool
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function enabledMpScanLogin(): bool
     {
         /**
@@ -217,6 +246,16 @@ class BusinessState
         return $enabledOAuthLogin === 1;
     }
 
+    /**
+     * 用户社交账号绑定检查
+     *
+     * @param int $userId
+     * @param string $app
+     * @param string $appId
+     * @return void
+     * @throws ServiceException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
     public function socialiteBindCheck(int $userId, string $app, string $appId): void
     {
         /**

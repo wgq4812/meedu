@@ -29,4 +29,6 @@ interface TencentVodServiceInterface
     public function deleteVideo(array $fileIds);
 
     public function transcodeSubmit(string $fileId, string $templateName): void;
+
+    public function getTranscodeRecords(array $fileIds): array;
 }

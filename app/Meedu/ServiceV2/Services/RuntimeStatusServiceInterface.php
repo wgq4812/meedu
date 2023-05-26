@@ -33,5 +33,5 @@ interface RuntimeStatusServiceInterface
     public function setAliVodDomain(string $domain);
 
     public function setAliVodEvent(string $url);
-    public function setAliVodTranscodeSimpleTask(bool $isOk);
+    public function setAliVodTranscodeSimpleTask(string $template);
 }

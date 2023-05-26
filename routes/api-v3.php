@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     // 手动打款
     Route::post('/order/pay/handPay', 'PaymentController@handPay');
 
+    // 视频播放地址
+    Route::post('/course/{courseId}/video/{videoId}/play', 'VideoController@play');
+
     Route::group(['prefix' => 'member'], function () {
         // 学员已购录播课
         Route::get('/courses', 'MemberController@courses');

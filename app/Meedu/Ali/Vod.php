@@ -9,6 +9,7 @@
 namespace App\Meedu\Ali;
 
 use Illuminate\Support\Str;
+use App\Constant\AliConstant;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use AlibabaCloud\Client\AlibabaCloud;
@@ -299,10 +300,83 @@ class Vod
     /**
      * 创建转码模板
      * @param string $appId
-     * @return \AlibabaCloud\Client\Result\Result|false
+     * @param bool $isEncrypt
+     * @return false|mixed
      */
-    public function templateStore(string $appId)
+    public function templateStore(string $appId, bool $isEncrypt = false)
     {
+        $hdConfig = [
+            'Type' => 'Normal',
+            'Definition' => 'HD',
+            'TemplateName' => '高清',
+            'Video' => [
+                'Codec' => 'H.264',
+                'Bitrate' => '1500',
+                'Width' => '1280',
+                'Height' => '720',
+                'Remove' => 'false',
+                'Fps' => '25',
+            ],
+            'Audio' => [
+                'Codec' => 'AAC',
+                'Bitrate' => '128',
+                'Samplerate' => '44100',
+            ],
+            //封装音视频码流的容器格式
+            'Container' => [
+                'Format' => 'm3u8',
+            ],
+            //转码的分片设置参数HLS必传
+            'MuxConfig' => [
+                'Segment' => [
+                    'Duration' => 10,
+                ],
+            ],
+        ];
+
+        $fhdConfig = [
+            'Type' => 'Normal',
+            'Definition' => 'FHD',
+            'TemplateName' => '超清',
+            'Video' => [
+                'Codec' => 'H.264',
+                'Bitrate' => '3000',
+                'Width' => '1920',
+                'Height' => '1080',
+                'Remove' => 'false',
+                'Fps' => '25',
+            ],
+            'Audio' => [
+                'Codec' => 'AAC',
+                'Bitrate' => '160',
+                'Samplerate' => '44100',
+            ],
+            //封装音视频码流的容器格式
+            'Container' => [
+                'Format' => 'm3u8',
+            ],
+            //转码的分片设置参数HLS必传
+            'MuxConfig' => [
+                'Segment' => [
+                    'Duration' => 10,
+                ],
+            ],
+        ];
+
+        if ($isEncrypt) {
+            $hdConfig['EncryptSetting'] = [
+                'EncryptType' => 'AliyunVoDEncryption',
+            ];
+            $fhdConfig['EncryptSetting'] = [
+                'EncryptType' => 'AliyunVoDEncryption',
+            ];
+        }
+
+        $name = AliConstant::VOD_TRANSCODE_SIMPLE;
+        if ($isEncrypt) {
+            $name = AliConstant::VOD_TRANSCODE_HLS_SIMPLE;
+        }
+
         try {
             $result = $this->client()
                 ->action('AddTranscodeTemplateGroup')
@@ -310,67 +384,8 @@ class Vod
                 ->options([
                     'form_params' => [
                         'AppId' => $appId,
-                        'Name' => 'MeEduSimple',
-                        'TranscodeTemplateList' => json_encode([
-                            // 高清转码模板
-                            [
-                                'Type' => 'Normal',
-                                'Definition' => 'HD',
-                                'TemplateName' => '高清',
-                                'Video' => [
-                                    'Codec' => 'H.264',
-                                    'Bitrate' => '1500',
-                                    'Width' => '1280',
-                                    'Height' => '720',
-                                    'Remove' => 'false',
-                                    'Fps' => '25',
-                                ],
-                                'Audio' => [
-                                    'Codec' => 'AAC',
-                                    'Bitrate' => '128',
-                                    'Samplerate' => '44100',
-                                ],
-                                //封装音视频码流的容器格式
-                                'Container' => [
-                                    'Format' => 'm3u8',
-                                ],
-                                //转码的分片设置参数HLS必传
-                                'MuxConfig' => [
-                                    'Segment' => [
-                                        'Duration' => 10,
-                                    ],
-                                ],
-                            ],
-                            // 超清转码模板
-                            [
-                                'Type' => 'Normal',
-                                'Definition' => 'FHD',
-                                'TemplateName' => '超清',
-                                'Video' => [
-                                    'Codec' => 'H.264',
-                                    'Bitrate' => '3000',
-                                    'Width' => '1920',
-                                    'Height' => '1080',
-                                    'Remove' => 'false',
-                                    'Fps' => '25',
-                                ],
-                                'Audio' => [
-                                    'Codec' => 'AAC',
-                                    'Bitrate' => '160',
-                                    'Samplerate' => '44100',
-                                ],
-                                //封装音视频码流的容器格式
-                                'Container' => [
-                                    'Format' => 'm3u8',
-                                ],
-                                //转码的分片设置参数HLS必传
-                                'MuxConfig' => [
-                                    'Segment' => [
-                                        'Duration' => 10,
-                                    ],
-                                ],
-                            ],
-                        ]),
+                        'Name' => $name,
+                        'TranscodeTemplateList' => json_encode([$hdConfig, $fhdConfig]),
                     ],
                 ])
                 ->request();
@@ -460,15 +475,49 @@ class Vod
                 'TemplateGroupId' => $templateId,
             ];
             $extra && $data = array_merge($data, $extra);
-            $result = $this->client()
+            $this->client()
                 ->action('SubmitTranscodeJobs')
                 ->method('POST')
                 ->options(['form_params' => $data])
                 ->request();
-
-            Log::info(__METHOD__ . '|阿里云转码任务提交', ['videoId' => $videoId, 'templateId' => $templateId, 'taskId' => $result['TranscodeTaskId']]);
-
             return true;
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
+    public function generateKMSDataKey()
+    {
+        try {
+            return $this->client()
+                ->action('GenerateKMSDataKey')
+                ->request();
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
+    /**
+     * @param string $cipherText
+     * @return false|mixed
+     */
+    public function decryptKMSDataKey(string $cipherText)
+    {
+        try {
+            $result = $this->client()
+                ->action('DecryptKMSDataKey')
+                ->method('POST')
+                ->options([
+                    'form_params' => [
+                        'CipherText' => $cipherText,
+                    ],
+                ])
+                ->request();
+            return $result['Plaintext'];
         } catch (\Exception $e) {
             $this->setErrMsg($e->getMessage());
             exception_record($e);

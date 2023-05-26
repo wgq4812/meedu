@@ -16,7 +16,11 @@ interface VodDaoInterface
 
     public function clearTencentTranscodeRecords(array $fileIds): void;
 
-    public function findAliTranscodeRecord(string $fileId, string $templateId): array;
+    public function findTencentTranscodeRecord(string $fileId, string $tempName): array;
+
+    // ------- 友情分割线 -------
+
+    public function findAliTranscodeRecord(string $fileId, string $tempName): array;
 
     public function getAliTranscodeRecords(array $fileIds, string $templateName): array;
 

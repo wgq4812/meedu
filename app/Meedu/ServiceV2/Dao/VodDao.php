@@ -17,7 +17,9 @@ class VodDao implements VodDaoInterface
     {
         return TencentVideoTranscode::query()
             ->whereIn('file_id', $fileIds)
-            ->where('template_name', $templateName)
+            ->when($templateName, function ($query) use ($templateName) {
+                $query->where('template_name', $templateName);
+            })
             ->get()
             ->toArray();
     }
@@ -35,11 +37,21 @@ class VodDao implements VodDaoInterface
         TencentVideoTranscode::query()->whereIn('file_id', $fileIds)->delete();
     }
 
+    public function findTencentTranscodeRecord(string $fileId, string $tempName): array
+    {
+        $data = TencentVideoTranscode::query()->where('file_id', $fileId)->where('template_name', $tempName)->first();
+        return $data ? $data->toArray() : [];
+    }
+
+    // ------- 友情分割线 -------
+
     public function getAliTranscodeRecords(array $fileIds, string $templateName): array
     {
         return AliVideoTranscode::query()
             ->whereIn('file_id', $fileIds)
-            ->where('template_name', $templateName)
+            ->when($templateName, function ($query) use ($templateName) {
+                $query->where('template_name', $templateName);
+            })
             ->get()
             ->toArray();
     }
@@ -58,9 +70,9 @@ class VodDao implements VodDaoInterface
         AliVideoTranscode::query()->where('file_id', $fileId)->delete();
     }
 
-    public function findAliTranscodeRecord(string $fileId, string $templateId): array
+    public function findAliTranscodeRecord(string $fileId, string $tempName): array
     {
-        $data = AliVideoTranscode::query()->where('file_id', $fileId)->first();
+        $data = AliVideoTranscode::query()->where('file_id', $fileId)->where('template_name', $tempName)->first();
         return $data ? $data->toArray() : [];
     }
 }

@@ -52,6 +52,8 @@ class TencentVodController extends BaseController
             $rsService->setTencentVodDomainKey(true);
         }
 
+        // todo - 默认分发域名配置+播放key配置
+
         if ($baseConfigOk && $config['app_id']) {
             if (!$runtime[RC::TENCENT_VOD_EVENT]['status']) {  // event的创建
                 $callbackKey = Str::random(32);
@@ -179,6 +181,13 @@ class TencentVodController extends BaseController
             Log::error(__METHOD__ . '|' . $msg);
             return $this->error($msg);
         }
+    }
+
+    public function transcodeConfig(TencentVodServiceInterface $tvService)
+    {
+        return $this->successData([
+            'templates' => $tvService->de
+        ]);
     }
 
     public function transcodeDestroy(Request $request, TencentVodServiceInterface $tvService)

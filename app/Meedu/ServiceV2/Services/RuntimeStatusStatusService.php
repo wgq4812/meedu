@@ -81,8 +81,8 @@ class RuntimeStatusStatusService implements RuntimeStatusServiceInterface
         $this->rsDao->save(RC::ALI_VOD_EVENT, $url);
     }
 
-    public function setAliVodTranscodeSimpleTask(bool $isOk)
+    public function setAliVodTranscodeSimpleTask(string $template)
     {
-        $this->rsDao->save(RC::ALI_VOD_TRANSCODE, $isOk ? RC::STATUS_OK : '');
+        $this->rsDao->save(RC::ALI_VOD_TRANSCODE, $template);
     }
 }

@@ -8,7 +8,9 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
+use Carbon\Carbon;
 use App\Meedu\Ali\Vod;
+use App\Constant\AliConstant;
 use App\Exceptions\ServiceException;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 
@@ -42,31 +44,17 @@ class AliVodService implements AliVodServiceInterface
     /**
      * 创建MeEdu默认的转码模板
      * @param string $appId
-     * @return void
+     * @param bool $isEncrypt
+     * @return string
      * @throws ServiceException
      */
-    public function transcodeTemplateStore(string $appId)
+    public function transcodeTemplateStore(string $appId, bool $isEncrypt): string
     {
-        $result = $this->vod->templateStore($appId);
+        $result = $this->vod->templateStore($appId, $isEncrypt);
         if (!$result) {
             throw new ServiceException($this->vod->getErrMsg());
         }
-    }
-
-    /**
-     * 判断MeEdu默认的转码模板是否存在
-     * @param string $appId
-     * @return bool
-     * @throws ServiceException
-     */
-    public function isTranscodeSimpleTaskExists(string $appId): bool
-    {
-        $result = $this->vod->templates($appId);
-        if ($result === false) {
-            throw new ServiceException('无法获取转码模板列表');
-        }
-        $names = array_column($result, 'Name');
-        return in_array('MeEduSimple', $names);
+        return $result;
     }
 
     /**
@@ -87,33 +75,39 @@ class AliVodService implements AliVodServiceInterface
     /**
      * @param string $appId
      * @param string $fileId
-     * @param string $templateName
+     * @param string $tempName
+     * @param string $tempId
      * @return void
      * @throws ServiceException
      */
-    public function transcodeSubmit(string $appId, string $fileId, string $templateName): void
+    public function transcodeSubmit(string $appId, string $fileId, string $tempName, string $tempId): void
     {
-        // 读取转码模板列表
-        $templates = $this->vod->templates($appId);
-        if ($templates === false) {
-            throw new ServiceException($this->vod->getErrMsg());
+        // 重复提交判断
+        $record = $this->vodDao->findAliTranscodeRecord($fileId, $tempName);
+        if ($record) {
+            throw new ServiceException(__('请勿重复提交转码。最近提交时间：:date', ['date' => Carbon::parse($record['created_at'])->format('Y-m-d H:i:s')]));
         }
-        $templates = array_column($templates, null, 'Name');
-        if (!isset($templates[$templateName])) {
-            throw new ServiceException('转码模板不存在');
-        }
-        $templateId = $templates[$templateName]['TranscodeTemplateGroupId'];
-
-        // 删除已有的转码记录，不管是否存在
-        $this->vod->deleteStream($fileId);
-        $this->vodDao->cleanAliTranscodeRecords($fileId);
 
         // 提交转码
-        $result = $this->vod->transcodeSubmit($fileId, $templateId);
+        $extra = [];
+        if ($tempName === AliConstant::VOD_TRANSCODE_HLS_SIMPLE) {//HLS标准加密
+            $key = $this->vod->generateKMSDataKey();
+            if ($key === false) {
+                throw new ServiceException($this->vod->getErrMsg());
+            }
+            $extra = [
+                'EncryptConfig' => json_encode([
+                    'CipherText' => $key['CiphertextBlob'],
+                    'DecryptKeyUri' => route('ali.vod.play.hls', ['Ciphertext' => $key['CiphertextBlob']]),
+                    'KeyServiceType' => 'KMS',
+                ]),
+            ];
+        }
+        $result = $this->vod->transcodeSubmit($fileId, $tempId, $extra);
         if ($result === false) {
             throw new ServiceException($this->vod->getErrMsg());
         }
-        $this->vodDao->storeTencentTranscodeRecord($fileId, $templateName);
+        $this->vodDao->storeAliTranscodeRecord($fileId, $tempName, $tempId);
     }
 
     /**
@@ -143,5 +137,14 @@ class AliVodService implements AliVodServiceInterface
             throw new ServiceException($this->vod->getErrMsg());
         }
         return $result;
+    }
+
+    /**
+     * @param string $fileId
+     * @return array
+     */
+    public function getTranscodeRecords(string $fileId): array
+    {
+        return $this->vodDao->getAliTranscodeRecords([$fileId], '');
     }
 }

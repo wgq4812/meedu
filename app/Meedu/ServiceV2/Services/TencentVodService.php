@@ -8,6 +8,7 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
+use Carbon\Carbon;
 use App\Meedu\Tencent\Vod;
 use App\Constant\TencentConstant;
 use App\Exceptions\ServiceException;
@@ -144,16 +145,25 @@ class TencentVodService implements TencentVodServiceInterface
      */
     public function transcodeSubmit(string $fileId, string $templateName): void
     {
+        // 重复提交判断
+        $record = $this->vodDao->findTencentTranscodeRecord($fileId, $templateName);
+        if ($record) {
+            throw new ServiceException(__('请勿重复提交转码。最近提交时间：:date', ['date' => Carbon::parse($record['created_at'])->format('Y-m-d H:i:s')]));
+        }
+
         $templates = $this->vod->defaultProcedureTemplatesList();
         if (!in_array($templateName, array_column($templates['data'], 'name'))) {
             throw new ServiceException(__('转码模板不存在'));
         }
 
-        // 删除已转码文件，不管是否存在
-        $this->deleteVideo([$fileId]);
         // 提交转码
         $this->vod->transcodeSubmit($fileId, $templateName);
         // 状态记录
         $this->vodDao->storeTencentTranscodeRecord($fileId, $templateName);
+    }
+
+    public function getTranscodeRecords(array $fileIds): array
+    {
+        return $this->vodDao->getTencentTranscodeRecords($fileIds, '');
     }
 }
