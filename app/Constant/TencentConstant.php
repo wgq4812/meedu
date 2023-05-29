@@ -10,10 +10,6 @@ namespace App\Constant;
 
 class TencentConstant
 {
-    public const VOD_TRANSCODE_NAMES = [
-        self::VOD_TRANSCODE_SIMPLE_TASK,
-        self::VOD_TRANSCODE_ADAPTIVE,
-    ];
     public const VOD_TRANSCODE_SIMPLE_TASK = 'MeEduSimple';
     public const VOD_TRANSCODE_ADAPTIVE = 'SimpleAesEncryptPreset';
 

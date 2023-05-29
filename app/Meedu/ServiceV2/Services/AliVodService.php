@@ -26,13 +26,6 @@ class AliVodService implements AliVodServiceInterface
         $this->vodDao = $vodDao;
     }
 
-    /**
-     * @param string $callbackKey
-     * @param string $callbackUrl
-     * @param string $appId
-     * @return void
-     * @throws ServiceException
-     */
     public function saveEventConfig(string $callbackKey, string $callbackUrl, string $appId)
     {
         $result = $this->vod->eventStore($appId, $callbackUrl, $callbackKey);
@@ -41,13 +34,6 @@ class AliVodService implements AliVodServiceInterface
         }
     }
 
-    /**
-     * 创建MeEdu默认的转码模板
-     * @param string $appId
-     * @param bool $isEncrypt
-     * @return string
-     * @throws ServiceException
-     */
     public function transcodeTemplateStore(string $appId, bool $isEncrypt): string
     {
         $result = $this->vod->templateStore($appId, $isEncrypt);
@@ -57,13 +43,6 @@ class AliVodService implements AliVodServiceInterface
         return $result;
     }
 
-    /**
-     * 获取点播域名列表
-     * @param int $page
-     * @param int $size
-     * @return array
-     * @throws ServiceException
-     */
     public function domains(int $page = 1, int $size = 50): array
     {
         $data = $this->vod->domains($page, $size);
@@ -72,14 +51,6 @@ class AliVodService implements AliVodServiceInterface
         }
     }
 
-    /**
-     * @param string $appId
-     * @param string $fileId
-     * @param string $tempName
-     * @param string $tempId
-     * @return void
-     * @throws ServiceException
-     */
     public function transcodeSubmit(string $appId, string $fileId, string $tempName, string $tempId): void
     {
         // 重复提交判断
@@ -110,11 +81,6 @@ class AliVodService implements AliVodServiceInterface
         $this->vodDao->storeAliTranscodeRecord($fileId, $tempName, $tempId);
     }
 
-    /**
-     * @param string $videoId
-     * @return void
-     * @throws ServiceException
-     */
     public function transcodeDestroy(string $videoId): void
     {
         $result = $this->vod->deleteStream($videoId);
@@ -125,11 +91,6 @@ class AliVodService implements AliVodServiceInterface
         $this->vodDao->cleanAliTranscodeRecords($videoId);
     }
 
-    /**
-     * @param string $appId
-     * @return array
-     * @throws ServiceException
-     */
     public function transcodeTemplates(string $appId): array
     {
         $result = $this->vod->templates($appId);
@@ -139,12 +100,13 @@ class AliVodService implements AliVodServiceInterface
         return $result;
     }
 
-    /**
-     * @param string $fileId
-     * @return array
-     */
     public function getTranscodeRecords(string $fileId): array
     {
         return $this->vodDao->getAliTranscodeRecords([$fileId], '');
+    }
+
+    public function chunks(array $fileIds): array
+    {
+        return $this->vodDao->getAliTranscodeRecords($fileIds, '');
     }
 }

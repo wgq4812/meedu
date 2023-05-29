@@ -11,13 +11,16 @@ namespace App\Http\Controllers\Backend\Api\V1;
 use App\Meedu\Ali\Vod;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
+use App\Constant\FrontendConstant;
 use App\Events\VideoUploadedEvent;
 use Illuminate\Support\Facades\DB;
 use App\Services\Course\Models\MediaVideo;
+use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
+use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 
 class MediaVideoController extends BaseController
 {
-    public function index(Request $request)
+    public function index(Request $request, AliVodServiceInterface $avService, TencentVodServiceInterface $tvService)
     {
         $keywords = $request->input('keywords');
         $isOpen = (int)$request->input('is_open');
@@ -48,9 +51,36 @@ class MediaVideoController extends BaseController
             compact('keywords', 'isOpen')
         );
 
-        // todo - 返回视频的转码信息
+        $aliFileIds = [];
+        $aliTranscodeData = [];
 
-        return $this->successData($videos);
+        $tencentFileIds = [];
+        $tencentTranscodeData = [];
+
+        $data = $videos->items();
+        $total = $videos->total();
+
+        foreach ($data as $tmpItem) {
+            if ($tmpItem['storage_driver'] === FrontendConstant::VOD_SERVICE_ALIYUN) {
+                $aliFileIds[] = $tmpItem['storage_file_id'];
+            } elseif ($tmpItem['storage_driver'] === FrontendConstant::VOD_SERVICE_TENCENT) {
+                $tencentFileIds[] = $tmpItem['storage_file_id'];
+            }
+        }
+
+        if ($aliFileIds) {
+            $aliTranscodeData = collect($avService->chunks($aliFileIds))->groupBy('file_id')->toArray();
+        }
+        if ($tencentFileIds) {
+            $tencentTranscodeData = collect($tvService->chunks($tencentFileIds))->groupBy('file_id')->toArray();
+        }
+
+        return $this->successData([
+            'data' => $data,
+            'total' => $total,
+            'ali_transcode' => $aliTranscodeData,
+            'tencent_transcode' => $tencentTranscodeData,
+        ]);
     }
 
     public function store(Request $request)

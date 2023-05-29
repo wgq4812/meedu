@@ -162,7 +162,7 @@ class TencentVodService implements TencentVodServiceInterface
         $this->vodDao->storeTencentTranscodeRecord($fileId, $templateName);
     }
 
-    public function getTranscodeRecords(array $fileIds): array
+    public function chunks(array $fileIds): array
     {
         return $this->vodDao->getTencentTranscodeRecords($fileIds, '');
     }
