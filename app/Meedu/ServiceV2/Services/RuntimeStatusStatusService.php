@@ -25,6 +25,11 @@ class RuntimeStatusStatusService implements RuntimeStatusServiceInterface
         $this->rsDao->save(RC::TENCENT_VOD_DOMAIN_KEY, $isOk ? RC::STATUS_OK : '');
     }
 
+    public function setTencentVodCdnKey(bool $isOk)
+    {
+        $this->rsDao->save(RC::TENCENT_VOD_CDN_KEY, $isOk ? RC::STATUS_OK : '');
+    }
+
     public function setTencentVodDomain(string $domain)
     {
         $this->rsDao->save(RC::TENCENT_VOD_DOMAIN, $domain);

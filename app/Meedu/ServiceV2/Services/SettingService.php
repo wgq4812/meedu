@@ -37,6 +37,12 @@ class SettingService implements SettingServiceInterface
         ]);
     }
 
+    public function saveTencentVodCdnKey(string $key)
+    {
+        $this->settingSource->put(['tencent.vod.cdn_key' => $key]);
+    }
+
+
     public function saveTencentVodAppId(string $appId)
     {
         $this->settingSource->put(['tencent.vod.app_id' => $appId]);

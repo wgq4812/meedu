@@ -125,7 +125,10 @@ class VodPlayBus
             ];
         }
 
-        return $data;
+        return [
+            'data' => $data,
+            'encrypt_type' => $encryptType,
+        ];
     }
 
     /**
@@ -168,6 +171,7 @@ class VodPlayBus
                 'app_id' => (int)$config['app_id'],
             ],
             'urls' => $vod->getPlayUrls($fileId, $trySeconds, $mode),
+            'mode' => $mode,
         ];
     }
 

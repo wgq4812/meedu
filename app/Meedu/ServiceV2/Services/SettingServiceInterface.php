@@ -16,6 +16,8 @@ interface SettingServiceInterface
 
     public function saveTencentVodDomainAndKey(string $domain, string $key);
 
+    public function saveTencentVodCdnKey(string $key);
+
     public function saveTencentVodCallbackKey(string $key);
 
     public function saveTencentVodAppId(string $appId);

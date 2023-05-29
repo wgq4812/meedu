@@ -52,7 +52,10 @@ class TencentVodController extends BaseController
             $rsService->setTencentVodDomainKey(true);
         }
 
-        // todo - 默认分发域名配置+播放key配置
+        // cdn-key的配置
+        if (!$runtime[RC::TENCENT_VOD_CDN_KEY]['status'] && $config['cdn_key']) {
+            $rsService->setTencentVodCdnKey(true);
+        }
 
         if ($baseConfigOk && $config['app_id']) {
             if (!$runtime[RC::TENCENT_VOD_EVENT]['status']) {  // event的创建
@@ -211,6 +214,19 @@ class TencentVodController extends BaseController
         }
 
         $tvService->transcodeSubmit($fileId, $templateName);
+
+        return $this->success();
+    }
+
+    public function saveCdnKey(Request $request, RuntimeStatusServiceInterface $rsService, SettingServiceInterface $settingService)
+    {
+        $key = $request->input('key');
+        if (!$key) {
+            return $this->error(__('参数错误'));
+        }
+
+        $settingService->saveTencentVodCdnKey($key);
+        $rsService->setTencentVodCdnKey(true);
 
         return $this->success();
     }

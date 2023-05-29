@@ -105,7 +105,7 @@ class Vod
 
         $headerEncode = $this->base64UrlEncode(json_encode(['typ' => 'JWT', 'alg' => 'HS256'], JSON_UNESCAPED_SLASHES));
         $dataEncode = $this->base64UrlEncode(json_encode($data, JSON_UNESCAPED_SLASHES));
-        $sign = $this->base64UrlEncode(hash_hmac('sha256', $headerEncode . '.' . $dataEncode, $config['play_key'], true));
+        $sign = $this->base64UrlEncode(hash_hmac('sha256', $headerEncode . '.' . $dataEncode, $config['cdn_key'], true));
 
         return $headerEncode . '.' . $dataEncode . '.' . $sign;
     }

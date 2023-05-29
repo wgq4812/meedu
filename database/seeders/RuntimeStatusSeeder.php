@@ -33,6 +33,7 @@ class RuntimeStatusSeeder extends Seeder
             RC::TENCENT_VOD_DOMAIN => '',
             RC::TENCENT_VOD_DOMAIN_KEY => '',
             RC::TENCENT_VOD_TRANSCODE_TASK_SIMPLE => '',
+            RC::TENCENT_VOD_CDN_KEY => '',
 
             RC::ALI_VOD_SECRET => '',
             RC::ALI_VOD_APP => '',

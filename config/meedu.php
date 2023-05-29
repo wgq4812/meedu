@@ -186,7 +186,7 @@ return [
                 'color' => '', //默认red
                 'opacity' => 1, //默认1
             ],
-            // 腾讯云播放key
+            // 腾讯云播放key-用户视频url的防盗链签名
             'tencent_play_key' => '',
             // 播放格式
             'video_format_whitelist' => '',

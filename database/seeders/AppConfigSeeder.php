@@ -836,6 +836,16 @@ class AppConfigSeeder extends Seeder
                 'value' => '',
                 'is_private' => 1,
             ],
+            [
+                'group' => '视频',
+                'name' => '腾讯云点播分发key',
+                'field_type' => 'text',
+                'sort' => 150,
+                'default_value' => '',
+                'key' => 'tencent.vod.cdn_key',
+                'value' => '',
+                'is_private' => 1,
+            ],
 
             // 会员配置
             [

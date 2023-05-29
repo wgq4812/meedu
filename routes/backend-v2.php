@@ -44,6 +44,8 @@ Route::group([
             Route::post('/domain/create', 'TencentVodController@domainSwitch');
             Route::post('/domain/key', 'TencentVodController@domainKeyReset');
 
+            Route::post('/cdn/key', 'TencentVodController@saveCdnKey');
+
             Route::post('/transcode-submit', 'TencentVodController@transcodeSubmit');
             Route::post('/transcode-destroy', 'TencentVodController@transcodeDestroy');
         });

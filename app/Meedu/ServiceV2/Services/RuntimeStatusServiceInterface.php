@@ -12,6 +12,8 @@ interface RuntimeStatusServiceInterface
 {
     public function setTencentVodDomainKey(bool $isOk);
 
+    public function setTencentVodCdnKey(bool $isOk);
+
     public function setTencentVodDomain(string $domain);
 
     public function setTencentVodApp(string $appId);
@@ -33,5 +35,6 @@ interface RuntimeStatusServiceInterface
     public function setAliVodDomain(string $domain);
 
     public function setAliVodEvent(string $url);
+
     public function setAliVodTranscodeSimpleTask(string $template);
 }

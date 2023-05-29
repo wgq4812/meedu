@@ -24,6 +24,7 @@ class RuntimeConstant
         self::TENCENT_VOD_DOMAIN,
         self::TENCENT_VOD_TRANSCODE_TASK_SIMPLE,
         self::TENCENT_VOD_DOMAIN_KEY,
+        self::TENCENT_VOD_CDN_KEY,
     ];
     public const TENCENT_VOD_SECRET = 'tencent-vod-secret';
     public const TENCENT_VOD_APP = 'tencent-vod-app';
@@ -31,6 +32,7 @@ class RuntimeConstant
     public const TENCENT_VOD_DOMAIN = 'tencent-vod-domain';
     public const TENCENT_VOD_TRANSCODE_TASK_SIMPLE = 'tencent-vod-transcode-task-simple';
     public const TENCENT_VOD_DOMAIN_KEY = 'tencent-vod-domain-key';
+    public const TENCENT_VOD_CDN_KEY = 'tencent-cdn-key';
 
     // 阿里云点播配置
     public const ALI_VOD_NAMES = [
