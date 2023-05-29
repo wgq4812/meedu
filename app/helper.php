@@ -137,7 +137,7 @@ if (!function_exists('aliyun_play_url')) {
                 $rows[] = [
                     'format' => $item['Format'],
                     'url' => $item['PlayURL'],
-                    'duration' => $item['Duration'],
+                    'duration' => (int)$item['Duration'],
                     'name' => $item['Height'],
                 ];
             }
