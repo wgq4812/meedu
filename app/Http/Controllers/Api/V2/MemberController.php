@@ -805,7 +805,7 @@ class MemberController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/member/socialite/{app} 社交账号绑定[302重定向]
+     * @api {get} /api/v2/member/socialite/{app} [废弃]社交账号绑定[302重定向]
      * @apiGroup 用户
      * @apiName MemberSocialiteBind
      * @apiVersion v2.0.0
@@ -851,7 +851,7 @@ class MemberController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/member/wechatBind 微信公众号授权绑定[302重定向]
+     * @api {get} /api/v2/member/wechatBind [废弃]微信公众号授权绑定[302重定向]
      * @apiGroup 用户
      * @apiName MemberWechatBind
      * @apiVersion v2.0.0

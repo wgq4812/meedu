@@ -81,7 +81,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/videos 录播视频列表
+     * @api {get} /api/v2/videos 录播视频列表[废弃]
      * @apiGroup 录播课
      * @apiName Videos
      * @apiVersion v2.0.0
@@ -243,7 +243,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @api {post} /api/v2/video/{id}/comment 录播视频评论
+     * @api {post} /api/v2/video/{id}/comment [废弃]录播视频评论
      * @apiGroup 录播课
      * @apiName VideoCommentAction
      * @apiVersion v2.0.0
@@ -266,7 +266,7 @@ class VideoController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/video/{video_id}/comments 录播视频评论列表
+     * @api {get} /api/v2/video/{video_id}/comments [废弃]录播视频评论列表
      * @apiGroup 录播课
      * @apiName VideoComments
      * @apiVersion v2.0.0
