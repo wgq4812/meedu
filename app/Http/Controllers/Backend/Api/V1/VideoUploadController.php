@@ -10,14 +10,14 @@ namespace App\Http\Controllers\Backend\Api\V1;
 
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
-use App\Meedu\Tencent\Vod as TencentVod;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
+use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 
 class VideoUploadController extends BaseController
 {
-    public function tencentToken(TencentVod $vod)
+    public function tencentToken(TencentVodServiceInterface $tvService)
     {
-        $signature = $vod->getUploadSignature();
+        $signature = $tvService->getUploadSignature();
 
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,

@@ -344,11 +344,11 @@ if (!function_exists('get_play_url')) {
         } elseif ($video['tencent_video_id']) {//腾讯云点播
             $playUrl = get_tencent_play_url($video['tencent_video_id']);
             /**
-             * @var \App\Meedu\Tencent\Vod $vod
+             * @var \App\Meedu\ServiceV2\Services\TencentVodServiceInterface $vodService
              */
-            $vod = app()->make(\App\Meedu\Tencent\Vod::class);
-            $playUrl = array_map(function ($item) use ($vod, $isTry, $video) {
-                $item['url'] = $vod->url($item['url'], $isTry ? $video['free_seconds'] : 0);
+            $vodService = app()->make(\App\Meedu\ServiceV2\Services\TencentVodServiceInterface::class);
+            $playUrl = array_map(function ($item) use ($vodService, $isTry, $video) {
+                $item['url'] = $vodService->getSignUrl($item['url'], $isTry ? $video['free_seconds'] : 0);
                 return $item;
             }, $playUrl);
         } else {//视频URL直链

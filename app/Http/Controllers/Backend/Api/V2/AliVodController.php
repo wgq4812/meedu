@@ -20,6 +20,7 @@ use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 
+// todo - 操作日志记录
 class AliVodController extends BaseController
 {
     public function check(

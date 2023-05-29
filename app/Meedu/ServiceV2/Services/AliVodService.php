@@ -11,6 +11,7 @@ namespace App\Meedu\ServiceV2\Services;
 use Carbon\Carbon;
 use App\Meedu\Ali\Vod;
 use App\Constant\AliConstant;
+use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 
@@ -126,6 +127,7 @@ class AliVodService implements AliVodServiceInterface
         if ($result === false) {
             throw new ServiceException($this->vod->getErrMsg());
         }
+        return $result;
     }
 
     public function createUploadRefreshToken(string $fileId): array
@@ -134,5 +136,25 @@ class AliVodService implements AliVodServiceInterface
         if ($result === false) {
             throw new ServiceException($this->vod->getErrMsg());
         }
+        return $result;
+    }
+
+    public function decryptKMSDataKey(string $key): string
+    {
+        $result = $this->vod->decryptKMSDataKey($key);
+        if ($result === false) {
+            throw new ServiceException($this->vod->getErrMsg());
+        }
+        return $result;
+    }
+
+    public function playInfo(string $fileId, array $extra): array
+    {
+        $result = $this->vod->playInfo($fileId, $extra);
+        if ($result === false) {
+            Log::error(__METHOD__ . '|无法获取视频播放地址', ['err' => $this->vod->getErrMsg(), 'file_id' => $fileId]);
+            throw new ServiceException(__('无法获取播放地址'));
+        }
+        return $result;
     }
 }

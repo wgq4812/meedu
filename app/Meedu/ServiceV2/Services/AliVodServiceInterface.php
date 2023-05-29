@@ -80,7 +80,33 @@ interface AliVodServiceInterface
      */
     public function destroyMulti(array $fileIds): void;
 
+    /**
+     * 创建视频上传token
+     * @param string $fileName
+     * @param string $title
+     * @return array
+     */
     public function createUploadToken(string $fileName, string $title): array;
 
+    /**
+     * 创建视频上传刷新token
+     * @param string $fileId
+     * @return array
+     */
     public function createUploadRefreshToken(string $fileId): array;
+
+    /**
+     * 获取hls解密密钥
+     * @param string $key
+     * @return string
+     */
+    public function decryptKMSDataKey(string $key): string;
+
+    /**
+     * 获取视频播放url
+     * @param string $fileId
+     * @param array $extra
+     * @return array
+     */
+    public function playInfo(string $fileId, array $extra): array;
 }

@@ -8,10 +8,8 @@
 
 namespace App\Bus;
 
-use App\Meedu\Ali\Vod;
 use App\Constant\AliConstant;
 use App\Constant\TencentConstant;
-use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
@@ -59,10 +57,6 @@ class VodPlayBus
     protected function getAliPlayInfo(string $fileId, int $trySeconds): array
     {
         /**
-         * @var Vod $vod
-         */
-        $vod = app()->make(Vod::class);
-        /**
          * @var AliVodServiceInterface $avServ
          */
         $avServ = app()->make(AliVodServiceInterface::class);
@@ -106,13 +100,9 @@ class VodPlayBus
             'PlayConfig' => json_encode($playConfig),
         ];
 
-        $playList = $vod->playInfo($fileId, $params);
-        if ($playList === false) {
-            Log::error(__METHOD__ . '|无法获取视频播放地址', ['err' => $vod->getErrMsg(), 'file_id' => $fileId]);
-            throw new ServiceException(__('无法获取播放地址'));
-        }
-
+        $playList = $avServ->playInfo($fileId, $params);
         $data = [];
+
         foreach ($playList['PlayInfo'] as $infoItem) {
             if ($infoItem['Status'] !== 'Normal') {
                 continue;
@@ -141,10 +131,6 @@ class VodPlayBus
     protected function getTencentPlayInfo(string $fileId, int $trySeconds): array
     {
         /**
-         * @var \App\Meedu\Tencent\Vod $vod
-         */
-        $vod = app()->make(\App\Meedu\Tencent\Vod::class);
-        /**
          * @var TencentVodServiceInterface $avServ
          */
         $tvServ = app()->make(TencentVodServiceInterface::class);
@@ -167,10 +153,10 @@ class VodPlayBus
         return [
             'player_sign' => [
                 'fileId' => $fileId,
-                'sign' => $vod->getPlayerSign($fileId, $trySeconds, $mode),
+                'sign' => $tvServ->getPlayerSign($fileId, $trySeconds, $mode),
                 'app_id' => (int)$config['app_id'],
             ],
-            'urls' => $vod->getPlayUrls($fileId, $trySeconds, $mode),
+            'urls' => $tvServ->getPlayUrls($fileId, $trySeconds, $mode),
             'mode' => $mode,
         ];
     }

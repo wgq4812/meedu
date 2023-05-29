@@ -94,4 +94,36 @@ interface TencentVodServiceInterface
      * @return void
      */
     public function destroyMulti(array $fileIds): void;
+
+    /**
+     * 获取视频上传sign
+     * @return string
+     */
+    public function getUploadSignature(): string;
+
+    /**
+     * 获取签名后的视频url
+     * @param string $url
+     * @param $trySeconds
+     * @return string
+     */
+    public function getSignUrl(string $url, $trySeconds): string;
+
+    /**
+     * 获取播放器签名
+     * @param string $fileId
+     * @param int $trySeconds
+     * @param string $mode
+     * @return array
+     */
+    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): array;
+
+    /**
+     * 获取播放URL
+     * @param string $fileId
+     * @param int $trySeconds
+     * @param string $mode
+     * @return array
+     */
+    public function getPlayUrls(string $fileId, int $trySeconds, string $mode): array;
 }

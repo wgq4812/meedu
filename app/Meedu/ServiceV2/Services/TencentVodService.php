@@ -172,4 +172,24 @@ class TencentVodService implements TencentVodServiceInterface
         $this->vod->deleteVideos($fileIds);
         $this->vodDao->clearTencentTranscodeRecords($fileIds);
     }
+
+    public function getUploadSignature(): string
+    {
+        return $this->vod->getUploadSignature();
+    }
+
+    public function getSignUrl(string $url, $trySeconds): string
+    {
+        return $this->vod->url($url, $trySeconds);
+    }
+
+    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): array
+    {
+        return $this->vod->getPlayerSign($fileId, $trySeconds, $mode);
+    }
+
+    public function getPlayUrls(string $fileId, int $trySeconds, string $mode): array
+    {
+        return $this->vod->getPlayUrls($fileId, $trySeconds, $mode);
+    }
 }

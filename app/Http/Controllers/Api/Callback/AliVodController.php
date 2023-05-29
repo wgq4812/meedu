@@ -8,18 +8,18 @@
 
 namespace App\Http\Controllers\Api\Callback;
 
-use App\Meedu\Ali\Vod;
 use Illuminate\Http\Request;
 use App\Events\AliVodCallbackEvent;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class AliVodController
 {
     use ResponseTrait;
 
-    public function hls(Request $request, Vod $vod)
+    public function hls(Request $request, AliVodServiceInterface $avService)
     {
         $key = $request->input('Ciphertext');
         if (!$key) {
@@ -29,10 +29,7 @@ class AliVodController
         $cacheKeyName = md5($key);
         $text = Cache::get($cacheKeyName);
         if (!$text) {
-            $text = $vod->decryptKMSDataKey($key);
-            if ($text === false) {
-                return $this->error(__('系统错误'));
-            }
+            $text = $avService->decryptKMSDataKey($key);
             Cache::forever($cacheKeyName, $text);
         }
 
