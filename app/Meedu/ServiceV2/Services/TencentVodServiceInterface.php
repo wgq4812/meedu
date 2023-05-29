@@ -87,4 +87,11 @@ interface TencentVodServiceInterface
      * @return array
      */
     public function chunks(array $fileIds): array;
+
+    /**
+     * 批量删除fileIds
+     * @param array $fileIds
+     * @return void
+     */
+    public function destroyMulti(array $fileIds): void;
 }

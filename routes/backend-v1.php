@@ -32,7 +32,6 @@ Route::group(['middleware' => ['auth:administrator', 'backend.permission']], fun
         // 视频素材库
         Route::group(['prefix' => 'videos'], function () {
             Route::get('/index', 'MediaVideoController@index');
-            Route::post('/create', 'MediaVideoController@store');
             Route::post('/delete/multi', 'MediaVideoController@destroy');
         });
 

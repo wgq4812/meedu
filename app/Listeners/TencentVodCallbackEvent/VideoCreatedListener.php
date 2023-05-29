@@ -9,6 +9,7 @@
 namespace App\Listeners\TencentVodCallbackEvent;
 
 use App\Constant\FrontendConstant;
+use App\Events\VideoUploadedEvent;
 use App\Events\TencentVodCallbackEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use App\Services\Course\Models\MediaVideo;
@@ -17,7 +18,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 class VideoCreatedListener implements ShouldQueue
 {
     use InteractsWithQueue;
-    
+
     public function handle(TencentVodCallbackEvent $event)
     {
         if ('NewFileUpload' !== $event->event) {
@@ -37,7 +38,7 @@ class VideoCreatedListener implements ShouldQueue
             return;
         }
 
-        MediaVideo::create([
+        $mediaVideo = MediaVideo::create([
             'title' => $name,
             'thumb' => '',
             'duration' => $duration,
@@ -45,5 +46,7 @@ class VideoCreatedListener implements ShouldQueue
             'storage_driver' => FrontendConstant::VOD_SERVICE_TENCENT,
             'storage_file_id' => $fileId,
         ]);
+
+        event(new VideoUploadedEvent($mediaVideo['storage_file_id'], $mediaVideo['storage_driver'], 'callback', ''));
     }
 }

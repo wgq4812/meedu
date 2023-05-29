@@ -65,9 +65,9 @@ class VodDao implements VodDaoInterface
         ]);
     }
 
-    public function cleanAliTranscodeRecords(string $fileId): void
+    public function cleanAliTranscodeRecordsMulti(array $fileIds): void
     {
-        AliVideoTranscode::query()->where('file_id', $fileId)->delete();
+        AliVideoTranscode::query()->whereIn('file_id', $fileIds)->delete();
     }
 
     public function findAliTranscodeRecord(string $fileId, string $tempName): array

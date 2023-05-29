@@ -8,17 +8,16 @@
 
 namespace App\Http\Controllers\Backend\Api\V1;
 
-use Exception;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\Tencent\Vod as TencentVod;
+use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 
 class VideoUploadController extends BaseController
 {
-    public function tencentToken()
+    public function tencentToken(TencentVod $vod)
     {
-        $signature = app()->make(\App\Meedu\Tencent\Vod::class)->getUploadSignature();
+        $signature = $vod->getUploadSignature();
 
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
@@ -29,14 +28,13 @@ class VideoUploadController extends BaseController
         return $this->successData(compact('signature'));
     }
 
-    public function aliyunCreateVideoToken(Request $request, ConfigServiceInterface $configService)
+    public function aliyunCreateVideoToken(Request $request, AliVodServiceInterface $avService)
     {
-        /**
-         * @var ConfigService $configService
-         */
-
         $title = $request->input('title');
         $filename = $request->input('filename');
+        if (!$title || !$filename) {
+            return $this->error(__('参数错误'));
+        }
 
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
@@ -44,44 +42,17 @@ class VideoUploadController extends BaseController
             compact('title', 'filename')
         );
 
-        try {
-            aliyun_sdk_client();
+        $data = $avService->createUploadToken($filename, $title);
 
-            $config = $configService->getAliyunVodConfig();
-
-            $result = \AlibabaCloud\Client\AlibabaCloud::rpc()
-                ->host($config['host'])
-                ->product('Vod')
-                ->version('2017-03-21')
-                ->action('CreateUploadVideo')
-                ->options([
-                    'query' => [
-                        'Title' => $title,
-                        'FileName' => $filename,
-                    ]
-                ])
-                ->request();
-
-            return $this->successData([
-                'upload_auth' => $result['UploadAuth'],
-                'upload_address' => $result['UploadAddress'],
-                'video_id' => $result['VideoId'],
-                'request_id' => $result['RequestId'],
-            ]);
-        } catch (Exception $exception) {
-            exception_record($exception);
-
-            return $this->error($exception->getMessage());
-        }
+        return $this->successData($data);
     }
 
-    public function aliyunRefreshVideoToken(Request $request, ConfigServiceInterface $configService)
+    public function aliyunRefreshVideoToken(Request $request, AliVodServiceInterface $avService)
     {
-        /**
-         * @var ConfigService $configService
-         */
-
         $videoId = $request->input('video_id');
+        if (!$videoId) {
+            return $this->error(__('参数错误'));
+        }
 
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
@@ -89,33 +60,8 @@ class VideoUploadController extends BaseController
             compact('videoId')
         );
 
-        try {
-            aliyun_sdk_client();
+        $data = $avService->createUploadRefreshToken($videoId);
 
-            $config = $configService->getAliyunVodConfig();
-
-            $result = \AlibabaCloud\Client\AlibabaCloud::rpc()
-                ->product('Vod')
-                ->host($config['host'])
-                ->version('2017-03-21')
-                ->action('RefreshUploadVideo')
-                ->options([
-                    'query' => [
-                        'VideoId' => $videoId,
-                    ]
-                ])
-                ->request();
-
-            return $this->successData([
-                'upload_auth' => $result['UploadAuth'],
-                'upload_address' => $result['UploadAddress'],
-                'video_id' => $result['VideoId'],
-                'request_id' => $result['RequestId'],
-            ]);
-        } catch (Exception $exception) {
-            exception_record($exception);
-
-            return $this->error($exception->getMessage());
-        }
+        return $this->successData($data);
     }
 }

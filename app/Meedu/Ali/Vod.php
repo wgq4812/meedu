@@ -525,6 +525,74 @@ class Vod
         }
     }
 
+    /**
+     * 创建视频上传token
+     * @param string $fileName
+     * @param string $title
+     * @return array|false
+     */
+    public function createUploadVideo(string $fileName, string $title)
+    {
+        $config = $this->config();
+        if (!$config['access_key_id'] || !$config['access_key_secret']) {
+            throw new ServiceException(__('阿里云点播未配置：:msg', ['msg' => 'AccessKeyId,AccessKeySecret']));
+        }
+        if (!$config['callback_key']) {
+            throw new ServiceException(__('阿里云点播未配置：:msg', ['msg' => '事件回调']));
+        }
+
+        try {
+            $result = $this->client()
+                ->action('CreateUploadVideo')
+                ->options([
+                    'query' => [
+                        'Title' => $title,
+                        'FileName' => $fileName,
+                    ]
+                ])
+                ->request();
+
+            return [
+                'upload_auth' => $result['UploadAuth'],
+                'upload_address' => $result['UploadAddress'],
+                'video_id' => $result['VideoId'],
+                'request_id' => $result['RequestId'],
+            ];
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
+
+    /**
+     * @param string $fileId
+     * @return array|false
+     */
+    public function refreshUploadVideo(string $fileId)
+    {
+        try {
+            $result = $this->client()
+                ->action('RefreshUploadVideo')
+                ->options([
+                    'query' => [
+                        'VideoId' => $fileId,
+                    ]
+                ])
+                ->request();
+
+            return [
+                'upload_auth' => $result['UploadAuth'],
+                'upload_address' => $result['UploadAddress'],
+                'video_id' => $result['VideoId'],
+                'request_id' => $result['RequestId'],
+            ];
+        } catch (\Exception $e) {
+            $this->setErrMsg($e->getMessage());
+            exception_record($e);
+            return false;
+        }
+    }
 
     /**
      * 阿里云请求client

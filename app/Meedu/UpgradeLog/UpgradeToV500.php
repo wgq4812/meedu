@@ -33,6 +33,7 @@ class UpgradeToV500
         AdministratorPermission::query()
             ->whereIn('slug', [
                 'administrator_role.edit',
+                'media.video.store',//视频上传后的本地存储
             ])
             ->delete();
     }

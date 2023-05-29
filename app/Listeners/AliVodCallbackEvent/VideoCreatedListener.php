@@ -10,6 +10,7 @@ namespace App\Listeners\AliVodCallbackEvent;
 
 use App\Constant\CacheConstant;
 use App\Constant\FrontendConstant;
+use App\Events\VideoUploadedEvent;
 use App\Events\AliVodCallbackEvent;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -61,7 +62,7 @@ class VideoCreatedListener implements ShouldQueue
             $duration = (int)$event->params['Duration'];
             $size = (int)$event->params['Size'];
 
-            MediaVideo::create([
+            $mediaVideo = MediaVideo::create([
                 'title' => $title,
                 'thumb' => '',
                 'duration' => $duration,
@@ -69,6 +70,8 @@ class VideoCreatedListener implements ShouldQueue
                 'storage_driver' => FrontendConstant::VOD_SERVICE_ALIYUN,
                 'storage_file_id' => $videoId,
             ]);
+
+            event(new VideoUploadedEvent($mediaVideo['storage_file_id'], $mediaVideo['storage_driver'], 'callback', ''));
 
             Cache::forget($cacheKey);
         }

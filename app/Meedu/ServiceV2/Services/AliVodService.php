@@ -56,7 +56,12 @@ class AliVodService implements AliVodServiceInterface
         // 重复提交判断
         $record = $this->vodDao->findAliTranscodeRecord($fileId, $tempName);
         if ($record) {
-            throw new ServiceException(__('请勿重复提交转码。最近提交时间：:date', ['date' => Carbon::parse($record['created_at'])->format('Y-m-d H:i:s')]));
+            throw new ServiceException(__(
+                '请勿重复提交转码。最近提交时间：:date',
+                [
+                    'date' => Carbon::parse($record['created_at'])->format('Y-m-d H:i:s'),
+                ]
+            ));
         }
 
         // 提交转码
@@ -81,14 +86,13 @@ class AliVodService implements AliVodServiceInterface
         $this->vodDao->storeAliTranscodeRecord($fileId, $tempName, $tempId);
     }
 
-    public function transcodeDestroy(string $videoId): void
+    public function transcodeDestroy(string $fileId): void
     {
-        $result = $this->vod->deleteStream($videoId);
+        $result = $this->vod->deleteStream($fileId);
         if (!$result) {
             throw new ServiceException($this->vod->getErrMsg());
         }
-        //清空本地转码记录
-        $this->vodDao->cleanAliTranscodeRecords($videoId);
+        $this->vodDao->cleanAliTranscodeRecordsMulti([$fileId]);
     }
 
     public function transcodeTemplates(string $appId): array
@@ -108,5 +112,27 @@ class AliVodService implements AliVodServiceInterface
     public function chunks(array $fileIds): array
     {
         return $this->vodDao->getAliTranscodeRecords($fileIds, '');
+    }
+
+    public function destroyMulti(array $fileIds): void
+    {
+        $this->vod->deleteVideos($fileIds);
+        $this->vodDao->cleanAliTranscodeRecordsMulti($fileIds);
+    }
+
+    public function createUploadToken(string $fileName, string $title): array
+    {
+        $result = $this->vod->createUploadVideo($fileName, $title);
+        if ($result === false) {
+            throw new ServiceException($this->vod->getErrMsg());
+        }
+    }
+
+    public function createUploadRefreshToken(string $fileId): array
+    {
+        $result = $this->vod->refreshUploadVideo($fileId);
+        if ($result === false) {
+            throw new ServiceException($this->vod->getErrMsg());
+        }
     }
 }

@@ -26,5 +26,5 @@ interface VodDaoInterface
 
     public function storeAliTranscodeRecord(string $fileId, string $templateName, string $templateId): void;
 
-    public function cleanAliTranscodeRecords(string $fileId): void;
+    public function cleanAliTranscodeRecordsMulti(array $fileIds): void;
 }

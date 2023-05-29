@@ -8,11 +8,9 @@
 
 namespace App\Http\Controllers\Backend\Api\V1;
 
-use App\Meedu\Ali\Vod;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
 use App\Constant\FrontendConstant;
-use App\Events\VideoUploadedEvent;
 use Illuminate\Support\Facades\DB;
 use App\Services\Course\Models\MediaVideo;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
@@ -83,40 +81,7 @@ class MediaVideoController extends BaseController
         ]);
     }
 
-    public function store(Request $request)
-    {
-        $title = mb_substr(strip_tags($request->input('title', '')), 0, 255);
-        $thumb = $request->input('thumb', '');
-        $duration = (int)$request->input('duration');
-        $size = (int)$request->input('size');
-        $storageDriver = $request->input('storage_driver');
-        $storageFileId = $request->input('storage_file_id');
-        $isOpen = (int)$request->input('is_open');
-
-        $data = [
-            'title' => $title,
-            'thumb' => $thumb,
-            'duration' => $duration,
-            'size' => $size,
-            'storage_driver' => $storageDriver,
-            'storage_file_id' => $storageFileId,
-            'is_open' => $isOpen,
-        ];
-
-        $mediaVideo = MediaVideo::create($data);
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
-            AdministratorLog::OPT_STORE,
-            $data
-        );
-
-        event(new VideoUploadedEvent($storageFileId, $storageDriver, 'media_video', $mediaVideo['id']));
-
-        return $this->successData($mediaVideo);
-    }
-
-    public function destroy(Request $request, Vod $aliyunVod, \App\Meedu\Tencent\Vod $tencentVod)
+    public function destroy(Request $request, AliVodServiceInterface $avService, TencentVodServiceInterface $tvService)
     {
         $ids = $request->input('ids');
         if (!$ids || !is_array($ids)) {
@@ -129,31 +94,34 @@ class MediaVideoController extends BaseController
             compact('ids')
         );
 
-        $videos = MediaVideo::query()->whereIn('id', $ids)->select(['id', 'storage_driver', 'storage_file_id'])->get();
+        $videos = MediaVideo::query()->whereIn('id', $ids)->select(['id', 'storage_driver', 'storage_file_id'])->get()->toArray();
         if (!$videos) {
             return $this->error(__('数据为空'));
         }
-        $aliyunFileIds = [];
+
+        $aliFileIds = [];
         $tencentFileIds = [];
         foreach ($videos as $videoItem) {
-            if ($videoItem['storage_driver'] === 'aliyun') {
-                $aliyunFileIds[] = $videoItem['storage_file_id'];
-            } elseif ($videoItem['storage_driver'] === 'tencent') {
+            if ($videoItem['storage_driver'] === FrontendConstant::VOD_SERVICE_ALIYUN) {
+                $aliFileIds[] = $videoItem['storage_file_id'];
+            } elseif ($videoItem['storage_driver'] === FrontendConstant::VOD_SERVICE_TENCENT) {
                 $tencentFileIds[] = $videoItem['storage_file_id'];
             }
         }
 
-        DB::transaction(function () use ($ids, $aliyunFileIds, $tencentFileIds, $aliyunVod, $tencentVod) {
-            // 删除本地记录
+        DB::transaction(function () use ($ids, $aliFileIds, $tencentFileIds, $avService, $tvService) {
             MediaVideo::query()->whereIn('id', $ids)->delete();
-            if ($aliyunFileIds) {
-                $aliyunVod->deleteVideos($aliyunFileIds);
+
+            if ($aliFileIds) {
+                $avService->destroyMulti($aliFileIds);
             }
             if ($tencentFileIds) {
-                $tencentVod->deleteVideos($tencentFileIds);
+                $tvService->destroyMulti($tencentFileIds);
             }
         });
 
         return $this->successData();
     }
+
+    // todo - 视频转码文件的删除
 }

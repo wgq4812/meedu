@@ -128,6 +128,13 @@ class Vod
     {
         $config = $this->config();
 
+        if (!$config['secret_id'] || !$config['secret_key']) {
+            throw new ServiceException(__('腾讯云点播未配置：:msg', ['msg' => 'SecretId,SecretKey']));
+        }
+        if (!$config['callback_key']) {
+            throw new ServiceException(__('腾讯云点播未配置：:msg', ['msg' => '事件回调']));
+        }
+
         $currentTime = time();
         $data = [
             'secretId' => $config['secret_id'],
@@ -137,6 +144,7 @@ class Vod
             'vodSubAppId' => config('tencent.vod.app_id'),
         ];
         $queryString = http_build_query($data);
+
         return base64_encode(hash_hmac('sha1', $queryString, $config['secret_key'], true) . $queryString);
     }
 

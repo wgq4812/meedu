@@ -54,10 +54,10 @@ interface AliVodServiceInterface
 
     /**
      * 删除videoId的转码文件和数据库记录
-     * @param string $videoId
+     * @param string $fileId
      * @return void
      */
-    public function transcodeDestroy(string $videoId): void;
+    public function transcodeDestroy(string $fileId): void;
 
     /**
      * 获取单个file的转码记录
@@ -72,4 +72,15 @@ interface AliVodServiceInterface
      * @return array
      */
     public function chunks(array $fileIds): array;
+
+    /**
+     * 批量删除fileIds
+     * @param array $fileIds
+     * @return void
+     */
+    public function destroyMulti(array $fileIds): void;
+
+    public function createUploadToken(string $fileName, string $title): array;
+
+    public function createUploadRefreshToken(string $fileId): array;
 }

@@ -166,4 +166,10 @@ class TencentVodService implements TencentVodServiceInterface
     {
         return $this->vodDao->getTencentTranscodeRecords($fileIds, '');
     }
+
+    public function destroyMulti(array $fileIds): void
+    {
+        $this->vod->deleteVideos($fileIds);
+        $this->vodDao->clearTencentTranscodeRecords($fileIds);
+    }
 }
