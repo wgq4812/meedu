@@ -46,6 +46,8 @@ interface RuntimeStatusServiceInterface
 
     public function updateSchedule(int $time): void;
 
+    public function getScheduleValue(): int;
+
     public function getSystemVersion(): string;
 
     public function setSystemVersion(string $version): void;

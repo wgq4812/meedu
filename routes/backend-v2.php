@@ -7,13 +7,20 @@
  */
 
 Route::group([
-    'middleware' => ['auth:administrator'],
+    'middleware' => [
+        'auth:administrator',
+        \App\Http\Middleware\Backend\SystemBaseConfigCheckMiddleware::class,
+    ],
 ], function () {
     Route::get('/system/config', 'SystemController@config');
 });
 
 Route::group([
-    'middleware' => ['auth:administrator', 'backend.permission'],
+    'middleware' => [
+        'auth:administrator',
+        \App\Http\Middleware\Backend\SystemBaseConfigCheckMiddleware::class,
+        'backend.permission',
+    ],
 ], function () {
     Route::group(['prefix' => 'member'], function () {
         Route::get('/courses', 'MemberController@courses');

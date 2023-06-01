@@ -9,7 +9,6 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\Backend\SystemBaseConfigCheckMiddleware;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider
@@ -86,7 +85,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapBackendApiV1Routes()
     {
         Route::prefix('/backend/api/v1')
-            ->middleware(['api', SystemBaseConfigCheckMiddleware::class])
+            ->middleware(['api'])
             ->namespace($this->namespace . '\Backend\Api\V1')
             ->group(base_path('routes/backend-v1.php'));
     }
@@ -94,7 +93,7 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapBackendApiV2Routes()
     {
         Route::prefix('/backend/api/v2')
-            ->middleware(['api', SystemBaseConfigCheckMiddleware::class])
+            ->middleware(['api'])
             ->namespace($this->namespace . '\Backend\Api\V2')
             ->group(base_path('routes/backend-v2.php'));
     }

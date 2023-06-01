@@ -20,7 +20,13 @@ Route::group(['middleware' => ['auth:administrator']], function () {
     Route::post('/logout', 'LoginController@logout');
 });
 
-Route::group(['middleware' => ['auth:administrator', 'backend.permission']], function () {
+Route::group([
+    'middleware' => [
+        'auth:administrator',
+        \App\Http\Middleware\Backend\SystemBaseConfigCheckMiddleware::class,
+        'backend.permission',
+    ]
+], function () {
     Route::get('/user', 'LoginController@user');
 
     Route::get('/dashboard', 'DashboardController@index');
