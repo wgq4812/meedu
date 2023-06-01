@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Constant\AliConstant;
+use App\Models\AdministratorLog;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use App\Constant\RuntimeConstant as RC;
@@ -20,7 +21,6 @@ use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 
-// todo - 操作日志记录
 class AliVodController extends BaseController
 {
     public function check(
@@ -29,6 +29,12 @@ class AliVodController extends BaseController
         SettingServiceInterface       $settingService,
         AliVodServiceInterface        $avService
     ) {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         $config = $cService->getAliVodConfig();
 
         $baseConfigOk = $config['access_key_id'] && $config['access_key_secret'];
@@ -95,6 +101,12 @@ class AliVodController extends BaseController
 
     public function transcodeConfig(ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
     {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         $config = $configService->getAliVodConfig();
 
         $templates = $avServ->transcodeTemplates($config['app_id']);
@@ -137,6 +149,12 @@ class AliVodController extends BaseController
             return $this->error(__('参数错误'));
         }
 
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_STORE,
+            compact('fileId', 'tempName', 'tempId')
+        );
+
         $config = $configService->getAliVodConfig();
 
         $avServ->transcodeSubmit($config['app_id'], $fileId, $tempName, $tempId);
@@ -150,6 +168,12 @@ class AliVodController extends BaseController
         if (!$fileId) {
             return $this->error(__('参数错误'));
         }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_DESTROY,
+            compact('fileId')
+        );
 
         $avServ->transcodeDestroy($fileId);
 

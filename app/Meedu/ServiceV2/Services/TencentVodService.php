@@ -183,7 +183,7 @@ class TencentVodService implements TencentVodServiceInterface
         return $this->vod->url($url, $trySeconds);
     }
 
-    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): array
+    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): string
     {
         return $this->vod->getPlayerSign($fileId, $trySeconds, $mode);
     }
@@ -191,5 +191,19 @@ class TencentVodService implements TencentVodServiceInterface
     public function getPlayUrls(string $fileId, int $trySeconds, string $mode): array
     {
         return $this->vod->getPlayUrls($fileId, $trySeconds, $mode);
+    }
+
+    public function transcodeTemplates(): array
+    {
+        return [
+            [
+                'name' => '普通转码',
+                'key' => TencentConstant::VOD_TRANSCODE_SIMPLE_TASK,
+            ],
+            [
+                'name' => '自适应加密转码',
+                'key' => TencentConstant::VOD_TRANSCODE_ADAPTIVE,
+            ],
+        ];
     }
 }

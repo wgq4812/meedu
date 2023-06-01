@@ -56,9 +56,10 @@ class AdministratorLog extends Model
     public const MODULE_VIEW_BLOCK = 'view-block';
     public const MODULE_PROMO_CODE = 'promo-code';
     public const MODULE_ANNOUNCEMENT = 'announcement';
-
     public const MODULE_ADMINISTRATOR = 'administrator';
     public const MODULE_ADMINISTRATOR_ROLE = 'administrator-role';
+    public const MODULE_ALI_VOD = 'ali-vod';
+    public const MODULE_TENCENT_VOD = 'tencent-vod';
 
     protected $table = 'administrator_logs';
 

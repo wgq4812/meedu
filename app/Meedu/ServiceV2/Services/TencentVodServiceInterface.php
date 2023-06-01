@@ -114,9 +114,9 @@ interface TencentVodServiceInterface
      * @param string $fileId
      * @param int $trySeconds
      * @param string $mode
-     * @return array
+     * @return string
      */
-    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): array;
+    public function getPlayerSign(string $fileId, int $trySeconds, string $mode): string;
 
     /**
      * 获取播放URL
@@ -126,4 +126,9 @@ interface TencentVodServiceInterface
      * @return array
      */
     public function getPlayUrls(string $fileId, int $trySeconds, string $mode): array;
+
+    /**
+     * @return array
+     */
+    public function transcodeTemplates(): array;
 }

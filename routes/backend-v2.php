@@ -35,6 +35,7 @@ Route::group([
 
     Route::group(['prefix' => 'runtime'], function () {
         Route::group(['prefix' => 'tencent-vod'], function () {
+            // todo - 权限
             Route::get('/check', 'TencentVodController@check');
 
             Route::get('/app/index', 'TencentVodController@apps');
@@ -46,11 +47,13 @@ Route::group([
 
             Route::post('/cdn/key', 'TencentVodController@saveCdnKey');
 
+            Route::get('/transcode-config', 'TencentVodController@transcodeConfig');
             Route::post('/transcode-submit', 'TencentVodController@transcodeSubmit');
             Route::post('/transcode-destroy', 'TencentVodController@transcodeDestroy');
         });
 
         Route::group(['prefix' => 'ali-vod'], function () {
+            // todo - 权限
             Route::get('/check', 'AliVodController@check');
 
             Route::get('/transcode-config', 'AliVodController@transcodeConfig');

@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Backend\Api\V2;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\AdministratorLog;
 use Illuminate\Support\Facades\Log;
 use App\Constant\RuntimeConstant as RC;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
@@ -17,7 +18,6 @@ use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 
-// todo - 操作日志记录
 class TencentVodController extends BaseController
 {
     public function check(
@@ -26,6 +26,12 @@ class TencentVodController extends BaseController
         SettingServiceInterface       $settingService,
         TencentVodServiceInterface    $tvService
     ) {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         $config = $cService->getTencentVodConfig();
         $playKey = $cService->getTencentVodPlayKey();
 
@@ -95,6 +101,12 @@ class TencentVodController extends BaseController
 
     public function apps(TencentVodServiceInterface $tvService)
     {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         return $this->successData($tvService->apps());
     }
 
@@ -119,6 +131,12 @@ class TencentVodController extends BaseController
             $subAppId = $tvService->storeApp($name);
         }
 
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_UPDATE,
+            compact('name', 'subAppId')
+        );
+
         $settingService->saveTencentVodAppId($subAppId);
 
         $rsService->setTencentVodApp($subAppId);
@@ -128,6 +146,12 @@ class TencentVodController extends BaseController
 
     public function domains(TencentVodServiceInterface $tvService)
     {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         return $this->successData($tvService->domains());
     }
 
@@ -142,6 +166,12 @@ class TencentVodController extends BaseController
         if (!$domain) {
             return $this->error(__('参数错误'));
         }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_UPDATE,
+            compact('domain')
+        );
 
         $config = $cService->getTencentVodConfig();
         if ($config['domain'] === $domain) {
@@ -170,6 +200,12 @@ class TencentVodController extends BaseController
         SettingServiceInterface       $settingService,
         RuntimeStatusServiceInterface $rsService
     ) {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_UPDATE,
+            []
+        );
+
         try {
             $playKey = Str::random(32);
 
@@ -189,8 +225,14 @@ class TencentVodController extends BaseController
 
     public function transcodeConfig(TencentVodServiceInterface $tvService)
     {
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
         return $this->successData([
-            'templates' => $tvService->de
+            'templates' => $tvService->transcodeTemplates(),
         ]);
     }
 
@@ -200,6 +242,12 @@ class TencentVodController extends BaseController
         if (!$fileId) {
             return $this->error(__('参数错误'));
         }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_DESTROY,
+            compact('fileId')
+        );
 
         $tvService->deleteVideo([$fileId]);
 
@@ -214,6 +262,12 @@ class TencentVodController extends BaseController
             return $this->error(__('参数错误'));
         }
 
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_STORE,
+            compact('fileId', 'templateName')
+        );
+
         $tvService->transcodeSubmit($fileId, $templateName);
 
         return $this->success();
@@ -225,6 +279,12 @@ class TencentVodController extends BaseController
         if (!$key) {
             return $this->error(__('参数错误'));
         }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_UPDATE,
+            ['key' => mb_substr($key, 0, 6) . '***']
+        );
 
         $settingService->saveTencentVodCdnKey($key);
         $rsService->setTencentVodCdnKey(true);

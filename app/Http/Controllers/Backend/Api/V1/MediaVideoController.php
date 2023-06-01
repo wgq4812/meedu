@@ -122,6 +122,4 @@ class MediaVideoController extends BaseController
 
         return $this->successData();
     }
-
-    // todo - 视频转码文件的删除
 }
