@@ -10,6 +10,10 @@ namespace App\Meedu\ServiceV2\Services;
 
 interface RuntimeStatusServiceInterface
 {
+    public function chunks(array $names): array;
+
+    // #### 友情分割线 ###############################################
+
     public function setTencentVodDomainKey(bool $isOk);
 
     public function setTencentVodCdnKey(bool $isOk);
@@ -24,9 +28,9 @@ interface RuntimeStatusServiceInterface
 
     public function setTencentVodTranscodeSimpleTask(bool $isOk);
 
-    public function chunks(array $names): array;
-
     public function tencentVodStatus(): array;
+
+    // #### 友情分割线 ###############################################
 
     public function aliVodStatus(): array;
 
@@ -37,4 +41,8 @@ interface RuntimeStatusServiceInterface
     public function setAliVodEvent(string $url);
 
     public function setAliVodTranscodeSimpleTask(string $template);
+
+    // #### 友情分割线 ###############################################
+
+    public function updateSchedule(int $time):void;
 }

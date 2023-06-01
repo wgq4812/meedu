@@ -12,28 +12,14 @@ use App\Bus\RefundBus;
 use Illuminate\Console\Command;
 use App\Services\Order\Services\OrderService;
 use App\Services\Order\Interfaces\OrderServiceInterface;
-use Illuminate\Contracts\Container\BindingResolutionException;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class RefundQueryCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'meedu:refund:query';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = '退款订单状态查询命令';
 
-    /**
-     * @throws BindingResolutionException
-     */
     public function handle(): int
     {
         /**

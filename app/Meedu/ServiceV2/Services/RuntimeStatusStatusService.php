@@ -90,4 +90,9 @@ class RuntimeStatusStatusService implements RuntimeStatusServiceInterface
     {
         $this->rsDao->save(RC::ALI_VOD_TRANSCODE, $template);
     }
+
+    public function updateSchedule(int $time): void
+    {
+        $this->rsDao->save(RC::SYSTEM_SCHEDULE, $time);
+    }
 }
