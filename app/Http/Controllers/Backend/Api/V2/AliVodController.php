@@ -10,11 +10,9 @@ namespace App\Http\Controllers\Backend\Api\V2;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Constant\AliConstant;
 use App\Models\AdministratorLog;
 use Illuminate\Support\Facades\Log;
-use App\Exceptions\ServiceException;
 use App\Constant\RuntimeConstant as RC;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
@@ -97,86 +95,5 @@ class AliVodController extends BaseController
         $runtime = $rsService->aliVodStatus();
 
         return $this->successData($runtime);
-    }
-
-    public function transcodeConfig(ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
-    {
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_ALI_VOD,
-            AdministratorLog::OPT_VIEW,
-            []
-        );
-
-        $config = $configService->getAliVodConfig();
-
-        $templates = $avServ->transcodeTemplates($config['app_id']);
-        $templates = array_column($templates, null, 'Name');
-
-        $simpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_SIMPLE . '.TranscodeTemplateGroupId');
-        $hlsSimpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_HLS_SIMPLE . '.TranscodeTemplateGroupId');
-
-        if (!$simpleTempId || !$hlsSimpleTempId) {
-            throw new ServiceException(__('转码模板不存在'));
-        }
-
-        $data = [
-            [
-                'name' => '默认转码(不加密)',
-                'slug' => AliConstant::VOD_TRANSCODE_SIMPLE,
-                'template_id' => $simpleTempId,
-            ],
-            [
-                'name' => '默认转码(标准加密)',
-                'slug' => AliConstant::VOD_TRANSCODE_HLS_SIMPLE,
-                'template_id' => $hlsSimpleTempId,
-            ],
-            [
-                'name' => '默认转码(私有加密)',
-                'slug' => AliConstant::VOD_TRANSCODE_HLS_PRIVATE,
-                'template_id' => $hlsSimpleTempId,
-            ],
-        ];
-
-        return $this->successData($data);
-    }
-
-    public function transcodeSubmit(Request $request, ConfigServiceInterface $configService, AliVodServiceInterface $avServ)
-    {
-        $fileId = $request->input('file_id');
-        $tempName = $request->input('template_name');
-        $tempId = $request->input('template_id');
-        if (!$fileId || !$tempName || !$tempId) {
-            return $this->error(__('参数错误'));
-        }
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_ALI_VOD,
-            AdministratorLog::OPT_STORE,
-            compact('fileId', 'tempName', 'tempId')
-        );
-
-        $config = $configService->getAliVodConfig();
-
-        $avServ->transcodeSubmit($config['app_id'], $fileId, $tempName, $tempId);
-
-        return $this->success();
-    }
-
-    public function transcodeDestroy(Request $request, AliVodServiceInterface $avServ)
-    {
-        $fileId = $request->input('file_id');
-        if (!$fileId) {
-            return $this->error(__('参数错误'));
-        }
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_ALI_VOD,
-            AdministratorLog::OPT_DESTROY,
-            compact('fileId')
-        );
-
-        $avServ->transcodeDestroy($fileId);
-
-        return $this->success();
     }
 }

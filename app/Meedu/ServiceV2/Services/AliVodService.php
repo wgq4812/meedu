@@ -10,6 +10,7 @@ namespace App\Meedu\ServiceV2\Services;
 
 use Carbon\Carbon;
 use App\Meedu\Ali\Vod;
+use Illuminate\Support\Arr;
 use App\Constant\AliConstant;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
@@ -104,6 +105,37 @@ class AliVodService implements AliVodServiceInterface
         }
         return $result;
     }
+
+    public function defaultTranscodeTemplates(string $appId): array
+    {
+        $templates = array_column($this->transcodeTemplates($appId), null, 'Name');
+
+        $simpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_SIMPLE . '.TranscodeTemplateGroupId');
+        $hlsSimpleTempId = Arr::get($templates, AliConstant::VOD_TRANSCODE_HLS_SIMPLE . '.TranscodeTemplateGroupId');
+
+        if (!$simpleTempId || !$hlsSimpleTempId) {
+            throw new ServiceException(__('转码模板不存在'));
+        }
+
+        return [
+            [
+                'name' => '默认转码(不加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_SIMPLE,
+                'template_id' => $simpleTempId,
+            ],
+            [
+                'name' => '默认转码(标准加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_HLS_SIMPLE,
+                'template_id' => $hlsSimpleTempId,
+            ],
+            [
+                'name' => '默认转码(私有加密)',
+                'slug' => AliConstant::VOD_TRANSCODE_HLS_PRIVATE,
+                'template_id' => $hlsSimpleTempId,
+            ],
+        ];
+    }
+
 
     public function getTranscodeRecords(string $fileId): array
     {

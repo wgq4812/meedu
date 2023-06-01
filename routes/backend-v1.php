@@ -33,6 +33,11 @@ Route::group(['middleware' => ['auth:administrator', 'backend.permission']], fun
         Route::group(['prefix' => 'videos'], function () {
             Route::get('/index', 'MediaVideoController@index');
             Route::post('/delete/multi', 'MediaVideoController@destroy');
+
+            // todo - 权限
+            Route::get('/transcode-config', 'MediaVideoController@transcodeConfig');
+            Route::post('/transcode-destroy', 'MediaVideoController@transcodeDestroy');
+            Route::post('/transcode-submit', 'MediaVideoController@transcodeSubmit');
         });
 
         // 图片素材库

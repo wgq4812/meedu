@@ -27,6 +27,13 @@ interface AliVodServiceInterface
     public function transcodeTemplates(string $appId): array;
 
     /**
+     * 获取MeEdu内置的转码模板
+     * @param string $appId
+     * @return array
+     */
+    public function defaultTranscodeTemplates(string $appId): array;
+
+    /**
      * 创建转码模板
      * @param string $appId
      * @param bool $isEncrypt

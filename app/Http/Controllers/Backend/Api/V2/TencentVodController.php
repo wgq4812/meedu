@@ -223,56 +223,6 @@ class TencentVodController extends BaseController
         }
     }
 
-    public function transcodeConfig(TencentVodServiceInterface $tvService)
-    {
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_TENCENT_VOD,
-            AdministratorLog::OPT_VIEW,
-            []
-        );
-
-        return $this->successData([
-            'templates' => $tvService->transcodeTemplates(),
-        ]);
-    }
-
-    public function transcodeDestroy(Request $request, TencentVodServiceInterface $tvService)
-    {
-        $fileId = $request->input('file_id');
-        if (!$fileId) {
-            return $this->error(__('参数错误'));
-        }
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_TENCENT_VOD,
-            AdministratorLog::OPT_DESTROY,
-            compact('fileId')
-        );
-
-        $tvService->deleteVideo([$fileId]);
-
-        return $this->success();
-    }
-
-    public function transcodeSubmit(Request $request, TencentVodServiceInterface $tvService)
-    {
-        $fileId = $request->input('file_id');
-        $templateName = $request->input('template_name');
-        if (!$fileId || !$templateName) {
-            return $this->error(__('参数错误'));
-        }
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_TENCENT_VOD,
-            AdministratorLog::OPT_STORE,
-            compact('fileId', 'templateName')
-        );
-
-        $tvService->transcodeSubmit($fileId, $templateName);
-
-        return $this->success();
-    }
-
     public function saveCdnKey(Request $request, RuntimeStatusServiceInterface $rsService, SettingServiceInterface $settingService)
     {
         $key = $request->input('key');

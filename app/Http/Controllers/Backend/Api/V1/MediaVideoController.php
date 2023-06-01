@@ -14,6 +14,7 @@ use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\DB;
 use App\Services\Course\Models\MediaVideo;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 
 class MediaVideoController extends BaseController
@@ -121,5 +122,73 @@ class MediaVideoController extends BaseController
         });
 
         return $this->successData();
+    }
+
+    public function transcodeConfig(ConfigServiceInterface $configService, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $config = $configService->getAliVodConfig();
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
+        return $this->successData([
+            'ali_templates' => $avServ->defaultTranscodeTemplates($config['app_id']),
+            'tencent_templates' => $tvService->transcodeTemplates(),
+        ]);
+    }
+
+    public function transcodeDestroy(Request $request, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $fileId = $request->input('file_id');
+        $service = $request->input('service');
+        if (!$fileId) {
+            return $this->error(__('参数错误'));
+        }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_DESTROY,
+            compact('fileId', 'service')
+        );
+
+        if ($service === FrontendConstant::VOD_SERVICE_TENCENT) {
+            $tvService->deleteVideo([$fileId]);
+        } elseif ($service === FrontendConstant::VOD_SERVICE_ALIYUN) {
+            $avServ->transcodeDestroy($fileId);
+        }
+
+        return $this->success();
+    }
+
+    public function transcodeSubmit(Request $request, ConfigServiceInterface $configService, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $fileId = $request->input('file_id');
+        $tempName = $request->input('template_name');
+        $service = $request->input('service');
+        if (!$fileId || !$tempName || !$service) {
+            return $this->error(__('参数错误'));
+        }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_STORE,
+            compact('fileId', 'tempName', 'service')
+        );
+
+        if ($service === FrontendConstant::VOD_SERVICE_TENCENT) {
+            $tvService->transcodeSubmit($fileId, $tempName);
+        } elseif ($service === FrontendConstant::VOD_SERVICE_ALIYUN) {
+            $tempId = $request->input('template_id');
+            if (!$tempId) {
+                return $this->error(__('参数错误'));
+            }
+            $config = $configService->getAliVodConfig();
+            $avServ->transcodeSubmit($config['app_id'], $fileId, $tempName, $tempId);
+        }
+
+        return $this->success();
     }
 }

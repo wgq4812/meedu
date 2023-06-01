@@ -33,32 +33,22 @@ Route::group([
         Route::get('/user-graph', 'StatsController@userGraph');
     });
 
-    Route::group(['prefix' => 'runtime'], function () {
-        Route::group(['prefix' => 'tencent-vod'], function () {
-            // todo - 权限
-            Route::get('/check', 'TencentVodController@check');
+    Route::group(['prefix' => 'tencent-vod'], function () {
+        // todo - 权限
+        Route::get('/check', 'TencentVodController@check');
 
-            Route::get('/app/index', 'TencentVodController@apps');
-            Route::post('/app/create', 'TencentVodController@appConfirm');
+        Route::get('/app/index', 'TencentVodController@apps');
+        Route::post('/app/create', 'TencentVodController@appConfirm');
 
-            Route::get('/domain/index', 'TencentVodController@domains');
-            Route::post('/domain/create', 'TencentVodController@domainSwitch');
-            Route::post('/domain/key', 'TencentVodController@domainKeyReset');
+        Route::get('/domain/index', 'TencentVodController@domains');
+        Route::post('/domain/create', 'TencentVodController@domainSwitch');
+        Route::post('/domain/key', 'TencentVodController@domainKeyReset');
 
-            Route::post('/cdn/key', 'TencentVodController@saveCdnKey');
+        Route::post('/cdn/key', 'TencentVodController@saveCdnKey');
+    });
 
-            Route::get('/transcode-config', 'TencentVodController@transcodeConfig');
-            Route::post('/transcode-submit', 'TencentVodController@transcodeSubmit');
-            Route::post('/transcode-destroy', 'TencentVodController@transcodeDestroy');
-        });
-
-        Route::group(['prefix' => 'ali-vod'], function () {
-            // todo - 权限
-            Route::get('/check', 'AliVodController@check');
-
-            Route::get('/transcode-config', 'AliVodController@transcodeConfig');
-            Route::post('/transcode-submit', 'AliVodController@transcodeSubmit');
-            Route::post('/transcode-destroy', 'AliVodController@transcodeDestroy');
-        });
+    Route::group(['prefix' => 'ali-vod'], function () {
+        // todo - 权限
+        Route::get('/check', 'AliVodController@check');
     });
 });
