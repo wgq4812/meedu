@@ -8,32 +8,9 @@
 
 namespace App\Http\Controllers\Backend\Api\V2;
 
+use App\Http\Controllers\Backend\Traits\ResponseTrait;
+
 class BaseController
 {
-    protected function success($message = '')
-    {
-        return response()->json([
-            'status' => 0,
-            'message' => $message,
-            'data' => [],
-        ]);
-    }
-
-    protected function successData($data = [], $message = '')
-    {
-        return response()->json([
-            'status' => 0,
-            'message' => $message,
-            'data' => $data,
-        ]);
-    }
-
-    protected function error($message, $code = 1)
-    {
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => [],
-        ]);
-    }
+    use ResponseTrait;
 }

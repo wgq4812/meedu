@@ -96,4 +96,19 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('meedu.upload.video.aliyun');
     }
+
+    public function isEnabledRedisCache(): bool
+    {
+        return config('cache.default') === 'redis';
+    }
+
+    public function isEnabledRedisQueue(): bool
+    {
+        return config('queue.default') === 'redis';
+    }
+
+    public function isEnvTest(): bool
+    {
+        return config('app.env') === 'testing';
+    }
 }

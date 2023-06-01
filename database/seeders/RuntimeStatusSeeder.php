@@ -23,9 +23,7 @@ class RuntimeStatusSeeder extends Seeder
     public function run()
     {
         $data = [
-            RC::SYSTEM_VERSION => '',
             RC::SYSTEM_SCHEDULE => '',
-            RC::SYSTEM_QUEUE => '',
 
             RC::TENCENT_VOD_SECRET => '',
             RC::TENCENT_VOD_APP => '',

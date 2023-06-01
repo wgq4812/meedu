@@ -9,56 +9,9 @@
 namespace App\Http\Controllers\Backend\Api\V1;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Backend\Traits\ResponseTrait;
 
 class BaseController extends Controller
 {
-    public function adminId()
-    {
-        return Auth::guard('administrator')->id();
-    }
-
-    /**
-     * @param string $message
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function success($message = '')
-    {
-        return response()->json([
-            'status' => 0,
-            'message' => $message,
-            'data' => [],
-        ]);
-    }
-
-    /**
-     * @param array $data
-     * @param string $message
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function successData($data = [], $message = '')
-    {
-        return response()->json([
-            'status' => 0,
-            'message' => $message,
-            'data' => $data,
-        ]);
-    }
-
-    /**
-     * @param $message
-     * @param int $code
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function error($message, $code = 1)
-    {
-        return response()->json([
-            'status' => $code,
-            'message' => $message,
-            'data' => [],
-        ]);
-    }
+    use ResponseTrait;
 }

@@ -8,18 +8,14 @@
 
 namespace App\Exceptions;
 
+use App\Http\Controllers\Backend\Traits\ResponseTrait;
+
 class BackendValidateException extends \Exception
 {
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @codeCoverageIgnore
-     */
+    use ResponseTrait;
+
     public function render()
     {
-        return response()->json([
-            'status' => 406,
-            'message' => $this->message,
-        ]);
+        return $this->error($this->getMessage());
     }
 }

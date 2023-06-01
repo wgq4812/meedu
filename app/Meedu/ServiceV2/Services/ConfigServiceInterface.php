@@ -10,12 +10,28 @@ namespace App\Meedu\ServiceV2\Services;
 
 interface ConfigServiceInterface
 {
+    /**
+     * 获取超级管理员角色的特征值
+     * @return string
+     */
     public function getSuperAdministratorSlug(): string;
 
+    /**
+     * 获取启用的社交登录
+     * @return array
+     */
     public function getEnabledSocialiteApps(): array;
 
+    /**
+     * 获取登录限制规则
+     * @return int
+     */
     public function getLoginLimitRule(): int;
 
+    /**
+     * 是否关闭不推荐的API访问的
+     * @return bool
+     */
     public function isCloseDeprecatedApi(): bool;
 
     public function getMpWechatScanLoginAlert(): string;
@@ -43,4 +59,10 @@ interface ConfigServiceInterface
     public function getTencentVodPlayKey(): string;
 
     public function getAliVodConfig(): array;
+
+    public function isEnabledRedisCache(): bool;
+
+    public function isEnabledRedisQueue(): bool;
+
+    public function isEnvTest(): bool;
 }

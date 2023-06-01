@@ -12,9 +12,7 @@ class RuntimeConstant
 {
     public const STATUS_OK = 'ok';
 
-    public const SYSTEM_VERSION = 'system-version';
     public const SYSTEM_SCHEDULE = 'system-schedule';
-    public const SYSTEM_QUEUE = 'system-queue';
 
     // 腾讯云-点播配置
     public const TENCENT_VOD_NAMES = [

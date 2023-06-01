@@ -9,14 +9,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Http\Controllers\Backend\Traits\ResponseTrait;
 
-/**
- * 影响到系统正常运行的异常
- * 该异常会记录到log中
- * 响应代码为500
- */
-class SystemException extends \Exception
+class SystemBaseConfigErrorException extends \Exception
 {
     use ResponseTrait;
 
@@ -27,6 +22,9 @@ class SystemException extends \Exception
      */
     public function render(): JsonResponse
     {
-        return $this->error(__('错误'));
+        if (is_backend_api()) {
+            return $this->error($this->getMessage(), 1001);
+        }
+        return response()->json(['code' => 1, 'message' => $this->getMessage()]);
     }
 }

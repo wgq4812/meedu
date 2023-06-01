@@ -22,6 +22,9 @@ class ServiceException extends \Exception
 
     public function render()
     {
-        return $this->error($this->getMessage());
+        if (!is_backend_api()) {
+            return $this->error($this->getMessage());
+        }
+        return response()->json(['status' => 1, 'message' => $this->getMessage()]);
     }
 }

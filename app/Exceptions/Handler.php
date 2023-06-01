@@ -29,6 +29,7 @@ class Handler extends ExceptionHandler
         ServiceException::class,
         BackendValidateException::class,
         SucAndReturnException::class,
+        SystemBaseConfigErrorException::class,
     ];
 
     /**
@@ -43,13 +44,18 @@ class Handler extends ExceptionHandler
 
     public function render($request, \Throwable $e)
     {
-        if ($e instanceof ServiceException) {
+        // 如果Exception实现了render方法(也就是自定处理异常的响应)
+        if (method_exists($e, 'render')) {
             return parent::render($request, $e);
         }
 
+        // ################################
+        // 对未实现render方法的异常类进行拦截处理
+        // ################################
+
         // 后台的异常错误
-        if (Str::contains($request->getUri(), '/backend/api/v1')) {
-            $code = BackendApiConstant::ERROR_CODE;
+        if (is_backend_api()) {
+            $code = BackendApiConstant::ERROR_CODE;//默认异常代码
             if ($e instanceof AuthenticationException) {//未登录异常
                 $code = BackendApiConstant::NO_AUTH_CODE;
             } elseif ($e instanceof ThrottleRequestsException) {//限流异常
@@ -63,10 +69,10 @@ class Handler extends ExceptionHandler
         }
 
         if (Str::contains($request->getUri(), '/api/v2')) {
-            $code = ApiV2Constant::ERROR_CODE;//默认的错误code
-            if ($e instanceof AuthenticationException) {//未登录code=401
+            $code = ApiV2Constant::ERROR_CODE;//默认异常代码
+            if ($e instanceof AuthenticationException) {//未登录401
                 $code = ApiV2Constant::ERROR_NO_AUTH_CODE;
-            } elseif ($e instanceof ThrottleRequestsException) {
+            } elseif ($e instanceof ThrottleRequestsException) {//触发限流429
                 $code = 429;
             }
             return $this->error(__('错误'), $code);
