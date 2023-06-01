@@ -95,4 +95,14 @@ class RuntimeStatusStatusService implements RuntimeStatusServiceInterface
     {
         $this->rsDao->save(RC::SYSTEM_SCHEDULE, $time);
     }
+
+    public function getSystemVersion(): string
+    {
+        return $this->rsDao->value(RC::SYSTEM_VERSION) ?? '';
+    }
+
+    public function setSystemVersion(string $version): void
+    {
+        $this->rsDao->save(RC::SYSTEM_VERSION, $version);
+    }
 }

@@ -13,4 +13,6 @@ interface RuntimeStatusDaoInterface
     public function save(string $name, $status);
 
     public function nameChunks(array $names): array;
+
+    public function value(string $name);
 }

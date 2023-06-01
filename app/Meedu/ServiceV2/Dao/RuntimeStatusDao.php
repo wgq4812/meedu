@@ -21,4 +21,9 @@ class RuntimeStatusDao implements RuntimeStatusDaoInterface
     {
         return RuntimeStatus::query()->whereIn('name', $names)->get()->toArray();
     }
+
+    public function value(string $name)
+    {
+        return RuntimeStatus::query()->where('name', $name)->value('status');
+    }
 }

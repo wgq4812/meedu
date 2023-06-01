@@ -44,5 +44,9 @@ interface RuntimeStatusServiceInterface
 
     // #### 友情分割线 ###############################################
 
-    public function updateSchedule(int $time):void;
+    public function updateSchedule(int $time): void;
+
+    public function getSystemVersion(): string;
+
+    public function setSystemVersion(string $version): void;
 }

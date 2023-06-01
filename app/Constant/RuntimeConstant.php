@@ -14,6 +14,8 @@ class RuntimeConstant
 
     public const SYSTEM_SCHEDULE = 'system-schedule';
 
+    public const SYSTEM_VERSION = 'system-version';
+
     // 腾讯云-点播配置
     public const TENCENT_VOD_NAMES = [
         self::TENCENT_VOD_SECRET,

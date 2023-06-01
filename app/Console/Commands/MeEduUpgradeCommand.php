@@ -8,39 +8,29 @@
 
 namespace App\Console\Commands;
 
+use App\Meedu\MeEdu;
 use App\Meedu\Upgrade;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Command\Command as CommandAlias;
+use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 
 class MeEduUpgradeCommand extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'meedu:upgrade';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'MeEdu升级处理命令';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function handle(): int
     {
+        /**
+         * @var RuntimeStatusServiceInterface $rsService
+         */
+        $rsService = app()->make(RuntimeStatusServiceInterface::class);
+
+        $this->line('当前系统版本:' . $rsService->getSystemVersion());
+        $this->line('本地系统版本:' . MeEdu::VERSION);
+
         // 数据库迁移命令
         $this->info('执行数据库迁移...');
         Artisan::call('migrate', ['--force' => true]);
@@ -68,6 +58,16 @@ class MeEduUpgradeCommand extends Command
         // 清空视图缓存
         $this->info('清除视图缓存...');
         Artisan::call('view:clear');
+
+        $this->info('更新版本中...');
+        try {
+            $rsService->setSystemVersion(MeEdu::VERSION);
+        } catch (\Exception $e) {
+            $this->error(__('系统版本更新失败,错误信息 :msg', ['msg' => $e->getMessage()]));
+            return Command::FAILURE;
+        }
+
+        $this->info('升级成功');
 
         return CommandAlias::SUCCESS;
     }
