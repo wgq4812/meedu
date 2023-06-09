@@ -25,11 +25,11 @@ MeEdu 是一款基于 PHP + Laravel 开发的线上网校系统。支持线上�
 
 | 项目 | 框架 |
 | --- | --- |
-| [MeEdu 后台界面程序](https://github.com/meedu/backend-v2) | `Vue2` |
-| [MeEdu PC端界面程序](https://github.com/meedu/pc-v1) | `Vue2` |
+| [MeEdu 后台界面程序](https://github.com/meedu/backend-v2) | `React18` |
+| [MeEdu PC端界面程序](https://github.com/meedu/pc-v1) | `React18` |
 | [MeEdu H5端界面程序](https://github.com/meedu/h5-v1) | `Vue2` |
 
-## 付费方案介绍
+## 商业版介绍
 
 ![](https://meedu.cloud.oss.meedu.vip/github/2.jpeg)
 
