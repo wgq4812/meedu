@@ -11,7 +11,7 @@ namespace App\Meedu\ServiceV2\Dao;
 interface OtherDaoInterface
 {
     public function storeUserUploadImage(
-        int $userId,
+        int    $userId,
         string $group,
         string $disk,
         string $path,
@@ -21,4 +21,12 @@ interface OtherDaoInterface
         string $logIp,
         string $logUA
     ): void;
+
+    public function navs(): array;
+
+    public function links(): array;
+
+    public function viewBlocks(string $page, string $platform): array;
+
+    public function latestAnnouncement(): array;
 }

@@ -65,4 +65,34 @@ interface ConfigServiceInterface
     public function isEnabledRedisQueue(): bool;
 
     public function isEnvTest(): bool;
+
+    public function getAppName(): string;
+
+    public function getICP(): string;
+
+    public function getICPLink(): string;
+
+    public function getICP2(): string;
+
+    public function getICP2Link(): string;
+
+    public function getPlayerCover(): string;
+
+    public function getPlayerBulletSecret(): array;
+
+    public function enabledMustBindMobile(): int;
+
+    public function enabledQQLogin(): int;
+
+    public function enabledWechatScanLogin(): int;
+
+    public function enabledWechatOAUTHLogin(): int;
+
+    public function getCredit1Register(): int;
+
+    public function getCredit1WatchedCourse(): int;
+
+    public function getCredit1WatchedVideo(): int;
+
+    public function getCredit1CreatedPaidOrder(): string;
 }

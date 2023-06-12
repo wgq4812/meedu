@@ -111,4 +111,87 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('app.env') === 'testing';
     }
+
+    public function getAppName(): string
+    {
+        return config('app.name') ?? '';
+    }
+
+    public function getICP(): string
+    {
+        return config('meedu.system.icp', '');
+    }
+
+    public function getICPLink(): string
+    {
+        return config('meedu.system.icp_link');
+    }
+
+    public function getICP2(): string
+    {
+        return config('meedu.system.icp2', '');
+    }
+
+    public function getICP2Link(): string
+    {
+        return config('meedu.system.icp2_link', '');
+    }
+
+    public function getPlayerCover(): string
+    {
+        return config('meedu.system.player_thumb') ?? '';
+    }
+
+    public function getPlayerBulletSecret(): array
+    {
+        $playerConfig = config('meedu.system.player');
+
+        return [
+            'enabled' => $playerConfig['enabled_bullet_secret'],
+            'text' => $playerConfig['bullet_secret']['text'],
+            'size' => $playerConfig['bullet_secret']['size'],
+            'color' => $playerConfig['bullet_secret']['color'],
+            'opacity' => $playerConfig['bullet_secret']['opacity'],
+        ];
+    }
+
+    public function enabledMustBindMobile(): int
+    {
+        return (int)config('meedu.member.enabled_mobile_bind_alert');
+    }
+
+    public function enabledQQLogin(): int
+    {
+        return (int)config('meedu.member.socialite.qq.enabled');
+    }
+
+    public function enabledWechatScanLogin(): int
+    {
+        return (int)config('meedu.mp_wechat.enabled_scan_login');
+    }
+
+    public function enabledWechatOAUTHLogin(): int
+    {
+        return (int)config('meedu.mp_wechat.enabled_oauth_login');
+    }
+
+    public function getCredit1Register(): int
+    {
+        return (int)config('meedu.member.credit1.register');
+    }
+
+    public function getCredit1WatchedCourse(): int
+    {
+        return (int)config('meedu.member.credit1.watched_course');
+    }
+
+    public function getCredit1WatchedVideo(): int
+    {
+        return (int)config('meedu.member.credit1.watched_video');
+    }
+
+    public function getCredit1CreatedPaidOrder(): string
+    {
+        return (string)config('meedu.member.credit1.paid_order');
+    }
 }
