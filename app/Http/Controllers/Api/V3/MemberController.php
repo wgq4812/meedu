@@ -459,7 +459,7 @@ class MemberController extends BaseController
         }
         $data = $face->query($ruleId, $bizToken);
         if (!$data) {
-            return $this->success(['status' => BusConstant::USER_VERIFY_FACE_TENCENT_STATUS_FAIL]);
+            return $this->data(['status' => BusConstant::USER_VERIFY_FACE_TENCENT_STATUS_FAIL]);
         }
 
         $verifyImageUrl = '';
