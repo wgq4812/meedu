@@ -32,6 +32,13 @@ class UpgradeToV500
                 'filesystems.disks.qiniu.access_key',
                 'filesystems.disks.qiniu.secret_key',
                 'filesystems.disks.qiniu.bucket',
+
+                // 云片短信
+                'sms.gateways.yunpian.api_key',
+                'sms.gateways.yunpian.template.password_reset',
+                'sms.gateways.yunpian.template.register',
+                'sms.gateways.yunpian.template.mobile_bind',
+                'sms.gateways.yunpian.template.login',
             ])
             ->delete();
     }
@@ -51,6 +58,19 @@ class UpgradeToV500
                 [
                     'title' => '腾讯云COS',
                     'key' => 'cos',
+                ],
+            ]),
+        ]);
+
+        AppConfig::query()->where('key', 'meedu.system.sms')->update([
+            'option_value' => json_encode([
+                [
+                    'title' => '阿里云',
+                    'key' => 'aliyun',
+                ],
+                [
+                    'title' => '腾讯云',
+                    'key' => 'tencent',
                 ],
             ]),
         ]);
