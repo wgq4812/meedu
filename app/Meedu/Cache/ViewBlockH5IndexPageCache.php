@@ -11,9 +11,9 @@ namespace App\Meedu\Cache;
 use Illuminate\Support\Facades\Cache;
 use App\Meedu\ServiceV2\Services\OtherServiceInterface;
 
-class PcIndexViewBlockCache
+class ViewBlockH5IndexPageCache
 {
-    public const KEY = 'system-pc-index-view-block';
+    public const KEY = 'system-h5-index-view-block';
     public const EXPIRE = 259200;
 
     private $otherService;
@@ -27,7 +27,7 @@ class PcIndexViewBlockCache
     {
         $data = Cache::get(self::KEY);
         if (!$data) {
-            $data = $this->otherService->viewBlocks('pc-page-index', 'pc');
+            $data = $this->otherService->viewBlocks('h5-page-index', 'h5');
             Cache::put(self::KEY, $data, self::EXPIRE);
         }
         return $data;

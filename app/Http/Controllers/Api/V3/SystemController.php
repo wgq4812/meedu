@@ -11,7 +11,8 @@ namespace App\Http\Controllers\Api\V3;
 use App\Meedu\Addons;
 use App\Meedu\Cache\NavCache;
 use App\Meedu\Cache\LinkCache;
-use App\Meedu\Cache\PcIndexViewBlockCache;
+use App\Meedu\Cache\ViewBlockH5IndexPageCache;
+use App\Meedu\Cache\ViewBlockPCIndexPageCache;
 use App\Http\Controllers\Api\V2\BaseController;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
@@ -23,11 +24,12 @@ class SystemController extends BaseController
     }
 
     public function config(
-        Addons                 $addons,
-        ConfigServiceInterface $configService,
-        LinkCache              $linkCache,
-        NavCache               $navCache,
-        PcIndexViewBlockCache  $blockCache
+        Addons                    $addons,
+        ConfigServiceInterface    $configService,
+        LinkCache                 $linkCache,
+        NavCache                  $navCache,
+        ViewBlockPCIndexPageCache $PCIndexPageCache,
+        ViewBlockH5IndexPageCache $h5IndexPageCache
     ) {
         $enabledAddons = $addons->enabledAddons();
 
@@ -98,7 +100,8 @@ class SystemController extends BaseController
             'config' => $config,
             'navs' => $navCache->get(),
             'links' => $linkCache->get(),
-            'pc_index_view_blocks' => $blockCache->get(),
+            'view_block_pc_index_page' => $PCIndexPageCache->get(),
+            'view_block_h5_index_page' => $h5IndexPageCache->get(),
         ]);
     }
 }

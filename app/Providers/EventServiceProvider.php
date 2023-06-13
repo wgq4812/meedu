@@ -110,5 +110,17 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\TencentVodCallbackEvent\VideoCreatedListener',
             'App\Listeners\TencentVodCallbackEvent\DestroyListener',
         ],
+        // 导航栏更新
+        'App\Events\NavUpdateEvent' => [
+            'App\Listeners\NavUpdateEvent\CacheClearListener',
+        ],
+        // 友情链接更新
+        'App\Events\LinkUpdateEvent' => [
+            'App\Listeners\LinkUpdateEvent\CacheClearListener',
+        ],
+        // 首页装修模块更新
+        'App\Events\ViewBlockUpdateEvent' => [
+            'App\Listeners\ViewBlockUpdateEvent\CacheClearListener',
+        ],
     ];
 }
