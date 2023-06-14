@@ -19,4 +19,8 @@ interface CourseDaoInterface
     public function findOrFail(int $id): array;
 
     public function videoFindOrFail(int $videoId, int $courseId): array;
+
+    public function categories(): array;
+
+    public function coursePaginate(int $page, int $size, array $params, array $with, array $withCount): array;
 }

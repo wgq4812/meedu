@@ -122,5 +122,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ViewBlockUpdateEvent' => [
             'App\Listeners\ViewBlockUpdateEvent\CacheClearListener',
         ],
+        // 录播课分类更新
+        'App\Events\CourseCategoryUpdateEvent' => [
+            'App\Listeners\CourseCategoryUpdateEvent\CacheClearListener',
+        ],
     ];
 }

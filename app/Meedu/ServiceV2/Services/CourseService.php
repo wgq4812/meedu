@@ -44,4 +44,14 @@ class CourseService implements CourseServiceInterface
     {
         return $this->courseDao->videoFindOrFail($videoId, $courseId);
     }
+
+    public function categories(): array
+    {
+        return $this->courseDao->categories();
+    }
+
+    public function coursePaginate(int $page, int $size, array $params, array $with, array $withCount): array
+    {
+        return $this->courseDao->coursePaginate($page, $size, $params, $with, $withCount);
+    }
 }

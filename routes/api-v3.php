@@ -6,22 +6,35 @@
  * (c) 杭州白书科技有限公司
  */
 
+// 内容给你搜索
 Route::get('/search', 'SearchController@index');
-
+// 系统状态查询[可以用于负载均衡的健康查询]
 Route::get('/status', 'SystemController@status');
+// 系统配置
 Route::get('/config', 'SystemController@config');
 
+// 微信公众号授权登录
 Route::get('/auth/login/wechat/oauth', 'LoginController@wechatOauthLogin');
+// 微信公众号授权登录-返回
 Route::get('/auth/login/wechat/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
+// 社交登录
 Route::get('/auth/login/socialite/{app}', 'LoginController@socialiteLogin');
+// 社交登录返回
 Route::get('/auth/login/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v3.login.socialite.callback');
-
+// 微信公众号扫码登录
 Route::get('/auth/login/wechat/scan', 'LoginController@wechatScan');
+// 微信公众号扫码登录-结果查询
 Route::get('/auth/login/wechat/scan/query', 'LoginController@wechatScanQuery');
 
+// 通过code登录系统[code由社交登录、微信扫码登录发放]
 Route::post('/auth/login/code', 'LoginController@loginByCode');
+// 注册-社交登录
 Route::post('/auth/register/withSocialite', 'LoginController@registerWithSocialite');
+// 注册-微信公众号扫码
 Route::post('/auth/register/withWechatScan', 'LoginController@registerWithWechatScan');
+
+// 录播课分页列表
+Route::get('/courses', 'CourseController@index');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
     // 手动打款
