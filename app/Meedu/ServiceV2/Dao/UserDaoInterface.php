@@ -65,4 +65,6 @@ interface UserDaoInterface
     public function storeUserProfile(int $userId, array $data): array;
 
     public function getUserVideoWatchRecordsByVideoIds(int $userId, array $videoIds): array;
+
+    public function unreadNotificationCount(int $userId): int;
 }

@@ -298,4 +298,9 @@ class UserService implements UserServiceInterface
     {
         return $this->userDao->getUserVideoWatchRecordsByVideoIds($userId, $videoIds);
     }
+
+    public function unreadNotificationCount(int $userId): int
+    {
+        return $this->userDao->unreadNotificationCount($userId);
+    }
 }

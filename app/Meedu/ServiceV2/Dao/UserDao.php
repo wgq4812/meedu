@@ -305,4 +305,9 @@ SQL;
     {
         return UserVideoWatchRecord::query()->where('user_id', $userId)->whereIn('video_id', $videoIds)->get()->toArray();
     }
+
+    public function unreadNotificationCount(int $userId): int
+    {
+        return User::query()->where('id', $userId)->firstOrFail()->unreadNotifications->count();
+    }
 }
