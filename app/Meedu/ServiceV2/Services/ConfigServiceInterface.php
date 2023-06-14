@@ -95,4 +95,6 @@ interface ConfigServiceInterface
     public function getCredit1WatchedVideo(): int;
 
     public function getCredit1CreatedPaidOrder(): string;
+
+    public function enabledPayments():array;
 }

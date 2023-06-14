@@ -194,4 +194,20 @@ class ConfigService implements ConfigServiceInterface
     {
         return (string)config('meedu.member.credit1.paid_order');
     }
+
+    public function enabledPayments(): array
+    {
+        return collect(config('meedu.payment'))->filter(function ($item) {
+            return (int)$item['enabled'] === 1;
+        })->map(function ($item) {
+            return [
+                'name' => $item['name'],
+                'logo' => url($item['logo']),
+                'sign' => $item['sign'],
+                'pc' => isset($item['pc']) ? 1 : 0,
+                'h5' => isset($item['h5']) ? 1 : 0,
+                'wechat' => isset($item['wechat']) ? 1 : 0,
+            ];
+        })->toArray();
+    }
 }
