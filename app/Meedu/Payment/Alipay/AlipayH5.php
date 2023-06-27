@@ -11,11 +11,12 @@ namespace App\Meedu\Payment\Alipay;
 use Exception;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\RedirectResponse;
 use App\Meedu\Payment\Contract\Payment;
 use App\Meedu\Payment\Contract\PaymentStatus;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
-class Alipay implements Payment
+class AlipayH5 implements Payment
 {
     private $config;
 
@@ -34,17 +35,20 @@ class Alipay implements Payment
         $payOrderData = array_merge($payOrderData, $extra);
 
         try {
-            $result = Pay::alipay($this->config)->scan($payOrderData);
+            /**
+             * @var RedirectResponse $result
+             */
+            $result = Pay::alipay($this->config)->wap($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
                 'message' => '',
                 'data' => [
-                    'qr_code' => $result['qr_code'],
+                    'redirect_url' => $result->getTargetUrl(),
                 ],
             ]));
         } catch (Exception $e) {
-            Log::error(__METHOD__ . '|支付宝订单创建失败,信息:' . $e->getMessage(), compact('orderNo', 'title', 'realAmount'));
+            Log::error(__METHOD__ . '|支付宝H5订单创建失败,信息:' . $e->getMessage(), compact('orderNo', 'title', 'realAmount'));
             return new PaymentStatus(false, response()->json([
                 'code' => -1,
                 'message' => __('支付宝订单创建失败'),

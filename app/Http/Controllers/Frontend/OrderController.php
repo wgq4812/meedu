@@ -10,27 +10,13 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Meedu\Wechat;
 use Illuminate\Http\Request;
-use App\Meedu\Payment\Wechat\WechatJSAPI;
-use App\Services\Order\Services\OrderService;
-use App\Services\Order\Interfaces\OrderServiceInterface;
+use App\Meedu\Payment\PaymentHandler;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
 class OrderController extends FrontendController
 {
-    /**
-     * @var OrderService
-     */
-    protected $orderService;
-
-    public function __construct(OrderServiceInterface $orderService)
+    public function wechatJSAPI(Request $request, PaymentHandler $paymentHandler, OrderServiceInterface $orderService)
     {
-        parent::__construct();
-
-        $this->orderService = $orderService;
-    }
-
-    public function wechatJSAPI(Request $request)
-    {
-        // 跳转地址
         $data = $request->input('data');
 
         $openid = session('wechat_jsapi_openid');
@@ -55,34 +41,25 @@ class OrderController extends FrontendController
         }
 
         try {
-            // 解密数据
             $decryptData = decrypt($data);
-            // 获取orderId
+
             $orderId = $decryptData['order_id'];
             $sUrl = $decryptData['s_url'];
             $fUrl = $decryptData['f_url'];
 
             if ($decryptData['expired_at'] < time()) {
-                abort(500, __('参数错误'));
+                abort(406, __('参数错误'));
             }
 
-            // 订单
-            $order = $this->orderService->findOrFail($orderId);
+            $order = $orderService->find($orderId);
 
-            /**
-             * @var WechatJSAPI $jsapi
-             */
-            $jsapi = app()->make(WechatJSAPI::class);
+            $data = $paymentHandler->create($order, ['openid' => $openid]);
 
-            // 创建微信支付订单
-            $data = $jsapi->createDirect($order, $openid);
-
-            // 页面标题
             $title = __('微信支付');
 
             return view('h5.order.wechat-jsapi-pay', compact('order', 'title', 'data', 'sUrl', 'fUrl'));
         } catch (\Exception $e) {
-            abort(500, __('参数错误'));
+            abort(406, __('参数错误'));
         }
     }
 }

@@ -69,15 +69,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     // 订单是否支付状态查询
     Route::get('/order/status', 'OrderController@queryStatus');
 
-    // 跳转到第三方平台支付[如：支付宝web支付]
-    Route::get('/order/pay/redirect', 'PaymentController@payRedirect');
-    // 手动打款支付
-    Route::get('/order/pay/handPay', 'PaymentController@handPay');
-    // 微信扫码支付
-    Route::post('/order/pay/wechatScan', 'PaymentController@wechatScan');
-    // 获取可用支付网关
-    Route::get('/order/payments', 'PaymentController@payments');
-
     // 优惠码-检测是否可用
     Route::get('/promoCode/{code}/check', 'PromoCodeController@checkCode');
 

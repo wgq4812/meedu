@@ -14,3 +14,6 @@ Route::any('/callback/ali/vod', 'Api\\Callback\\AliVodController@handle')->name(
 Route::any('/ali/vod/play/hls', 'Api\\Callback\\AliVodController@hls')->name('ali.vod.play.hls');
 
 Route::any('/callback/tencent/vod/{key}', 'Api\\Callback\\TencentVodController@handle')->name('tencent.vod.callback');
+
+// 支付回调
+Route::post('/payment/callback/{payment}', 'Api\\Callback\\PaymentController@callback')->name('payment.callback');

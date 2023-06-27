@@ -195,19 +195,40 @@ class ConfigService implements ConfigServiceInterface
         return (string)config('meedu.member.credit1.paid_order');
     }
 
-    public function enabledPayments(): array
+    public function paymentsStatus(): array
     {
-        return collect(config('meedu.payment'))->filter(function ($item) {
-            return (int)$item['enabled'] === 1;
-        })->map(function ($item) {
-            return [
-                'name' => $item['name'],
-                'logo' => url($item['logo']),
-                'sign' => $item['sign'],
-                'pc' => isset($item['pc']) ? 1 : 0,
-                'h5' => isset($item['h5']) ? 1 : 0,
-                'wechat' => isset($item['wechat']) ? 1 : 0,
+        $payments = $this->payments();
+        $data = [];
+        foreach ($payments as $key => $item) {
+            $data[] = [
+                'payment' => $key,
+                'status' => $item['enabled'],
             ];
-        })->toArray();
+        }
+        return $data;
+    }
+
+    public function payments(): array
+    {
+        return config('meedu.payment');
+    }
+
+    public function getHandPayDesc(): string
+    {
+        return config('meedu.payment.handPay.introduction') ?? '';
+    }
+
+    public function getAlipayConfig(): array
+    {
+        $config = config('pay.alipay');
+        $config['notify_url'] = route('payment.callback', ['alipay']);
+        return $config;
+    }
+
+    public function getWechatPayConfig(): array
+    {
+        $config = config('pay.wechat');
+        $config['notify_url'] = route('payment.callback', ['wechat']);
+        return $config;
     }
 }

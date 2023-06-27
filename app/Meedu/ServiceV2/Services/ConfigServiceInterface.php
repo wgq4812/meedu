@@ -96,5 +96,13 @@ interface ConfigServiceInterface
 
     public function getCredit1CreatedPaidOrder(): string;
 
-    public function enabledPayments():array;
+    public function paymentsStatus(): array;
+
+    public function payments(): array;
+
+    public function getHandPayDesc(): string;
+
+    public function getAlipayConfig(): array;
+
+    public function getWechatPayConfig(): array;
 }

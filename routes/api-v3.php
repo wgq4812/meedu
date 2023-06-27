@@ -37,8 +37,8 @@ Route::post('/auth/register/withWechatScan', 'LoginController@registerWithWechat
 Route::get('/courses', 'CourseController@index');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
-    // 手动打款
-    Route::post('/order/pay/handPay', 'PaymentController@handPay');
+    // 订单支付
+    Route::post('/order/pay', 'PaymentController@submit');
 
     // 视频播放地址
     Route::post('/course/{courseId}/video/{videoId}/play', 'VideoController@play');

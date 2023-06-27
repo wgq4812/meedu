@@ -13,7 +13,5 @@ Route::get('/user/private_protocol', 'IndexController@userPrivateProtocol')->nam
 Route::get('/aboutus', 'IndexController@aboutus')->name('aboutus');
 Route::get('/face-verify-success', 'IndexController@faceVerifySuccess')->name('face.verify.success');
 
-// 支付回调
-Route::post('/payment/callback/{payment}', 'PaymentController@callback')->name('payment.callback');
 // 微信JSAPI支付
 Route::get('/member/order/pay/wechat/jsapi/page', 'OrderController@wechatJSAPI')->name('order.pay.wechat.jsapi');

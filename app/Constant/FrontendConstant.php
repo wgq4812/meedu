@@ -10,7 +10,19 @@ namespace App\Constant;
 
 class FrontendConstant
 {
-    // 支付平台
+    const PAYMENT_PLATFORMS = [
+        self::PAYMENT_PLATFORM_PC,
+        self::PAYMENT_PLATFORM_H5,
+        self::PAYMENT_PLATFORM_WECHAT,
+        self::PAYMENT_PLATFORM_WECHAT_MINI,
+        self::PAYMENT_PLATFORM_APP,
+    ];
+    const PAYMENT_PLATFORM_PC = 'pc';
+    const PAYMENT_PLATFORM_H5 = 'h5';
+    const PAYMENT_PLATFORM_WECHAT = 'wechat';
+    const PAYMENT_PLATFORM_WECHAT_MINI = 'wechat-mini';
+    const PAYMENT_PLATFORM_APP = 'app';
+
     const PAYMENT_SCENE_PC = 'pc';
     const PAYMENT_SCENE_H5 = 'h5';
     const PAYMENT_SCENE_WECHAT = 'wechat';
@@ -19,10 +31,12 @@ class FrontendConstant
     // 支付渠道-方法
     const PAYMENT_SCENE_WECHAT_SCAN = 'scan';
     const PAYMENT_SCENE_WECHAT_MINI = 'miniapp';
+    const PAYMENT_CHANNEL_ALI_SCAN = 'ali-scan';
 
-    // 订单已支付
-    const ORDER_PAID = 9;
     const ORDER_UN_PAY = 1;
+    const ORDER_PAYING = 5;
+    const ORDER_CANCELED = 7;
+    const ORDER_PAID = 9;
 
     // api会员认证driver
     const API_GUARD = 'apiv2';
