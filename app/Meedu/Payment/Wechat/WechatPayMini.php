@@ -8,36 +8,39 @@
 
 namespace App\Meedu\Payment\Wechat;
 
-use Exception;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
+use App\Exceptions\ServiceException;
 use App\Meedu\Payment\Contract\PaymentStatus;
 
-class WechatScan extends WechatPayBase
+class WechatPayMini extends WechatPayBase
 {
     public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
+        // 微信小程序的用户openid
+        $openid = $extra['openid'] ?? '';
+        if (!$openid) {
+            throw new ServiceException(__('未配置openid'));
+        }
+
         try {
             $payOrderData = [
                 'out_trade_no' => $orderNo,
                 'total_fee' => $realAmount * 100,
                 'body' => $title,
+                'openid' => $openid,
             ];
             $payOrderData = array_merge($payOrderData, $extra);
 
-            // 创建微信支付订单
-            // $createResult['code_url'] = 二维码的内容
-            $createResult = Pay::wechat($this->getConfig())->scan($payOrderData);
+            $createResult = Pay::wechat($this->getConfig())->miniapp($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
                 'message' => '',
-                'data' => [
-                    'code_url' => $createResult['code_url'],
-                ],
+                'data' => $createResult->toArray(),
             ]));
-        } catch (Exception $exception) {
-            Log::error(__METHOD__ . '|微信扫码支付订单创建失败,信息:' . $exception->getMessage());
+        } catch (\Exception $exception) {
+            Log::error(__METHOD__ . '|微信小程序支付订单创建失败,信息:' . $exception->getMessage());
             return new PaymentStatus(false, response()->json([
                 'code' => -1,
                 'message' => __('微信订单创建失败'),

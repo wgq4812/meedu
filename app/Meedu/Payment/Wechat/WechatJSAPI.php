@@ -12,19 +12,10 @@ use Exception;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
-use App\Meedu\Payment\Contract\Payment;
 use App\Meedu\Payment\Contract\PaymentStatus;
-use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
-class WechatJSAPI implements Payment
+class WechatJSAPI extends WechatPayBase
 {
-    private $config;
-
-    public function __construct(ConfigServiceInterface $configService)
-    {
-        $this->config = $configService->getWechatPayConfig();
-    }
-
     public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
         if (!isset($extra['openid'])) {
@@ -64,7 +55,7 @@ class WechatJSAPI implements Payment
                 'openid' => $extra['openid'],
             ];
 
-            $createResult = Pay::wechat($this->config)->mp($payOrderData);
+            $createResult = Pay::wechat($this->getConfig())->mp($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
@@ -78,20 +69,6 @@ class WechatJSAPI implements Payment
                 'message' => '',
                 'data' => [],
             ]));
-        }
-    }
-
-    public function callback()
-    {
-        $pay = Pay::wechat($this->config);
-
-        try {
-            $data = $pay->verify();
-            Log::info(__METHOD__ . '|微信支付回调数据|.' . json_encode($data));
-            return $data['out_trade_no'];
-        } catch (Exception $e) {
-            exception_record($e);
-            return false;
         }
     }
 }

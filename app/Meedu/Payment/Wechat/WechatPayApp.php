@@ -8,12 +8,11 @@
 
 namespace App\Meedu\Payment\Wechat;
 
-use Exception;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
 use App\Meedu\Payment\Contract\PaymentStatus;
 
-class WechatScan extends WechatPayBase
+class WechatPayApp extends WechatPayBase
 {
     public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
@@ -25,19 +24,15 @@ class WechatScan extends WechatPayBase
             ];
             $payOrderData = array_merge($payOrderData, $extra);
 
-            // 创建微信支付订单
-            // $createResult['code_url'] = 二维码的内容
-            $createResult = Pay::wechat($this->getConfig())->scan($payOrderData);
+            $createResult = Pay::wechat($this->getConfig())->app($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
                 'message' => '',
-                'data' => [
-                    'code_url' => $createResult['code_url'],
-                ],
+                'data' => json_decode($createResult->getContent(), true),
             ]));
-        } catch (Exception $exception) {
-            Log::error(__METHOD__ . '|微信扫码支付订单创建失败,信息:' . $exception->getMessage());
+        } catch (\Exception $exception) {
+            Log::error(__METHOD__ . '|微信APP支付订单创建失败,信息:' . $exception->getMessage());
             return new PaymentStatus(false, response()->json([
                 'code' => -1,
                 'message' => __('微信订单创建失败'),

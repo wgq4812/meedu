@@ -74,6 +74,11 @@ class UpgradeToV500
                 ],
             ]),
         ]);
+
+        AppConfig::query()->where('key', 'meedu.payment.alipay.enabled')->update(['name' => '支付宝-电脑端']);
+        AppConfig::query()->where('key', 'meedu.payment.wechat.enabled')->update(['name' => '微信支付-电脑端']);
+        AppConfig::query()->where('key', 'meedu.payment.wechat-jsapi.enabled')->update(['name' => '微信支付-微信公众号']);
+        AppConfig::query()->where('key', 'meedu.payment.handPay.enabled')->update(['name' => '手动打款-电脑端']);
     }
 
     public static function deletePermissions()
