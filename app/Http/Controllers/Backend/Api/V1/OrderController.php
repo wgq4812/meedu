@@ -67,7 +67,11 @@ class OrderController extends BaseController
             ->when($payment, function ($query) use ($payment) {
                 $payments = [$payment];
                 if ($payment === 'wechat') {
-                    $payments = array_merge($payments, ['wechat-jsapi', 'wechat_h5', 'wechatApp']);
+                    $payments = array_merge($payments, ['wechat-jsapi', 'wechat_h5', 'wechatApp', 'wechat-h5', 'wechat-mini', 'wechat-app']);
+                } elseif ($payment === 'alipay') {
+                    $payments = array_merge($payments, ['alipay-h5']);
+                } elseif ($payment === 'handPay') {
+                    $payments = array_merge($payments, ['handPay-h5', 'handPay-wechat', 'handPay-wechat-mini', 'handPay-app']);
                 }
                 $query->whereIn('payment', $payments);
             })
