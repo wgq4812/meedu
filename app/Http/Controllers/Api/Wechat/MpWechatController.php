@@ -9,9 +9,9 @@
 namespace App\Http\Controllers\Api\Wechat;
 
 use App\Meedu\Utils\Wechat;
-use App\Meedu\Hooks\HookRun;
-use App\Meedu\Hooks\HookParams;
-use App\Meedu\Hooks\Constant\PositionConstant;
+use App\Constant\HookConstant;
+use App\Meedu\Core\Hooks\HookRun;
+use App\Meedu\Core\Hooks\HookParams;
 use App\Http\Controllers\Api\V2\BaseController;
 
 class MpWechatController extends BaseController
@@ -20,7 +20,7 @@ class MpWechatController extends BaseController
     {
         $mp = Wechat::getInstance();
         $mp->server->push(function ($message) {
-            return HookRun::run(PositionConstant::MP_WECHAT_RECEIVER_MESSAGE, new HookParams([
+            return HookRun::run(HookConstant::MP_WECHAT_RECEIVER_MESSAGE, new HookParams([
                 'MsgType' => $message['MsgType'] ?? '',
                 'ToUserName' => $message['ToUserName'] ?? '',//openid
                 'FromUserName' => $message['FromUserName'] ?? '',

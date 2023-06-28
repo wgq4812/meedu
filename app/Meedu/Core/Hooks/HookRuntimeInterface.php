@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Hooks;
+namespace App\Meedu\Core\Hooks;
 
 interface HookRuntimeInterface
 {

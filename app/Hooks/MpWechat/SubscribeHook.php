@@ -13,11 +13,11 @@ use App\Bus\WechatBindBus;
 use App\Bus\WechatScanBus;
 use App\Meedu\Utils\Wechat;
 use App\Constant\CacheConstant;
-use App\Meedu\Hooks\HookParams;
 use App\Exceptions\ServiceException;
-use App\Meedu\Hooks\HookRuntimeInterface;
+use App\Meedu\Core\Hooks\HookParams;
 use App\Services\Base\Services\CacheService;
 use App\Services\Base\Services\ConfigService;
+use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 

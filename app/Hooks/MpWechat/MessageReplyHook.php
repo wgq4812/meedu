@@ -8,8 +8,8 @@
 
 namespace App\Hooks\MpWechat;
 
-use App\Meedu\Hooks\HookParams;
-use App\Meedu\Hooks\HookRuntimeInterface;
+use App\Meedu\Core\Hooks\HookParams;
+use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Services\Other\Services\MpWechatService;
 use App\Services\Other\Interfaces\MpWechatServiceInterface;
 

@@ -10,4 +10,10 @@ namespace App\Constant;
 
 class HookConstant
 {
+
+    // 收到微信公众号消息
+    public const MP_WECHAT_RECEIVER_MESSAGE = 'mp_wechat_receive_message';
+
+    // ViewBlock钩子
+    public const VIEW_BLOCK_DATA_RENDER = 'view_block_data_render';
 }

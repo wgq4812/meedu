@@ -8,9 +8,9 @@
 
 namespace App\Hooks\ViewBlock\Data;
 
-use App\Meedu\Hooks\HookParams;
 use App\Meedu\ViewBlock\Constant;
-use App\Meedu\Hooks\HookRuntimeInterface;
+use App\Meedu\Core\Hooks\HookParams;
+use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Services\Course\Services\CourseService;
 use App\Services\Course\Interfaces\CourseServiceInterface;
 

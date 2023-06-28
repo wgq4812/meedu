@@ -11,11 +11,11 @@ namespace App\Hooks\MpWechat;
 use App\Bus\AuthBus;
 use App\Bus\WechatScanBus;
 use App\Meedu\Utils\Wechat;
-use App\Meedu\Hooks\HookParams;
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
-use App\Meedu\Hooks\HookRuntimeInterface;
+use App\Meedu\Core\Hooks\HookParams;
 use App\Meedu\ServiceV2\Services\UserService;
+use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 
 class ScanEvtSubHook implements HookRuntimeInterface
