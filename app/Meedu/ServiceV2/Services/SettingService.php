@@ -8,7 +8,7 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
-use App\Meedu\Setting;
+use App\Meedu\Core\Setting;
 
 class SettingService implements SettingServiceInterface
 {

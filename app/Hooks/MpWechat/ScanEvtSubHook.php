@@ -9,8 +9,8 @@
 namespace App\Hooks\MpWechat;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
 use App\Bus\WechatScanBus;
+use App\Meedu\Utils\Wechat;
 use App\Meedu\Hooks\HookParams;
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;

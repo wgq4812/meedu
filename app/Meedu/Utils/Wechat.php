@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu;
+namespace App\Meedu\Utils;
 
 use EasyWeChat\Factory;
 use App\Services\Base\Services\ConfigService;

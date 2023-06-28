@@ -9,7 +9,7 @@
 namespace App\Console\Commands;
 
 use App\Meedu\MeEdu;
-use App\Meedu\Upgrade;
+use App\Meedu\Core\Upgrade;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Command\Command as CommandAlias;

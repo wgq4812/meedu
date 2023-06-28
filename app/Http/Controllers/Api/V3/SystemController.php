@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use App\Meedu\Addons;
+use App\Meedu\Core\Addons;
 use App\Meedu\Cache\NavCache;
 use App\Meedu\Cache\LinkCache;
 use App\Meedu\Cache\ViewBlockH5IndexPageCache;

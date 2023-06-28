@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api\Wechat;
 
-use App\Meedu\Wechat;
+use App\Meedu\Utils\Wechat;
 use App\Meedu\Hooks\HookRun;
 use App\Meedu\Hooks\HookParams;
 use App\Meedu\Hooks\Constant\PositionConstant;

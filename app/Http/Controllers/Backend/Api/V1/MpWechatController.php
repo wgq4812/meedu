@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Backend\Api\V1;
 
-use App\Meedu\Wechat;
+use App\Meedu\Utils\Wechat;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
 

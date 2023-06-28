@@ -8,9 +8,9 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Meedu\Verify;
-use App\Meedu\Wechat;
 use App\Bus\WechatBindBus;
+use App\Meedu\Utils\Verify;
+use App\Meedu\Utils\Wechat;
 use Illuminate\Http\Request;
 use App\Constant\ApiV2Constant;
 use App\Businesses\BusinessState;

@@ -496,7 +496,7 @@ if (!function_exists('url_append_query')) {
 if (!function_exists('wechat_qrcode_image')) {
     function wechat_qrcode_image(string $code): string
     {
-        $result = \App\Meedu\Wechat::getInstance()->qrcode->temporary($code, 3600);
+        $result = \App\Meedu\Utils\Wechat::getInstance()->qrcode->temporary($code, 3600);
         $url = $result['url'] ?? '';
         return 'data:image/png;base64, ' . base64_encode(\QrCode::format('png')->size(300)->generate($url));
     }

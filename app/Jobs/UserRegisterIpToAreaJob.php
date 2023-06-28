@@ -8,7 +8,7 @@
 
 namespace App\Jobs;
 
-use App\Meedu\Ip;
+use App\Meedu\Utils\Ip;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Queue\SerializesModels;

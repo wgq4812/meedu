@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Meedu\Addons;
+use App\Meedu\Core\Addons;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 

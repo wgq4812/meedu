@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
         \Illuminate\Foundation\Bootstrap\RegisterFacades::class,
         \Illuminate\Foundation\Bootstrap\SetRequestForConsole::class,
         \Illuminate\Foundation\Bootstrap\RegisterProviders::class,
-        \App\Meedu\AddonsProvider::class,
+        \App\Meedu\Core\AddonsProvider::class,
         \Illuminate\Foundation\Bootstrap\BootProviders::class,
     ];
 

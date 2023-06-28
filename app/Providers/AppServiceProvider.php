@@ -8,7 +8,7 @@
 
 namespace App\Providers;
 
-use App\Meedu\Setting;
+use App\Meedu\Core\Setting;
 use Illuminate\Support\Str;
 use App\Meedu\ServiceV2\ServiceInit;
 use Illuminate\Support\Facades\Schema;

@@ -8,7 +8,7 @@
 
 namespace Tests\Feature\Api\V2;
 
-use App\Meedu\Verify;
+use App\Meedu\Utils\Verify;
 use App\Constant\CacheConstant;
 use Illuminate\Http\UploadedFile;
 use App\Services\Member\Models\User;

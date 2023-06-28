@@ -9,10 +9,10 @@
 namespace App\Http\Controllers\Backend\Api\V1;
 
 use PhpZip\ZipFile;
-use App\Meedu\Addons;
 use GuzzleHttp\Client;
-use App\Meedu\MeEduCloud;
+use App\Meedu\Core\Addons;
 use Illuminate\Http\Request;
+use App\Meedu\Core\MeEduCloud;
 use App\Models\AdministratorLog;
 
 class AddonsController extends BaseController

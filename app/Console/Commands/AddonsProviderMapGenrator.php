@@ -8,7 +8,7 @@
 
 namespace App\Console\Commands;
 
-use App\Meedu\Addons;
+use App\Meedu\Core\Addons;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 

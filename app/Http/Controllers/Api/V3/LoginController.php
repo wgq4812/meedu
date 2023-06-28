@@ -9,8 +9,8 @@
 namespace App\Http\Controllers\Api\V3;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
 use App\Bus\WechatScanBus;
+use App\Meedu\Utils\Wechat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Constant\CacheConstant;

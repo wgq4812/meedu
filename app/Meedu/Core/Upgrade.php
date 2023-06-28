@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu;
+namespace App\Meedu\Core;
 
 use App\Meedu\UpgradeLog\UpgradeTo48;
 use App\Meedu\UpgradeLog\UpgradeToV4;

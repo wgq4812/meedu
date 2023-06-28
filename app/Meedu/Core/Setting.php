@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu;
+namespace App\Meedu\Core;
 
 use App\Meedu\Sms\SmsInterface;
 use App\Services\Base\Services\ConfigService;

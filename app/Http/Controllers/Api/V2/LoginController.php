@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
+use App\Meedu\Utils\Wechat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Constant\CacheConstant;
