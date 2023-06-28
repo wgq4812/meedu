@@ -11,7 +11,6 @@ namespace App\Meedu\Payment\Alipay;
 use Exception;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Http\RedirectResponse;
 use App\Meedu\Payment\Contract\PaymentStatus;
 
 class AlipayPayH5 extends AlipayPayBase
@@ -26,16 +25,13 @@ class AlipayPayH5 extends AlipayPayBase
         $payOrderData = array_merge($payOrderData, $extra);
 
         try {
-            /**
-             * @var RedirectResponse $result
-             */
             $result = Pay::alipay($this->getConfig())->wap($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
                 'message' => '',
                 'data' => [
-                    'redirect_url' => $result->getTargetUrl(),
+                    'redirect_content' => $result->getContent(),
                 ],
             ]));
         } catch (Exception $e) {

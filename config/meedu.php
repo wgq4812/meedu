@@ -119,7 +119,7 @@ return [
     'payment' => [
         'alipay' => [
             'enabled' => 0,
-            'handler' => \App\Meedu\Payment\Alipay\AlipayPayScan::class,
+            'handler' => \App\Meedu\Payment\Alipay\AlipayPayWeb::class,
             'name' => '支付宝',
             'logo' => '/images/icons/alipay.png',
             'sign' => 'alipay',

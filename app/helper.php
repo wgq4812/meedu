@@ -651,7 +651,6 @@ if (!function_exists('is_backend_api')) {
     function is_backend_api(): bool
     {
         $uri = request()->path();
-        \Illuminate\Support\Facades\Log::info(__METHOD__, compact('uri'));
         return \Illuminate\Support\Str::startsWith($uri, 'backend');
     }
 }

@@ -45,7 +45,7 @@ class PaymentController extends BaseController
             return $this->error(__('订单状态错误'));
         }
 
-        $paymentStatus = $paymentHandler->setPayment($payment)->create($order, []);
+        $paymentStatus = $paymentHandler->setPayment($payment)->create($order);
 
         return $paymentStatus->data;
     }

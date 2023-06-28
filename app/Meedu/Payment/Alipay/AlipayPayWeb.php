@@ -13,7 +13,7 @@ use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
 use App\Meedu\Payment\Contract\PaymentStatus;
 
-class AlipayPayScan extends AlipayPayBase
+class AlipayPayWeb extends AlipayPayBase
 {
     public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
@@ -25,13 +25,13 @@ class AlipayPayScan extends AlipayPayBase
         $payOrderData = array_merge($payOrderData, $extra);
 
         try {
-            $result = Pay::alipay($this->getConfig())->scan($payOrderData);
+            $result = Pay::alipay($this->getConfig())->web($payOrderData);
 
             return new PaymentStatus(true, response()->json([
                 'code' => 0,
                 'message' => '',
                 'data' => [
-                    'qr_code' => $result['qr_code'],
+                    'redirect_content' => $result->getContent(),
                 ],
             ]));
         } catch (Exception $e) {

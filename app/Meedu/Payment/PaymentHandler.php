@@ -10,8 +10,8 @@ namespace App\Meedu\Payment;
 
 use App\Meedu\Cache\MemoryCache;
 use App\Businesses\BusinessState;
+use App\Constant\FrontendConstant;
 use App\Events\PaymentSuccessEvent;
-use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use App\Meedu\Payment\Contract\Payment;
 use App\Meedu\Payment\Contract\PaymentStatus;
@@ -21,6 +21,8 @@ use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 class PaymentHandler
 {
     private $payments;
+
+    private $payment;
 
     private $businessState;
 
@@ -32,8 +34,6 @@ class PaymentHandler
         $this->businessState = $businessState;
         $this->orderService = $orderService;
     }
-
-    private $payment;
 
     /**
      * @return string
@@ -53,10 +53,10 @@ class PaymentHandler
         if (!isset($this->payments[$payment])) {
             throw new ServiceException(__('支付网关不存在'));
         }
-        if ((int)$this->payments[$payment]['enabled'] !== 0) {
+        if ((int)$this->payments[$payment]['enabled'] !== 1) {
             throw new ServiceException(__('支付网关未启用'));
         }
-        $this->setPayment($payment);
+        $this->payment = $payment;
         return $this;
     }
 
@@ -69,7 +69,7 @@ class PaymentHandler
         return app()->make($this->payments[$this->payment]['handler']);
     }
 
-    public function create(array $order, array $extra): PaymentStatus
+    public function create(array $order, array $extra = []): PaymentStatus
     {
         $total = $this->businessState->calculateOrderNeedPaidSum($order);
         if ($total === 0) {
@@ -78,13 +78,10 @@ class PaymentHandler
 
         $updateData = [
             'payment' => $this->payment,
-            'payment_method' => $this->payments[$this->payment]['method'],
+            'payment_method' => $this->payment,
+            'status' => FrontendConstant::ORDER_PAYING,//修改状态为支付中
         ];
-        $orderUpdateRes = $this->orderService->change2Paying($order['user_id'], $order['id'], $order['status'], $updateData);
-        if (!$orderUpdateRes) {
-            Log::error(__METHOD__ . '|订单状态修改失败|信息:' . json_encode(array_merge($updateData, ['id' => $order['id']])));
-            throw new ServiceException(__('订单状态修改失败'));
-        }
+        $this->orderService->change2Paying($order['user_id'], $order['id'], $order['status'], $updateData);
 
         $title = $this->orderService->getOrderGoodsTitle($order['id']);
 
