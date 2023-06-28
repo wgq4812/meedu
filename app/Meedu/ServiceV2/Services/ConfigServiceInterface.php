@@ -100,6 +100,8 @@ interface ConfigServiceInterface
 
     public function payments(): array;
 
+    public function enabledPayments(): array;
+
     public function getHandPayDesc(): string;
 
     public function getAlipayConfig(): array;

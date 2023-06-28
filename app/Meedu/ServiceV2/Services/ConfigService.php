@@ -213,6 +213,18 @@ class ConfigService implements ConfigServiceInterface
         return config('meedu.payment');
     }
 
+    public function enabledPayments(): array
+    {
+        return collect($this->payments())->map(function ($item) {
+            return [
+                'enabled' => (int)$item['enabled'],
+                'name' => $item['name'],
+                'logo' => url($item['logo']),
+                'sign' => $item['sign'],
+            ];
+        })->toArray();
+    }
+
     public function getHandPayDesc(): string
     {
         return config('meedu.payment.handPay.introduction') ?? '';

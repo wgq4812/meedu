@@ -95,7 +95,7 @@ class SystemController extends BaseController
             // 已用插件
             'enabled_addons' => $enabledAddons,
             // 支付网关状态
-            'payments' => $configService->payments(),
+            'payments' => $configService->enabledPayments(),
         ];
 
         return $this->data([
