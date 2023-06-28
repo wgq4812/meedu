@@ -15,4 +15,6 @@ interface OrderServiceInterface
     public function findUserOrder(int $userId, string $orderNo);
 
     public function change2Paying(int $userId, int $orderId, int $status, array $data);
+
+    public function getOrderGoodsTitle(string $id): string;
 }

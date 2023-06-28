@@ -10,9 +10,12 @@ namespace App\Meedu\ServiceV2\Models;
 
 use App\Constant\TableConstant;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
+    use HasFactory;
+
     protected $table = TableConstant::TABLE_ORDERS;
 
     protected $fillable = [

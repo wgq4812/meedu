@@ -13,4 +13,6 @@ interface OrderDaoInterface
     public function find(array $params): array;
 
     public function update(array $data, array $params): int;
+
+    public function orderGoods(int $orderId): array;
 }

@@ -86,7 +86,9 @@ class PaymentHandler
             throw new ServiceException(__('订单状态修改失败'));
         }
 
-        return $this->getPaymentHandler()->create($order['order_id'], $order['order_id'], $total, $extra);
+        $title = $this->orderService->getOrderGoodsTitle($order['id']);
+
+        return $this->getPaymentHandler()->create($order['order_id'], $title, $total, $extra);
     }
 
     public function callback()

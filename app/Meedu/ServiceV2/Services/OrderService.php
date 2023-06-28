@@ -43,4 +43,10 @@ class OrderService implements OrderServiceInterface
             throw new ServiceException('订单状态写入失败');
         }
     }
+
+    public function getOrderGoodsTitle(string $id): string
+    {
+        $goods = $this->orderDao->orderGoods($id);
+        return implode('|', array_compress($goods, 'goods_name'));
+    }
 }

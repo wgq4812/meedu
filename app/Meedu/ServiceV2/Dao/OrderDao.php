@@ -9,6 +9,7 @@
 namespace App\Meedu\ServiceV2\Dao;
 
 use App\Meedu\ServiceV2\Models\Order;
+use App\Meedu\ServiceV2\Models\OrderGoods;
 
 class OrderDao implements OrderDaoInterface
 {
@@ -44,5 +45,10 @@ class OrderDao implements OrderDaoInterface
                 $query->where('status', $params['status']);
             })
             ->update($data);
+    }
+
+    public function orderGoods(int $orderId): array
+    {
+        return OrderGoods::query()->where('oid', $orderId)->get()->toArray();
     }
 }
