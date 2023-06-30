@@ -11,8 +11,9 @@ namespace App\Http\Controllers\Backend\Api\V1;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
+use App\Constant\FrontendConstant;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
+use App\Meedu\ServiceV2\Models\Order;
 use App\Services\Member\Models\UserCourse;
 use App\Services\Member\Models\UserJoinRoleRecord;
 use App\Services\Member\Models\UserVideoWatchRecord;
@@ -83,7 +84,7 @@ class StatisticController extends BaseController
         $endAt = Carbon::parse($request->input('end_at', Carbon::now()->subDays(1)));
 
         $orders = Order::select(['created_at'])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->whereBetween('created_at', [$startAt, $endAt])
             ->get();
 
@@ -115,7 +116,7 @@ class StatisticController extends BaseController
         $endAt = Carbon::parse($request->input('end_at', Carbon::now()->subDays(1)));
 
         $orders = Order::select(['charge', 'status', 'created_at'])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->whereBetween('created_at', [$startAt, $endAt])
             ->get();
 

@@ -6,11 +6,12 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Order\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
 use Illuminate\Support\Str;
+use App\Constant\FrontendConstant;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
+use App\Meedu\ServiceV2\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderFactory extends Factory
@@ -25,7 +26,7 @@ class OrderFactory extends Factory
             },
             'order_id' => Str::random(12),
             'charge' => mt_rand(1, 1000),
-            'status' => $this->faker->randomElement([Order::STATUS_UNPAY, Order::STATUS_PAID]),
+            'status' => $this->faker->randomElement([FrontendConstant::ORDER_UN_PAY, FrontendConstant::ORDER_PAID]),
             'payment' => '',
             'payment_method' => '',
         ];

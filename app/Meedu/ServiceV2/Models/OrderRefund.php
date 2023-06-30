@@ -6,17 +6,12 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Services\Order\Models;
+namespace App\Meedu\ServiceV2\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class OrderRefund extends Model
 {
-    public const STATUS_DEFAULT = 1;
-    public const STATUS_SUCCESS = 5;
-    public const STATUS_EXCEPTION = 9;
-    public const STATUS_CLOSE = 13;
-
     protected $table = 'order_refund';
 
     protected $fillable = [

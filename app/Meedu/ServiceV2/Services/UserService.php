@@ -308,4 +308,9 @@ class UserService implements UserServiceInterface
     {
         return $this->userDao->getUserCourses($userId, $courseIds);
     }
+
+    public function storeUserCourse(int $userId, int $courseId, int $charge = 0): void
+    {
+        $this->userDao->storeUserCourse($userId, $courseId, $charge);
+    }
 }

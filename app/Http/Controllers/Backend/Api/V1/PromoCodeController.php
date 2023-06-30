@@ -13,7 +13,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
 use Illuminate\Support\Facades\DB;
-use App\Services\Order\Models\PromoCode;
+use App\Meedu\ServiceV2\Models\PromoCode;
 use App\Http\Requests\Backend\PromoCodeRequest;
 use App\Http\Requests\Backend\PromoCodeGeneratorRequest;
 

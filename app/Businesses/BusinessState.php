@@ -14,15 +14,11 @@ use App\Exceptions\ServiceException;
 use App\Services\Course\Models\Course;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
-use App\Services\Order\Services\OrderService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Order\Services\PromoCodeService;
 use App\Services\Member\Services\SocialiteService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
-use App\Services\Order\Interfaces\PromoCodeServiceInterface;
 use App\Services\Member\Interfaces\SocialiteServiceInterface;
 
 class BusinessState
@@ -101,49 +97,6 @@ class BusinessState
             return false;
         }
         return true;
-    }
-
-    /**
-     * @param int $loginUserId
-     * @param array $promoCode
-     * @return bool
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public function promoCodeCanUse(int $loginUserId, array $promoCode): bool
-    {
-        // 自己不能使用自己的优惠码
-        if ($promoCode['user_id'] === $loginUserId) {
-            return false;
-        }
-        if ($promoCode['use_times'] > 0 && $promoCode['use_times'] - $promoCode['used_times'] <= 0) {
-            // 使用次数已用完
-            return false;
-        }
-        /**
-         * @var $promoCodeService PromoCodeService
-         */
-        $promoCodeService = app()->make(PromoCodeServiceInterface::class);
-        // 同一邀请码一个用户只能用一次
-        $useRecords = $promoCodeService->getCurrentUserOrderPaidRecords($loginUserId, $promoCode['id']);
-        if ($useRecords) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * @param array $order
-     * @return int
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    public function calculateOrderNeedPaidSum(array $order): int
-    {
-        /**
-         * @var $orderService OrderService
-         */
-        $orderService = app()->make(OrderServiceInterface::class);
-        $sum = $order['charge'] - $orderService->getOrderPaidRecordsTotal($order['id']);
-        return max($sum, 0);
     }
 
     /**

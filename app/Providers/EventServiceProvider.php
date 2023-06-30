@@ -18,9 +18,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         // 支付成功event
         'App\Events\PaymentSuccessEvent' => [
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidDeliverListener',
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidNotificationListener',
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidStatusChangeListener',
+            '\App\Listeners\PaymentSuccessEvent\DeliverListener',
+            '\App\Listeners\PaymentSuccessEvent\NotificationListener',
+            '\App\Listeners\PaymentSuccessEvent\StatusChangeListener',
             '\App\Listeners\PaymentSuccessEvent\Credit1RewardListener',
         ],
         // 订单取消
@@ -84,8 +84,8 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OrderRefundCreated' => [],
         // 退款已处理[不一定成功]
         'App\Events\OrderRefundProcessed' => [
-            'App\Listeners\OrderRefundProcessed\OrderRefundStatusChange',
-            'App\Listeners\OrderRefundProcessed\UserNotify',
+            'App\Listeners\OrderRefundProcessed\StatusChangeListener',
+            'App\Listeners\OrderRefundProcessed\UserNotifyListener',
         ],
         // 学员删除-申请
         'App\Events\UserDeleteSubmitEvent' => [],

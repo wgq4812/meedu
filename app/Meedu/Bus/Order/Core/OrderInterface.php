@@ -17,4 +17,6 @@ interface OrderInterface
     public function cancel(array $orderGoods): void;
 
     public function refundConfirm(array $orderGoods): void;
+
+    public function delivery(int $userId, array $orderGoods): void;
 }

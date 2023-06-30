@@ -62,4 +62,12 @@ class OrderCourse implements OrderInterface
     public function refundConfirm(array $orderGoods): void
     {
     }
+
+    public function delivery(int $userId, array $orderGoods): void
+    {
+        $records = $this->userService->userCourseChunks($userId, [$orderGoods['goods_id']]);
+        if (!$records) {
+            $this->userService->storeUserCourse($userId, $orderGoods['goods_id'], $orderGoods['goods_charge']);
+        }
+    }
 }

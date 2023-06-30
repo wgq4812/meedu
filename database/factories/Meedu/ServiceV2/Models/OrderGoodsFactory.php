@@ -6,11 +6,12 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Order\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
+use App\Constant\FrontendConstant;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
-use App\Services\Order\Models\OrderGoods;
+use App\Meedu\ServiceV2\Models\Order;
+use App\Meedu\ServiceV2\Models\OrderGoods;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class OrderGoodsFactory extends Factory
@@ -28,9 +29,8 @@ class OrderGoodsFactory extends Factory
                 return Order::factory()->create()->id;
             },
             'goods_type' => $this->faker->randomElement([
-                OrderGoods::GOODS_TYPE_ROLE,
-                OrderGoods::GOODS_TYPE_VIDEO,
-                OrderGoods::GOODS_TYPE_COURSE,
+                FrontendConstant::ORDER_TYPE_ROLE,
+                FrontendConstant::ORDER_TYPE_COURSE,
             ]),
             'goods_id' => mt_rand(0, 100),
             'num' => 1,

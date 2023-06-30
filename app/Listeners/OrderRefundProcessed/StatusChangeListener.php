@@ -9,15 +9,10 @@
 namespace App\Listeners\OrderRefundProcessed;
 
 use App\Events\OrderRefundProcessed;
-use App\Services\Order\Services\OrderService;
-use App\Services\Order\Interfaces\OrderServiceInterface;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
-class OrderRefundStatusChange
+class StatusChangeListener
 {
-
-    /**
-     * @var OrderService
-     */
     protected $orderService;
 
     public function __construct(OrderServiceInterface $orderService)
@@ -25,12 +20,6 @@ class OrderRefundStatusChange
         $this->orderService = $orderService;
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param \App\Events\OrderRefundProcessed $event
-     * @return void
-     */
     public function handle(OrderRefundProcessed $event)
     {
         $this->orderService->changeOrderRefundStatus($event->orderRefund['id'], $event->status);

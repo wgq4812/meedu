@@ -89,4 +89,21 @@ class OrderHandler
         // 退款处理
         // 比如：收回课程
     }
+
+    public function delivery(int $orderId): void
+    {
+        $order = $this->orderService->findById($orderId);
+        $orderGoods = $this->orderService->orderGoodsList($orderId);
+        foreach ($orderGoods as $goodsItem) {
+            $goodsType = $goodsItem['goods_type'];
+            if (!isset($this->registerOrderHandler[$goodsType])) {
+                continue;
+            }
+            /**
+             * @var OrderInterface $handler
+             */
+            $handler = app()->make($this->registerOrderHandler[$goodsType]['handler']);
+            $handler->delivery($order['user_id'], $goodsItem);
+        }
+    }
 }

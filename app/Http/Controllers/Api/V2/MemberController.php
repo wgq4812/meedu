@@ -20,7 +20,6 @@ use Laravel\Socialite\Facades\Socialite;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\RoleService;
 use App\Services\Member\Services\UserService;
-use App\Services\Order\Services\OrderService;
 use App\Services\Course\Services\VideoService;
 use App\Services\Course\Services\CourseService;
 use App\Services\Member\Services\CreditService;
@@ -30,10 +29,10 @@ use App\Http\Requests\ApiV2\NicknameChangeRequest;
 use App\Http\Requests\ApiV2\PasswordChangeRequest;
 use App\Services\Member\Services\SocialiteService;
 use App\Meedu\Cache\UserUnreadNotificationCountCache;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\RoleServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
 use App\Services\Member\Interfaces\CreditServiceInterface;
@@ -58,10 +57,6 @@ class MemberController extends BaseController
      */
     protected $roleService;
     /**
-     * @var OrderService
-     */
-    protected $orderService;
-    /**
      * @var SocialiteService
      */
     protected $socialiteService;
@@ -77,7 +72,6 @@ class MemberController extends BaseController
         CourseServiceInterface    $courseService,
         VideoServiceInterface     $videoService,
         RoleServiceInterface      $roleService,
-        OrderServiceInterface     $orderService,
         SocialiteServiceInterface $socialiteService,
         BusinessState             $businessState,
         ConfigServiceInterface    $configService
@@ -86,7 +80,6 @@ class MemberController extends BaseController
         $this->courseService = $courseService;
         $this->videoService = $videoService;
         $this->roleService = $roleService;
-        $this->orderService = $orderService;
         $this->socialiteService = $socialiteService;
         $this->businessState = $businessState;
         $this->configService = $configService;
@@ -588,7 +581,7 @@ class MemberController extends BaseController
      * @apiSuccess {String} data.data.goods.charge 总价
      * @apiSuccess {String} data.data.goods.goods_ori_charge 商品原价
      */
-    public function orders(Request $request)
+    public function orders(Request $request, OrderServiceInterface $orderService)
     {
         $page = (int)$request->input('page', 1);
         $pageSize = (int)$request->input('page_size', 10);
@@ -596,7 +589,7 @@ class MemberController extends BaseController
         [
             'total' => $total,
             'list' => $list,
-        ] = $this->orderService->userOrdersPaginate($this->id(), $page, $pageSize);
+        ] = $orderService->userOrdersPaginate($this->id(), $page, $pageSize);
         $list = arr2_clear($list, ApiV2Constant::MODEL_ORDER_FIELD);
 
         foreach ($list as $key => $val) {

@@ -12,10 +12,15 @@ class FrontendConstant
 {
     const ORDER_PAID_TYPE_DEFAULT = 0;
     const ORDER_PAID_TYPE_PROMO_CODE = 1;
-    const ORDER_PAID_TYPE_BALANCE = 2;
+    const ORDER_PAID_TYPE_HAND = 3;
 
     const ORDER_TYPE_COURSE = 'COURSE';
     const ORDER_TYPE_ROLE = 'ROLE';
+
+    const ORDER_REFUND_STATUS_DEFAULT = 1;
+    const ORDER_REFUND_STATUS_SUCCESS = 5;
+    const ORDER_REFUND_STATUS_EXCEPTION = 9;
+    const ORDER_REFUND_STATUS_CLOSE = 13;
 
     const ORDER_UN_PAY = 1;
     const ORDER_PAYING = 5;

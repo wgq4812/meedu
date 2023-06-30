@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 use App\Meedu\ServiceV2\Models\Order;
 use App\Meedu\ServiceV2\Models\PromoCode;
 use App\Meedu\ServiceV2\Models\OrderGoods;
+use App\Meedu\ServiceV2\Models\OrderRefund;
 use App\Meedu\ServiceV2\Models\OrderPaidRecord;
 use App\Meedu\ServiceV2\Models\UserPromoCodeRecord;
 
@@ -147,6 +148,18 @@ class OrderDao implements OrderDaoInterface
         ]);
     }
 
+    public function storeOrderPaidHand(array $order, int $amount): void
+    {
+        OrderPaidRecord::create([
+            'user_id' => $order['user_id'],
+            'order_id' => $order['id'],
+            'paid_total' => $amount,
+            'paid_type' => FrontendConstant::ORDER_PAID_TYPE_HAND,
+            'paid_type_id' => 0,
+        ]);
+    }
+
+
     public function storeUserPromoCodeRecord(int $userId, int $codeId, int $orderId, int $originalAmount, int $discount): void
     {
         UserPromoCodeRecord::create([
@@ -171,5 +184,56 @@ class OrderDao implements OrderDaoInterface
     public function paidRecords(int $orderId): array
     {
         return OrderPaidRecord::query()->where('order_id', $orderId)->get()->toArray();
+    }
+
+    public function findOrderRefund(string $refundNo): array
+    {
+        return OrderRefund::query()
+            ->where('refund_no', $refundNo)
+            ->firstOrFail()
+            ->toArray();
+    }
+
+    public function getTimeoutOrders(string $datetime): array
+    {
+        return Order::query()
+            ->whereIn('status', [FrontendConstant::ORDER_UN_PAY, FrontendConstant::ORDER_PAYING])
+            ->where('created_at', '<=', $datetime)
+            ->get()
+            ->toArray();
+    }
+
+    public function takeProcessingRefundOrders(int $limit): array
+    {
+        return OrderRefund::query()
+            ->with(['order:id,order_id'])
+            ->where('status', FrontendConstant::ORDER_REFUND_STATUS_DEFAULT)
+            ->orderBy('id')
+            ->take($limit)
+            ->get()
+            ->toArray();
+    }
+
+    public function changeOrderRefundStatus(int $refundOrderId, int $status): int
+    {
+        $updateData = ['status' => $status];
+        if ($status === FrontendConstant::ORDER_REFUND_STATUS_SUCCESS) {
+            $updateData['success_at'] = Carbon::now()->toDateTimeLocalString();
+        }
+        return OrderRefund::query()->where('id', $refundOrderId)->update($updateData);
+    }
+
+    public function userOrdersPaginate(int $userId, int $page, int $size): array
+    {
+        $query = Order::query()->where('user_id', $userId);
+        $total = $query->count();
+        $list = $query
+            ->with(['goods:id,oid,goods_id,goods_type,goods_name,goods_thumb,goods_charge,goods_ori_charge,num,charge'])
+            ->latest()
+            ->forPage($page, $size)
+            ->get()
+            ->toArray();
+
+        return compact('total', 'list');
     }
 }

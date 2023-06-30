@@ -310,4 +310,14 @@ SQL;
     {
         return User::query()->where('id', $userId)->firstOrFail()->unreadNotifications->count();
     }
+
+    public function storeUserCourse(int $userId, int $courseId, int $charge = 0)
+    {
+        UserCourse::create([
+            'user_id' => $userId,
+            'course_id' => $courseId,
+            'charge' => $charge,
+            'created_at' => Carbon::now()->toDateTimeLocalString(),
+        ]);
+    }
 }

@@ -9,12 +9,12 @@
 namespace App\Bus;
 
 use Carbon\Carbon;
+use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\Log;
 use App\Events\OrderRefundProcessed;
 use App\Exceptions\ServiceException;
 use App\Meedu\Payment\Alipay\AlipayRefund;
 use App\Meedu\Payment\Wechat\WechatRefund;
-use App\Services\Order\Models\OrderRefund;
 
 class RefundBus
 {
@@ -70,7 +70,7 @@ class RefundBus
      */
     public function isProcessed(array $refundOrder): bool
     {
-        return in_array($refundOrder['status'], [OrderRefund::STATUS_SUCCESS, OrderRefund::STATUS_CLOSE, OrderRefund::STATUS_EXCEPTION]);
+        return in_array($refundOrder['status'], [FrontendConstant::ORDER_REFUND_STATUS_SUCCESS, FrontendConstant::ORDER_REFUND_STATUS_CLOSE, FrontendConstant::ORDER_REFUND_STATUS_EXCEPTION]);
     }
 
     /**
@@ -80,7 +80,7 @@ class RefundBus
      */
     public function isSuccess(int $status): bool
     {
-        return $status === OrderRefund::STATUS_SUCCESS;
+        return $status === FrontendConstant::ORDER_REFUND_STATUS_SUCCESS;
     }
 
     /**
@@ -92,9 +92,9 @@ class RefundBus
     public function wechatRefundStatusMap(string $refundStatus): int
     {
         $map = [
-            'SUCCESS' => OrderRefund::STATUS_SUCCESS,
-            'CHANGE' => OrderRefund::STATUS_EXCEPTION,
-            'REFUNDCLOSE' => OrderRefund::STATUS_CLOSE,
+            'SUCCESS' => FrontendConstant::ORDER_REFUND_STATUS_SUCCESS,
+            'CHANGE' => FrontendConstant::ORDER_REFUND_STATUS_EXCEPTION,
+            'REFUNDCLOSE' => FrontendConstant::ORDER_REFUND_STATUS_CLOSE,
         ];
         if (isset($map[$refundStatus])) {
             return $map[$refundStatus];
@@ -125,7 +125,7 @@ class RefundBus
             $alipayRefund = app()->make(AlipayRefund::class);
             try {
                 $isSuccess = $alipayRefund->queryIsSuccess($orderRefund['refund_no'], $orderRefund['order']['order_id']);
-                event(new OrderRefundProcessed($orderRefund, $isSuccess ? OrderRefund::STATUS_SUCCESS : OrderRefund::STATUS_EXCEPTION, []));
+                event(new OrderRefundProcessed($orderRefund, $isSuccess ? FrontendConstant::ORDER_REFUND_STATUS_SUCCESS : FrontendConstant::ORDER_REFUND_STATUS_EXCEPTION, []));
             } catch (\Exception $e) {
                 Log::error(
                     __METHOD__ . '|支付宝退款订单查询失败',

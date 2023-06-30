@@ -62,6 +62,20 @@ class OrderService implements OrderServiceInterface
         }
     }
 
+    public function change2Paid(int $id): void
+    {
+        $result = $this->orderDao->update([
+            'status' => FrontendConstant::ORDER_PAID,
+        ], [
+            'id' => $id,
+            'status' => FrontendConstant::ORDER_PAYING,
+        ]);
+        if (!$result) {
+            Log::error(__METHOD__ . '|订单状态写入失败', compact('id'));
+            throw new ServiceException('订单状态写入失败');
+        }
+    }
+
     public function getOrderGoodsTitle(string $id): string
     {
         $goods = $this->orderDao->orderGoods($id);
@@ -139,13 +153,15 @@ class OrderService implements OrderServiceInterface
 
     public function cancelOrder(array $order): void
     {
-        if ($order['status'] !== FrontendConstant::ORDER_PAYING) {
+        if (!in_array($order['status'], [FrontendConstant::ORDER_PAYING, FrontendConstant::ORDER_UN_PAY])) {
             throw new ServiceException(__('订单状态错误'));
         }
 
         DB::transaction(function () use ($order) {
             // 修改订单状态为『已取消』
-            $result = $this->orderDao->update(['status' => FrontendConstant::ORDER_CANCELED], [
+            $result = $this->orderDao->update([
+                'status' => FrontendConstant::ORDER_CANCELED,
+            ], [
                 'id' => $order['id'],
                 'status' => $order['status'],
             ]);
@@ -184,5 +200,43 @@ class OrderService implements OrderServiceInterface
             $amount -= $paidRecordItems['paid_total'];
         }
         return $amount;
+    }
+
+    public function remainingAmountHandPay(int $orderId): void
+    {
+        $order = $this->findById($orderId);
+
+        $amount = $this->continuePayAmount($order['id']);
+        if ($amount === 0) {
+            throw new ServiceException(__('无需继续支付'));
+        }
+        $this->orderDao->storeOrderPaidHand($order, $amount);
+
+        event(new PaymentSuccessEvent($order));
+    }
+
+    public function findOrderRefund(string $refundNo): array
+    {
+        return $this->orderDao->findOrderRefund($refundNo);
+    }
+
+    public function getTimeoutOrders(string $datetime): array
+    {
+        return $this->orderDao->getTimeoutOrders($datetime);
+    }
+
+    public function takeProcessingRefundOrders(int $limit): array
+    {
+        return $this->orderDao->takeProcessingRefundOrders($limit);
+    }
+
+    public function changeOrderRefundStatus(int $refundOrderId, int $status): void
+    {
+        $this->orderDao->changeOrderRefundStatus($refundOrderId, $status);
+    }
+
+    public function userOrdersPaginate(int $userId, int $page, int $size): array
+    {
+        return $this->orderDao->userOrdersPaginate($userId, $page, $size);
     }
 }

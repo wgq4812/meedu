@@ -14,7 +14,6 @@ use App\Meedu\ServiceV2\ServiceInit;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Base\Providers\BaseServiceRegisterProvider;
-use App\Services\Order\Providers\OrderServiceRegisterProvider;
 use App\Services\Other\Providers\OtherServiceRegisterProvider;
 use App\Services\Course\Providers\CourseServiceRegisterProvider;
 use App\Services\Member\Providers\MemberServiceRegisterProvider;
@@ -46,7 +45,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(MemberServiceRegisterProvider::class);
         $this->app->register(CourseServiceRegisterProvider::class);
         $this->app->register(OtherServiceRegisterProvider::class);
-        $this->app->register(OrderServiceRegisterProvider::class);
     }
 
     protected function logInit()

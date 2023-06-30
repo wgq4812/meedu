@@ -6,10 +6,10 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Order\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
 use Illuminate\Support\Str;
-use App\Services\Order\Models\PromoCode;
+use App\Meedu\ServiceV2\Models\PromoCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PromoCodeFactory extends Factory

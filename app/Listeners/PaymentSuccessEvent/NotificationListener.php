@@ -14,7 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Services\Member\Services\NotificationService;
 use App\Services\Member\Interfaces\NotificationServiceInterface;
 
-class OrderPaidNotificationListener implements ShouldQueue
+class NotificationListener implements ShouldQueue
 {
     use InteractsWithQueue;
 

@@ -63,4 +63,6 @@ interface UserServiceInterface
     public function unreadNotificationCount(int $userId): int;
 
     public function userCourseChunks(int $userId, array $courseIds): array;
+
+    public function storeUserCourse(int $userId, int $courseId, int $charge = 0): void;
 }

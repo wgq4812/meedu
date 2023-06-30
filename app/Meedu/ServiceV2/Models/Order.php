@@ -26,6 +26,8 @@ class Order extends Model
         'payment', 'payment_method',
         // 退款信息
         'is_refund', 'last_refund_at',
+
+        'created_at',
     ];
 
     public function goods()

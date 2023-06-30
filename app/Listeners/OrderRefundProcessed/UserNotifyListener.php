@@ -12,12 +12,11 @@ use App\Bus\RefundBus;
 use App\Events\OrderRefundProcessed;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Services\Order\Services\OrderService;
 use App\Services\Member\Services\NotificationService;
-use App\Services\Order\Interfaces\OrderServiceInterface;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 use App\Services\Member\Interfaces\NotificationServiceInterface;
 
-class UserNotify implements ShouldQueue
+class UserNotifyListener implements ShouldQueue
 {
     use InteractsWithQueue;
 
@@ -26,35 +25,27 @@ class UserNotify implements ShouldQueue
      */
     protected $notificationService;
 
-    /**
-     * @var OrderService
-     */
     protected $orderService;
 
     protected $refundBus;
 
     public function __construct(
         NotificationServiceInterface $notificationService,
-        RefundBus $refundBus,
-        OrderServiceInterface $orderService
+        RefundBus                    $refundBus,
+        OrderServiceInterface        $orderService
     ) {
         $this->notificationService = $notificationService;
         $this->refundBus = $refundBus;
         $this->orderService = $orderService;
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param \App\Events\OrderRefundProcessed $event
-     * @return void
-     */
     public function handle(OrderRefundProcessed $event)
     {
         if (!$this->refundBus->isSuccess($event->status)) {
             return;
         }
-        $order = $this->orderService->findId($event->orderRefund['order_id']);
+
+        $order = $this->orderService->findById($event->orderRefund['order_id']);
 
         $this->notificationService->notify(
             $event->orderRefund['user_id'],

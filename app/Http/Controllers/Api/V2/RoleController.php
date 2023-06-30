@@ -11,10 +11,8 @@ namespace App\Http\Controllers\Api\V2;
 use App\Constant\ApiV2Constant;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\RoleService;
-use App\Services\Order\Services\OrderService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\RoleServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 
 class RoleController extends BaseController
 {
@@ -27,19 +25,13 @@ class RoleController extends BaseController
      * @var ConfigService
      */
     protected $configService;
-    /**
-     * @var OrderService
-     */
-    protected $orderService;
 
     public function __construct(
-        RoleServiceInterface $roleService,
-        ConfigServiceInterface $configService,
-        OrderServiceInterface $orderService
+        RoleServiceInterface   $roleService,
+        ConfigServiceInterface $configService
     ) {
         $this->roleService = $roleService;
         $this->configService = $configService;
-        $this->orderService = $orderService;
     }
 
     /**

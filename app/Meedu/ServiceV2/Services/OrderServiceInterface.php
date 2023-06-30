@@ -20,6 +20,8 @@ interface OrderServiceInterface
 
     public function change2Paying(int $userId, int $orderId, int $status, array $data);
 
+    public function change2Paid(int $id): void;
+
     public function getOrderGoodsTitle(string $id): string;
 
     public function orderGoodsList(int $id): array;
@@ -33,4 +35,16 @@ interface OrderServiceInterface
     public function cancelOrder(array $order): void;
 
     public function continuePayAmount(int $orderId): int;
+
+    public function remainingAmountHandPay(int $orderId): void;
+
+    public function findOrderRefund(string $refundNo): array;
+
+    public function getTimeoutOrders(string $datetime): array;
+
+    public function takeProcessingRefundOrders(int $limit): array;
+
+    public function changeOrderRefundStatus(int $refundOrderId, int $status): void;
+
+    public function userOrdersPaginate(int $userId, int $page, int $size): array;
 }

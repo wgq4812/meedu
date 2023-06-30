@@ -11,7 +11,8 @@ namespace Tests\Commands;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Tests\OriginalTestCase;
-use App\Services\Order\Models\Order;
+use App\Constant\FrontendConstant;
+use App\Meedu\ServiceV2\Models\Order;
 
 class OrderPayTimeoutCommandTest extends OriginalTestCase
 {
@@ -26,19 +27,18 @@ class OrderPayTimeoutCommandTest extends OriginalTestCase
         $order = Order::create([
             'user_id' => 1,
             'charge' => 100,
-            'status' => Order::STATUS_UNPAY,
+            'status' => FrontendConstant::ORDER_PAYING,
             'order_id' => Str::random(),
             'payment' => '123',
             'payment_method' => '123',
+            'created_at' => Carbon::now()->subDays(4)->toDateTimeLocalString(),
         ]);
-        $order->created_at = Carbon::now()->subDays(4);
-        $order->save();
 
-        $this->artisan('order:pay:timeout')
-            ->assertExitCode(0);
+        $this->artisan('order:pay:timeout')->assertExitCode(0);
 
         $order->refresh();
-        $this->assertEquals(Order::STATUS_CANCELED, $order->status);
+
+        $this->assertEquals(FrontendConstant::ORDER_CANCELED, $order->status);
     }
 
     public function test_order_pay_timeout_with_paying_order()
@@ -46,7 +46,7 @@ class OrderPayTimeoutCommandTest extends OriginalTestCase
         $order = Order::create([
             'user_id' => 1,
             'charge' => 100,
-            'status' => Order::STATUS_PAYING,
+            'status' => FrontendConstant::ORDER_PAYING,
             'order_id' => Str::random(),
             'payment' => '123',
             'payment_method' => '123',
@@ -58,6 +58,6 @@ class OrderPayTimeoutCommandTest extends OriginalTestCase
             ->assertExitCode(0);
 
         $order->refresh();
-        $this->assertEquals(Order::STATUS_CANCELED, $order->status);
+        $this->assertEquals(FrontendConstant::ORDER_CANCELED, $order->status);
     }
 }

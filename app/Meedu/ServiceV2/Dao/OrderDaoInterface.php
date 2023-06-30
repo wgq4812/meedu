@@ -32,9 +32,21 @@ interface OrderDaoInterface
 
     public function storeOrderPaidPromoCode(array $order, int $discount, array $promoCodeInfo): void;
 
+    public function storeOrderPaidHand(array $order, int $amount): void;
+
     public function storeUserPromoCodeRecord(int $userId, int $codeId, int $orderId, int $originalAmount, int $discount): void;
 
     public function destroyUserPromoCodeRecord(int $userId, int $codeId, int $orderId): void;
 
     public function paidRecords(int $orderId): array;
+
+    public function findOrderRefund(string $refundNo): array;
+
+    public function getTimeoutOrders(string $datetime): array;
+
+    public function takeProcessingRefundOrders(int $limit): array;
+
+    public function changeOrderRefundStatus(int $refundOrderId, int $status): int;
+
+    public function userOrdersPaginate(int $userId, int $page, int $size): array;
 }

@@ -8,12 +8,13 @@
 
 namespace Tests\Unit\Events;
 
+use App\Constant\FrontendConstant;
 use Tests\TestCase;
-use App\Events\OrderCancelEvent;
 use App\Services\Member\Models\Role;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\PromoCode;
-use App\Services\Order\Services\OrderService;
+use App\Meedu\Bus\Order\OrderHandler;
+use App\Meedu\ServiceV2\Models\PromoCode;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
 class OrderCancelEventTest extends TestCase
 {
@@ -23,13 +24,24 @@ class OrderCancelEventTest extends TestCase
         $promoCode = PromoCode::factory()->create([
             'used_times' => 1,
         ]);
-        $orderService = $this->app->make(OrderService::class);
-        $role = Role::factory()->create(['charge' => 100]);
-        $order = $orderService->createRoleOrder($user->id, $role->toArray(), $promoCode->id);
 
-        event(new OrderCancelEvent($order['id']));
+        $role = Role::factory()->create(['charge' => 100]);
+
+        /**
+         * @var OrderHandler $orderHandler
+         */
+        $orderHandler = $this->app->make(OrderHandler::class);
+        $order = $orderHandler->setType(FrontendConstant::ORDER_TYPE_ROLE)->create($user['id'], $role['id'], $promoCode['code']);
+
+        /**
+         * @var OrderServiceInterface $orderService
+         */
+        $orderService = $this->app->make(OrderServiceInterface::class);
+
+        $orderService->cancelOrder($order);
 
         $promoCode->refresh();
-        $this->assertEquals(1, $promoCode->used_times);
+
+        $this->assertEquals(1, $promoCode['used_times']);
     }
 }

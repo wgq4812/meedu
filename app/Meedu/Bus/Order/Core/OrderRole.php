@@ -55,4 +55,9 @@ class OrderRole implements OrderInterface
     public function refundConfirm(array $orderGoods): void
     {
     }
+
+    public function delivery(int $userId, array $orderGoods): void
+    {
+        // todo - VIP会员发货
+    }
 }
