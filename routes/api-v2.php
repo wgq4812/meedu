@@ -45,9 +45,6 @@ Route::get('/announcements', 'AnnouncementController@list');
 // 公告-详情
 Route::get('/announcement/{id}', 'AnnouncementController@detail');
 
-// 优惠码检测
-Route::get('/promoCode/{code}', 'PromoCodeController@detail');
-
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
     // 录播课-学员学习-记录
     Route::post('/video/{id}/record', 'VideoController@recordVideo');
@@ -61,16 +58,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     Route::get('/course/{id}/like', 'CourseController@like');
     // 录播课-附件下载
     Route::get('/course/attach/{id}/download', 'CourseController@attachDownload');
-
-    // 录播课-创建购买订单
-    Route::post('/order/course', 'OrderController@createCourseOrder');
-    // VIP-创建购买订单
-    Route::post('/order/role', 'OrderController@createRoleOrder');
-    // 订单是否支付状态查询
-    Route::get('/order/status', 'OrderController@queryStatus');
-
-    // 优惠码-检测是否可用
-    Route::get('/promoCode/{code}/check', 'PromoCodeController@checkCode');
 
     // 图片上传
     Route::post('/upload/image', 'UploadController@image');

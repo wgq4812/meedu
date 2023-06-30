@@ -203,6 +203,18 @@ return [
         ],
     ],
 
+    // 系统订单网关
+    'orderHandler' => [
+        \App\Constant\FrontendConstant::ORDER_TYPE_ROLE => [
+            'enabled' => 1,
+            'handler' => \App\Meedu\Bus\Order\Core\OrderRole::class,
+        ],
+        \App\Constant\FrontendConstant::ORDER_TYPE_COURSE => [
+            'enabled' => 1,
+            'handler' => \App\Meedu\Bus\Order\Core\OrderCourse::class,
+        ],
+    ],
+
     // 系统配置
     'system' => [
         // ICP备案

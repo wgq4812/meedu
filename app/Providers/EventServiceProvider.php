@@ -25,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         // 订单取消
         'App\Events\OrderCancelEvent' => [
-            '\App\Listeners\OrderCancelEvent\PromoCodeResumeListener',
+            'App\Listeners\OrderCancelEvent\OrderGoodsCancelHandlerListener',
         ],
         // 学员注册
         'App\Events\UserRegisterEvent' => [

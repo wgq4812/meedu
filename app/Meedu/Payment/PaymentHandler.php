@@ -9,7 +9,6 @@
 namespace App\Meedu\Payment;
 
 use App\Meedu\Cache\MemoryCache;
-use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
 use App\Events\PaymentSuccessEvent;
 use App\Exceptions\ServiceException;
@@ -24,14 +23,11 @@ class PaymentHandler
 
     private $payment;
 
-    private $businessState;
-
     private $orderService;
 
-    public function __construct(ConfigServiceInterface $configService, BusinessState $businessState, OrderServiceInterface $orderService)
+    public function __construct(ConfigServiceInterface $configService, OrderServiceInterface $orderService)
     {
         $this->payments = $configService->payments();
-        $this->businessState = $businessState;
         $this->orderService = $orderService;
     }
 
@@ -71,8 +67,8 @@ class PaymentHandler
 
     public function create(array $order, array $extra = []): PaymentStatus
     {
-        $total = $this->businessState->calculateOrderNeedPaidSum($order);
-        if ($total === 0) {
+        $total = $this->orderService->continuePayAmount($order['id']);
+        if ($total <= 0) {
             throw new ServiceException(__('无需继续支付'));
         }
 

@@ -15,4 +15,26 @@ interface OrderDaoInterface
     public function update(array $data, array $params): int;
 
     public function orderGoods(int $orderId): array;
+
+    public function userPromoCodeRecord(int $userId, int $codeId): array;
+
+    public function userPromoCodePaidRecord(int $userId, int $promoCodeId): array;
+
+    public function promoCode(string $code): array;
+
+    public function promoCodeById(int $id): array;
+
+    public function promoCodUsedTimeInc(int $id, int $beforeUsedTimes, int $amount = 1): void;
+
+    public function storeOrder(int $userId, int $total, int $status): array;
+
+    public function storeOrderGoods(array $order, array $goodsList): void;
+
+    public function storeOrderPaidPromoCode(array $order, int $discount, array $promoCodeInfo): void;
+
+    public function storeUserPromoCodeRecord(int $userId, int $codeId, int $orderId, int $originalAmount, int $discount): void;
+
+    public function destroyUserPromoCodeRecord(int $userId, int $codeId, int $orderId): void;
+
+    public function paidRecords(int $orderId): array;
 }

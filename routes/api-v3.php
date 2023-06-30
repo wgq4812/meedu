@@ -38,7 +38,9 @@ Route::get('/courses', 'CourseController@index');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
     // 创建订单
-    Route::post('/order', 'PaymentController@create');
+    Route::post('/order', 'OrderController@store');
+    Route::get('/order/status', 'PaymentController@status');
+    Route::get('/order/promoCode', 'PaymentController@promoCode');
     // 订单支付
     Route::post('/order/pay', 'PaymentController@submit');
 

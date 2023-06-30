@@ -9,13 +9,16 @@
 namespace App\Meedu\ServiceV2;
 
 use App\Meedu\ServiceV2\Dao\VodDao;
+use App\Meedu\ServiceV2\Dao\RoleDao;
 use App\Meedu\ServiceV2\Dao\UserDao;
 use App\Meedu\ServiceV2\Dao\OrderDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
+use App\Meedu\ServiceV2\Dao\RoleDaoInterface;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDao;
 use App\Meedu\ServiceV2\Dao\UserDaoInterface;
+use App\Meedu\ServiceV2\Services\RoleService;
 use App\Meedu\ServiceV2\Services\UserService;
 use App\Meedu\ServiceV2\Dao\OrderDaoInterface;
 use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
@@ -28,6 +31,7 @@ use App\Meedu\ServiceV2\Services\CourseService;
 use App\Meedu\ServiceV2\Services\SettingService;
 use App\Meedu\ServiceV2\Services\TencentVodService;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDaoInterface;
+use App\Meedu\ServiceV2\Services\RoleServiceInterface;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 use App\Meedu\ServiceV2\Services\OtherServiceInterface;
@@ -48,6 +52,7 @@ class ServiceInit
         RuntimeStatusDaoInterface::class => RuntimeStatusDao::class,
         VodDaoInterface::class => VodDao::class,
         OrderDaoInterface::class => OrderDao::class,
+        RoleDaoInterface::class => RoleDao::class,
     ];
 
     public $service = [
@@ -60,6 +65,7 @@ class ServiceInit
         SettingServiceInterface::class => SettingService::class,
         RuntimeStatusServiceInterface::class => RuntimeStatusStatusService::class,
         OrderServiceInterface::class => OrderService::class,
+        RoleServiceInterface::class => RoleService::class,
     ];
 
     public function run()

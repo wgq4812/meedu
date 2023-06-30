@@ -19,7 +19,17 @@ class Order extends Model
     protected $table = TableConstant::TABLE_ORDERS;
 
     protected $fillable = [
-        'user_id', 'charge', 'status', 'order_id', 'payment',
-        'payment_method', 'is_refund', 'last_refund_at',
+        'user_id', 'charge', 'status',
+        // 订单编号
+        'order_id',
+        // 支付信息
+        'payment', 'payment_method',
+        // 退款信息
+        'is_refund', 'last_refund_at',
     ];
+
+    public function goods()
+    {
+        return $this->hasMany(OrderGoods::class, 'oid');
+    }
 }

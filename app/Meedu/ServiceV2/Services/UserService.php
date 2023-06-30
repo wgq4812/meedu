@@ -303,4 +303,9 @@ class UserService implements UserServiceInterface
     {
         return $this->userDao->unreadNotificationCount($userId);
     }
+
+    public function userCourseChunks(int $userId, array $courseIds): array
+    {
+        return $this->userDao->getUserCourses($userId, $courseIds);
+    }
 }

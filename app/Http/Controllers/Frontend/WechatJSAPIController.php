@@ -11,11 +11,12 @@ namespace App\Http\Controllers\Frontend;
 use App\Meedu\Utils\Wechat;
 use Illuminate\Http\Request;
 use App\Meedu\Payment\PaymentHandler;
+use App\Http\Controllers\BaseController;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
-class OrderController extends FrontendController
+class WechatJSAPIController extends BaseController
 {
-    public function wechatJSAPI(Request $request, PaymentHandler $paymentHandler, OrderServiceInterface $orderService)
+    public function index(Request $request, PaymentHandler $paymentHandler, OrderServiceInterface $orderService)
     {
         $data = $request->input('data');
 

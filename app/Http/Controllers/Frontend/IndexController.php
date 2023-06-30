@@ -8,7 +8,9 @@
 
 namespace App\Http\Controllers\Frontend;
 
-class IndexController extends FrontendController
+use App\Http\Controllers\BaseController;
+
+class IndexController extends BaseController
 {
     public function index()
     {

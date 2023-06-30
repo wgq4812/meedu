@@ -21,12 +21,12 @@ class OrderGoods extends Model
     protected $fillable = [
         // 订单表orders的id
         'oid',
-        // 商品信息
+        // 学员ID
+        'user_id',
+        // 商品基础信息
         'goods_id', 'goods_type', 'goods_name', 'goods_thumb', 'goods_charge', 'goods_ori_charge',
         // 购买数量和价格
         'num', 'charge',
-
-        'user_id',
 
         // todo 即将废弃
         'order_id',

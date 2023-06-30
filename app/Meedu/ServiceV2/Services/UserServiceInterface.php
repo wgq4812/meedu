@@ -61,4 +61,6 @@ interface UserServiceInterface
     public function getUserVideoWatchRecordsByChunkVideoIds(int $userId, array $videoIds): array;
 
     public function unreadNotificationCount(int $userId): int;
+
+    public function userCourseChunks(int $userId, array $courseIds): array;
 }

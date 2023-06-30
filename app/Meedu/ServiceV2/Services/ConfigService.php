@@ -243,4 +243,9 @@ class ConfigService implements ConfigServiceInterface
         $config['notify_url'] = route('payment.callback', ['wechat']);
         return $config;
     }
+
+    public function getOrderHandler(): array
+    {
+        return config('meedu.orderHandler');
+    }
 }

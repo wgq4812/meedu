@@ -107,4 +107,6 @@ interface ConfigServiceInterface
     public function getAlipayConfig(): array;
 
     public function getWechatPayConfig(): array;
+
+    public function getOrderHandler(): array;
 }

@@ -10,35 +10,18 @@ namespace App\Constant;
 
 class FrontendConstant
 {
-    const PAYMENT_PLATFORMS = [
-        self::PAYMENT_PLATFORM_PC,
-        self::PAYMENT_PLATFORM_H5,
-        self::PAYMENT_PLATFORM_WECHAT,
-        self::PAYMENT_PLATFORM_WECHAT_MINI,
-        self::PAYMENT_PLATFORM_APP,
-    ];
-    const PAYMENT_PLATFORM_PC = 'pc';
-    const PAYMENT_PLATFORM_H5 = 'h5';
-    const PAYMENT_PLATFORM_WECHAT = 'wechat';
-    const PAYMENT_PLATFORM_WECHAT_MINI = 'wechat-mini';
-    const PAYMENT_PLATFORM_APP = 'app';
+    const ORDER_PAID_TYPE_DEFAULT = 0;
+    const ORDER_PAID_TYPE_PROMO_CODE = 1;
+    const ORDER_PAID_TYPE_BALANCE = 2;
 
-    const PAYMENT_SCENE_PC = 'pc';
-    const PAYMENT_SCENE_H5 = 'h5';
-    const PAYMENT_SCENE_WECHAT = 'wechat';
-    const PAYMENT_SCENE_HAND_PAY = 'handPay';
-
-    // 支付渠道-方法
-    const PAYMENT_SCENE_WECHAT_SCAN = 'scan';
-    const PAYMENT_SCENE_WECHAT_MINI = 'miniapp';
-    const PAYMENT_CHANNEL_ALI_SCAN = 'ali-scan';
+    const ORDER_TYPE_COURSE = 'COURSE';
+    const ORDER_TYPE_ROLE = 'ROLE';
 
     const ORDER_UN_PAY = 1;
     const ORDER_PAYING = 5;
     const ORDER_CANCELED = 7;
     const ORDER_PAID = 9;
 
-    // api会员认证driver
     const API_GUARD = 'apiv2';
 
     // 登录平台
@@ -49,8 +32,6 @@ class FrontendConstant
     public const LOGIN_PLATFORM_MINI = 'MINI';
     public const LOGIN_PLATFORM_APP = 'APP';
     public const LOGIN_PLATFORM_OTHER = 'OTHER';
-
-    public const USER_LOGIN_AT_COOKIE_NAME = 'last_login_at';
 
     // 不限制
     public const LOGIN_LIMIT_RULE_DEFAULT = 1;
@@ -85,13 +66,10 @@ class FrontendConstant
 
     public const SOCIALITE_APP_QQ = 'qq';
 
-    // 点播服务
     public const VOD_SERVICE_TENCENT = 'tencent';
     public const VOD_SERVICE_ALIYUN = 'aliyun';
 
-    // 实名认证最佳帧图片存储路径
     public const USER_VERIFY_FACE_IMAGE_SAVE_PATH = 'meedu/userFaceVerify/images';
-    // 实名认证视频存储路径
     public const USER_VERIFY_FACE_VIDEO_SAVE_PATH = 'meedu/userFaceVerify/videos';
     public const USER_VERIFY_FACE_ID_CARD_SAVE_PATH = '/meedu/userFaceVerify/idCard';
 }
