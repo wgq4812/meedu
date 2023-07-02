@@ -25,6 +25,7 @@ class OrderGoods extends Model
         'user_id',
         // 商品基础信息
         'goods_id', 'goods_type', 'goods_name', 'goods_thumb', 'goods_charge', 'goods_ori_charge',
+
         // 购买数量和价格
         'num', 'charge',
 

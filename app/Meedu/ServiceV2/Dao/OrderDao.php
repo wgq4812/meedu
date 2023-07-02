@@ -100,12 +100,12 @@ class OrderDao implements OrderDaoInterface
         }
     }
 
-    public function storeOrder(int $userId, int $total, int $status): array
+    public function storeOrder(int $userId, int $total): array
     {
         $data = Order::create([
             'user_id' => $userId,
             'charge' => $total,
-            'status' => $status,
+            'status' => FrontendConstant::ORDER_UN_PAY,
             'order_id' => $userId . date('Ymd') . mt_rand(10, 99),
         ]);
         return $data->toArray();

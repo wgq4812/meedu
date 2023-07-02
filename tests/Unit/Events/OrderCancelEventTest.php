@@ -8,8 +8,8 @@
 
 namespace Tests\Unit\Events;
 
-use App\Constant\FrontendConstant;
 use Tests\TestCase;
+use App\Constant\FrontendConstant;
 use App\Services\Member\Models\Role;
 use App\Services\Member\Models\User;
 use App\Meedu\Bus\Order\OrderHandler;

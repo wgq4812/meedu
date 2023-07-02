@@ -26,7 +26,7 @@ interface OrderDaoInterface
 
     public function promoCodUsedTimeInc(int $id, int $beforeUsedTimes, int $amount = 1): void;
 
-    public function storeOrder(int $userId, int $total, int $status): array;
+    public function storeOrder(int $userId, int $total): array;
 
     public function storeOrderGoods(array $order, array $goodsList): void;
 

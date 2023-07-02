@@ -9,7 +9,6 @@
 namespace App\Meedu\Payment;
 
 use App\Meedu\Cache\MemoryCache;
-use App\Constant\FrontendConstant;
 use App\Events\PaymentSuccessEvent;
 use App\Exceptions\ServiceException;
 use App\Meedu\Payment\Contract\Payment;
@@ -75,9 +74,8 @@ class PaymentHandler
         $updateData = [
             'payment' => $this->payment,
             'payment_method' => $this->payment,
-            'status' => FrontendConstant::ORDER_PAYING,//修改状态为支付中
         ];
-        $this->orderService->change2Paying($order['user_id'], $order['id'], $order['status'], $updateData);
+        $this->orderService->change2Paying($order['user_id'], $order['id'], $updateData);
 
         $title = $this->orderService->getOrderGoodsTitle($order['id']);
 

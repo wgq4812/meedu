@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Tests\ServiceV2;
+namespace Tests\MeEdu\Service\Service;
 
 use Tests\TestCase;
 use App\Meedu\ServiceV2\Models\User;

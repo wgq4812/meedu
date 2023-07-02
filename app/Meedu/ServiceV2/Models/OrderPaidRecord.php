@@ -9,9 +9,11 @@
 namespace App\Meedu\ServiceV2\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class OrderPaidRecord extends Model
 {
+    use HasFactory;
     protected $table = 'order_paid_records';
 
     protected $fillable = [

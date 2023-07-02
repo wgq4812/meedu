@@ -24,17 +24,23 @@ class OrderGoodsFactory extends Factory
             'user_id' => function () {
                 return User::factory()->create()->id;
             },
-            'order_id' => '',
             'oid' => function () {
                 return Order::factory()->create()->id;
             },
+            'goods_id' => mt_rand(0, 100),
             'goods_type' => $this->faker->randomElement([
                 FrontendConstant::ORDER_TYPE_ROLE,
                 FrontendConstant::ORDER_TYPE_COURSE,
             ]),
-            'goods_id' => mt_rand(0, 100),
+            'goods_name' => mb_substr($this->faker->title, 0, 122),
+            'goods_thumb' => $this->faker->imageUrl(),
+            'goods_charge' => 199,
+            'goods_ori_charge' => 299,
             'num' => 1,
             'charge' => mt_rand(0, 100),
+
+            // 废弃
+            'order_id' => '',
         ];
     }
 }

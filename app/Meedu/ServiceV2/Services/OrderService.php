@@ -44,20 +44,21 @@ class OrderService implements OrderServiceInterface
         return $order['status'];
     }
 
-    public function findUserOrder(int $userId, string $orderNo)
+    public function findUserOrder(int $userId, string $orderNo): array
     {
         return $this->orderDao->find(['user_id' => $userId, 'order_id' => $orderNo]);
     }
 
-    public function change2Paying(int $userId, int $orderId, int $status, array $data)
+    public function change2Paying(int $userId, int $orderId, array $data): void
     {
+        $data['status'] = FrontendConstant::ORDER_PAYING;
         $result = $this->orderDao->update($data, [
             'user_id' => $userId,
             'id' => $orderId,
-            'status' => $status,
+            'status' => FrontendConstant::ORDER_UN_PAY,
         ]);
         if (!$result) {
-            Log::error(__METHOD__ . '|订单状态写入失败', compact('userId', 'orderId', 'status', 'data'));
+            Log::error(__METHOD__ . '|订单状态写入失败', compact('userId', 'orderId', 'data'));
             throw new ServiceException('订单状态写入失败');
         }
     }
@@ -68,7 +69,6 @@ class OrderService implements OrderServiceInterface
             'status' => FrontendConstant::ORDER_PAID,
         ], [
             'id' => $id,
-            'status' => FrontendConstant::ORDER_PAYING,
         ]);
         if (!$result) {
             Log::error(__METHOD__ . '|订单状态写入失败', compact('id'));
@@ -79,7 +79,7 @@ class OrderService implements OrderServiceInterface
     public function getOrderGoodsTitle(string $id): string
     {
         $goods = $this->orderDao->orderGoods($id);
-        return implode('|', array_compress($goods, 'goods_name'));
+        return implode('|', array_column($goods, 'goods_name'));
     }
 
     public function orderGoodsList(int $id): array
@@ -128,13 +128,8 @@ class OrderService implements OrderServiceInterface
                 }
             }
 
-            // 实际学员需要支付金
-            $payAmount = $total - $discount;
-            // 订单状态
-            $orderStatus = $payAmount === 0 ? FrontendConstant::ORDER_PAID : FrontendConstant::ORDER_UN_PAY;
-
             // 创建订单
-            $order = $this->orderDao->storeOrder($userId, $total, $orderStatus);
+            $order = $this->orderDao->storeOrder($userId, $total);
             // 创建订单商品
             $this->orderDao->storeOrderGoods($order, $goodsList);
             // 记录优化的使用记录
@@ -143,7 +138,7 @@ class OrderService implements OrderServiceInterface
                 $this->orderDao->storeUserPromoCodeRecord($userId, $promoCodeInfo['id'], $order['id'], $promoCodeInfo['invite_user_reward'], $discount);
             }
 
-            if ($orderStatus === FrontendConstant::ORDER_PAID) {
+            if ($total - $discount === 0) {
                 event(new PaymentSuccessEvent($order));
             }
 

@@ -22,10 +22,12 @@ class PromoCodeFactory extends Factory
             'user_id' => 0,
             'code' => Str::random(12),
             'expired_at' => null,
-            'invite_user_reward' => mt_rand(0, 100),
-            'invited_user_reward' => mt_rand(0, 100),
-            'use_times' => 1,
+            'invite_user_reward' => 0,
+            'use_times' => 0,
             'used_times' => 0,
+
+            // 已废弃
+            'invited_user_reward' => 0,
         ];
     }
 }
