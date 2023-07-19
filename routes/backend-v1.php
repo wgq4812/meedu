@@ -179,6 +179,7 @@ Route::group([
         Route::get('/{id}/subscribe/delete', 'CourseController@deleteSubscribe');
         Route::post('/{id}/subscribe/create', 'CourseController@createSubscribe');
         Route::post('/{id}/subscribe/import', 'CourseController@importUsers');
+
         Route::get('/{id}/user/{userId}/watch/records', 'CourseController@videoWatchRecords');
     });
 
