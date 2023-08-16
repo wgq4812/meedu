@@ -42,6 +42,8 @@ Route::get('/courses', 'CourseController@index');
 // 课程附件下载
 Route::get('/course/{courseId}/attach/{id}/download', 'CourseAttachController@download')->name('course.attachment.download');
 
+Route::get('/roles', 'RoleController@index');
+
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
     Route::group(['prefix' => 'order'], function () {
         // 创建订单

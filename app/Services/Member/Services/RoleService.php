@@ -10,7 +10,6 @@ namespace App\Services\Member\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use App\Services\Member\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Member\Models\UserJoinRoleRecord;
 use App\Services\Member\Interfaces\RoleServiceInterface;
@@ -23,21 +22,6 @@ class RoleService implements RoleServiceInterface
     public function __construct(UserServiceInterface $userService)
     {
         $this->userService = $userService;
-    }
-
-    public function all(): array
-    {
-        return Role::show()->orderBy('weight')->get()->toArray();
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
-    public function find(int $id): array
-    {
-        return Role::show()->findOrFail($id)->toArray();
     }
 
     /**

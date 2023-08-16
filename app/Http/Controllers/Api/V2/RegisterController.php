@@ -9,9 +9,9 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Api\BaseController;
+use App\Services\Member\Services\UserService;
 use App\Http\Requests\ApiV2\RegisterSmsRequest;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Member\Services\UserService;
 
 class RegisterController extends BaseController
 {

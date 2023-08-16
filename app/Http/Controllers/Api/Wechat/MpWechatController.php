@@ -8,11 +8,11 @@
 
 namespace App\Http\Controllers\Api\Wechat;
 
-use App\Constant\HookConstant;
-use App\Http\Controllers\Api\BaseController;
-use App\Meedu\Core\Hooks\HookParams;
-use App\Meedu\Core\Hooks\HookRun;
 use App\Meedu\Utils\Wechat;
+use App\Constant\HookConstant;
+use App\Meedu\Core\Hooks\HookRun;
+use App\Meedu\Core\Hooks\HookParams;
+use App\Http\Controllers\Api\BaseController;
 
 class MpWechatController extends BaseController
 {

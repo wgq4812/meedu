@@ -8,21 +8,21 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Businesses\BusinessState;
-use App\Constant\ApiV2Constant;
-use App\Http\Controllers\Api\BaseController;
-use App\Http\Requests\ApiV2\CommentRequest;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Course\Interfaces\CourseCommentServiceInterface;
-use App\Services\Course\Interfaces\CourseServiceInterface;
-use App\Services\Course\Interfaces\VideoServiceInterface;
-use App\Services\Course\Services\CourseCommentService;
-use App\Services\Course\Services\CourseService;
-use App\Services\Course\Services\VideoService;
-use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Member\Services\UserService;
 use Illuminate\Http\Request;
+use App\Constant\ApiV2Constant;
+use App\Businesses\BusinessState;
+use App\Http\Requests\ApiV2\CommentRequest;
+use App\Http\Controllers\Api\BaseController;
+use App\Services\Base\Services\ConfigService;
+use App\Services\Member\Services\UserService;
+use App\Services\Course\Services\VideoService;
+use App\Services\Course\Services\CourseService;
+use App\Services\Course\Services\CourseCommentService;
+use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Services\Member\Interfaces\UserServiceInterface;
+use App\Services\Course\Interfaces\VideoServiceInterface;
+use App\Services\Course\Interfaces\CourseServiceInterface;
+use App\Services\Course\Interfaces\CourseCommentServiceInterface;
 
 class CourseController extends BaseController
 {

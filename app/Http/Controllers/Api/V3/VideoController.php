@@ -8,11 +8,11 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use Carbon\Carbon;
 use App\Bus\VodPlayBus;
 use App\Businesses\BusinessState;
 use App\Http\Controllers\Api\BaseController;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class VideoController extends BaseController

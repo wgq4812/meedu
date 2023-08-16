@@ -9,32 +9,32 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Bus\WechatBindBus;
-use App\Businesses\BusinessState;
+use App\Meedu\Utils\Verify;
+use Illuminate\Http\Request;
 use App\Constant\ApiV2Constant;
+use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
 use App\Http\Controllers\Api\BaseController;
+use App\Services\Base\Services\ConfigService;
+use App\Services\Member\Services\RoleService;
+use App\Services\Member\Services\UserService;
+use App\Services\Course\Services\VideoService;
+use App\Services\Course\Services\CourseService;
+use App\Services\Member\Services\CreditService;
 use App\Http\Requests\ApiV2\AvatarChangeRequest;
 use App\Http\Requests\ApiV2\MobileChangeRequest;
 use App\Http\Requests\ApiV2\NicknameChangeRequest;
 use App\Http\Requests\ApiV2\PasswordChangeRequest;
+use App\Services\Member\Services\SocialiteService;
 use App\Meedu\Cache\UserUnreadNotificationCountCache;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
-use App\Meedu\Utils\Verify;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Course\Interfaces\CourseServiceInterface;
-use App\Services\Course\Interfaces\VideoServiceInterface;
-use App\Services\Course\Services\CourseService;
-use App\Services\Course\Services\VideoService;
-use App\Services\Member\Interfaces\CreditServiceInterface;
 use App\Services\Member\Interfaces\RoleServiceInterface;
-use App\Services\Member\Interfaces\SocialiteServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Member\Services\CreditService;
-use App\Services\Member\Services\RoleService;
-use App\Services\Member\Services\SocialiteService;
-use App\Services\Member\Services\UserService;
-use Illuminate\Http\Request;
+use App\Services\Course\Interfaces\VideoServiceInterface;
+use App\Services\Course\Interfaces\CourseServiceInterface;
+use App\Services\Member\Interfaces\CreditServiceInterface;
+use App\Services\Member\Interfaces\SocialiteServiceInterface;
 
 class MemberController extends BaseController
 {

@@ -8,13 +8,13 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 use App\Services\Other\Proxies\SearchRecordService;
-use Illuminate\Http\Request;
+use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 
 class SearchController extends BaseController
 {

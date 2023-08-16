@@ -8,12 +8,12 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use App\Http\Controllers\Api\BaseController;
-use App\Meedu\Cache\LinkCache;
+use App\Meedu\Core\Addons;
 use App\Meedu\Cache\NavCache;
+use App\Meedu\Cache\LinkCache;
+use App\Http\Controllers\Api\BaseController;
 use App\Meedu\Cache\ViewBlockH5IndexPageCache;
 use App\Meedu\Cache\ViewBlockPCIndexPageCache;
-use App\Meedu\Core\Addons;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class SystemController extends BaseController

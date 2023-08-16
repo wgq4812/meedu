@@ -31,11 +31,6 @@ Route::get('/video/{id}', 'VideoController@detail');
 // 公开的视频播放
 Route::get('/video/open/play', 'VideoController@openPlay');
 
-// VIP-列表
-Route::get('/roles', 'RoleController@roles');
-// VIP-详情
-Route::get('/role/{id}', 'RoleController@detail');
-
 // 公告-列表
 Route::get('/announcements', 'AnnouncementController@list');
 // 公告-详情
