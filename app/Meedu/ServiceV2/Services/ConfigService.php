@@ -67,6 +67,11 @@ class ConfigService implements ConfigServiceInterface
         return config('meedu.system.h5_url') ?? '';
     }
 
+    public function getGoMeEduUrl(): string
+    {
+        return config('meedu.system.go_meedu_url') ?? '';
+    }
+
     public function getLogo(): string
     {
         return config('meedu.system.logo') ?? '';

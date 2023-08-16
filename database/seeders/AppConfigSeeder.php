@@ -56,6 +56,16 @@ class AppConfigSeeder extends Seeder
             ],
             [
                 'group' => '系统',
+                'name' => 'GoMeEdu地址',
+                'field_type' => 'text',
+                'sort' => 35,
+                'default_value' => '',
+                'key' => 'meedu.system.go_meedu_url',
+                'value' => '',
+                'help' => '请填写API访问地址，需携带http://或https://协议',
+            ],
+            [
+                'group' => '系统',
                 'name' => 'PC访问地址',
                 'field_type' => 'text',
                 'sort' => 40,

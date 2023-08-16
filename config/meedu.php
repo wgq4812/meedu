@@ -234,6 +234,9 @@ return [
         // H5网站地址
         'h5_url' => '',
 
+        // go-meedu地址
+        'go_meedu_url' => '',
+
         // 播放器
         'player' => [
             // 跑马灯

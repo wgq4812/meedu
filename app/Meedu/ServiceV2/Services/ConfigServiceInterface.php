@@ -46,6 +46,8 @@ interface ConfigServiceInterface
 
     public function getH5Url(): string;
 
+    public function getGoMeEduUrl(): string;
+
     public function getLogo(): string;
 
     public function getAliCallbackKey(): string;
@@ -110,9 +112,9 @@ interface ConfigServiceInterface
 
     public function getOrderHandler(): array;
 
-    public function getMemberProtocol():string;
+    public function getMemberProtocol(): string;
 
-    public function getMemberPrivateProtocol():string;
+    public function getMemberPrivateProtocol(): string;
 
-    public function getAboutUs():string;
+    public function getAboutUs(): string;
 }
