@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Controllers\Api\V2\Traits;
+namespace App\Http\Controllers\Traits;
 
 trait ResponseTrait
 {

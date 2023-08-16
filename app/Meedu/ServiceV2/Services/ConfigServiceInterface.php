@@ -109,4 +109,10 @@ interface ConfigServiceInterface
     public function getWechatPayConfig(): array;
 
     public function getOrderHandler(): array;
+
+    public function getMemberProtocol():string;
+
+    public function getMemberPrivateProtocol():string;
+
+    public function getAboutUs():string;
 }

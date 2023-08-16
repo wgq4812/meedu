@@ -248,4 +248,21 @@ class ConfigService implements ConfigServiceInterface
     {
         return config('meedu.orderHandler');
     }
+
+    public function getMemberProtocol(): string
+    {
+        return config('meedu.member.protocol') ?? '';
+    }
+
+    public function getMemberPrivateProtocol(): string
+    {
+        return config('meedu.member.private_protocol') ?? '';
+    }
+
+    public function getAboutUs(): string
+    {
+        return config('meedu.aboutus') ?? '';
+    }
+
+
 }

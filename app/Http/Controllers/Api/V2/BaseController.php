@@ -12,8 +12,8 @@ use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Member\Services\UserService;
+use App\Http\Controllers\Traits\ResponseTrait;
 use Illuminate\Pagination\LengthAwarePaginator;
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
 use App\Services\Member\Interfaces\UserServiceInterface;
 
 class BaseController

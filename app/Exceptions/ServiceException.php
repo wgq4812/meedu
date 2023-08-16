@@ -8,7 +8,7 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Http\Controllers\Traits\ResponseTrait;
 
 /**
  * 业务异常

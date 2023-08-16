@@ -9,7 +9,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Http\Controllers\Traits\ResponseTrait;
 
 /**
  * 影响到系统正常运行的异常

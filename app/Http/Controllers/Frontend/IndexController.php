@@ -8,30 +8,32 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\BaseController;
+use App\Http\Controllers\Controller;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
-class IndexController extends BaseController
+class IndexController extends Controller
 {
+
     public function index()
     {
         return __('API服务正在运行');
     }
 
-    public function userProtocol()
+    public function userProtocol(ConfigServiceInterface $configService)
     {
-        $protocol = $this->configService->getMemberProtocol();
+        $protocol = $configService->getMemberProtocol();
         return view('index.user_protocol', compact('protocol'));
     }
 
-    public function userPrivateProtocol()
+    public function userPrivateProtocol(ConfigServiceInterface $configService)
     {
-        $protocol = $this->configService->getMemberPrivateProtocol();
+        $protocol = $configService->getMemberPrivateProtocol();
         return view('index.user_private_protocol', compact('protocol'));
     }
 
-    public function aboutus()
+    public function aboutus(ConfigServiceInterface $configService)
     {
-        $aboutus = $this->configService->getAboutus();
+        $aboutus = $configService->getAboutUs();
         return view('index.aboutus', compact('aboutus'));
     }
 
