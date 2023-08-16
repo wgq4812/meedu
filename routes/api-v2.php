@@ -17,10 +17,6 @@ Route::post('/password/reset', 'PasswordController@reset');
 Route::post('/login/password', 'LoginController@passwordLogin');
 // 手机号登录
 Route::post('/login/mobile', 'LoginController@mobileLogin');
-// 微信公众号扫码登录-创建二维码
-Route::get('/login/wechatScan', 'LoginController@wechatScan');
-// 微信公众号扫码登录-结果查询
-Route::get('/login/wechatScan/query', 'LoginController@wechatScanQuery');
 
 // 录播课-列表
 Route::get('/courses', 'CourseController@paginate');
