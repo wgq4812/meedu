@@ -15,11 +15,9 @@ use App\Services\Other\Proxies\SmsServiceProxy;
 use App\Services\Other\Services\MpWechatService;
 use App\Services\Other\Proxies\SearchRecordService;
 use App\Services\Other\Interfaces\SmsServiceInterface;
-use App\Services\Other\Proxies\AnnouncementServiceProxy;
 use App\Services\Other\Interfaces\AdFromServiceInterface;
 use App\Services\Other\Interfaces\UploadServiceInterface;
 use App\Services\Other\Interfaces\MpWechatServiceInterface;
-use App\Services\Other\Interfaces\AnnouncementServiceInterface;
 use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 
 class OtherServiceRegisterProvider extends ServiceProvider
@@ -27,7 +25,6 @@ class OtherServiceRegisterProvider extends ServiceProvider
     public function register()
     {
         $this->app->instance(AdFromServiceInterface::class, $this->app->make(AdFromService::class));
-        $this->app->instance(AnnouncementServiceInterface::class, $this->app->make(AnnouncementServiceProxy::class));
         $this->app->instance(SmsServiceInterface::class, $this->app->make(SmsServiceProxy::class));
         $this->app->instance(UploadServiceInterface::class, $this->app->make(UploadService::class));
         $this->app->instance(MpWechatServiceInterface::class, $this->app->make(MpWechatService::class));

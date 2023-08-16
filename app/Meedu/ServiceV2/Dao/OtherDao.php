@@ -79,4 +79,21 @@ class OtherDao implements OtherDaoInterface
             ->first();
         return $a ? $a->toArray() : [];
     }
+
+    public function findAnnouncement(int $id): array
+    {
+        $data = Announcement::query()->where('id', $id)->first();
+        return $data ? $data->toArray() : [];
+    }
+
+    public function announcementPaginate(int $page, int $size): array
+    {
+        $data = Announcement::query()->orderByDesc('id')->forPage($page, $size)->get()->toArray();
+        $total = Announcement::query()->orderByDesc('id')->count();
+        return [
+            'data' => $data,
+            'total' => $total,
+        ];
+    }
+
 }

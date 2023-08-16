@@ -30,6 +30,7 @@ use App\Meedu\ServiceV2\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\CourseService;
 use App\Meedu\ServiceV2\Services\SettingService;
 use App\Meedu\ServiceV2\Services\TencentVodService;
+use App\Meedu\ServiceV2\Services\AnnouncementService;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDaoInterface;
 use App\Meedu\ServiceV2\Services\RoleServiceInterface;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
@@ -41,6 +42,7 @@ use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusStatusService;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
+use App\Meedu\ServiceV2\Services\AnnouncementServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 
 class ServiceInit
@@ -66,6 +68,7 @@ class ServiceInit
         RuntimeStatusServiceInterface::class => RuntimeStatusStatusService::class,
         OrderServiceInterface::class => OrderService::class,
         RoleServiceInterface::class => RoleService::class,
+        AnnouncementServiceInterface::class => AnnouncementService::class,
     ];
 
     public function run()

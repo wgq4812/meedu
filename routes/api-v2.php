@@ -31,11 +31,6 @@ Route::get('/video/{id}', 'VideoController@detail');
 // 公开的视频播放
 Route::get('/video/open/play', 'VideoController@openPlay');
 
-// 公告-列表
-Route::get('/announcements', 'AnnouncementController@list');
-// 公告-详情
-Route::get('/announcement/{id}', 'AnnouncementController@detail');
-
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
     // 录播课-学员学习-记录
     Route::post('/video/{id}/record', 'VideoController@recordVideo');

@@ -29,4 +29,8 @@ interface OtherDaoInterface
     public function viewBlocks(string $page, string $platform): array;
 
     public function latestAnnouncement(): array;
+
+    public function findAnnouncement(int $id): array;
+
+    public function announcementPaginate(int $page, int $size): array;
 }

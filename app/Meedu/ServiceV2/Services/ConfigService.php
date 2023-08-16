@@ -269,5 +269,4 @@ class ConfigService implements ConfigServiceInterface
         return config('meedu.aboutus') ?? '';
     }
 
-
 }
