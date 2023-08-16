@@ -280,33 +280,6 @@ class CourseService implements CourseServiceInterface
     }
 
     /**
-     * 课程附件下载次数自增
-     * @param int $id
-     */
-    public function courseAttachDownloadTimesInc(int $id): void
-    {
-        CourseAttach::query()->where('id', $id)->increment('download_times', 1);
-    }
-
-    /**
-     * @param int $id
-     * @return array
-     */
-    public function getAttach(int $id): array
-    {
-        return CourseAttach::query()->where('id', $id)->firstOrFail()->toArray();
-    }
-
-    /**
-     * @param int $id
-     * @param int $num
-     */
-    public function userCountInc(int $id, int $num): void
-    {
-        Course::query()->where('id', $id)->increment('user_count', $num);
-    }
-
-    /**
      * @param array $ids
      * @param array $fields
      * @param array $with

@@ -23,4 +23,8 @@ interface CourseDaoInterface
     public function categories(): array;
 
     public function coursePaginate(int $page, int $size, array $params, array $with, array $withCount): array;
+
+    public function findCourseAttach(int $id, int $courseId): array;
+
+    public function attachDownloadTimesInc(int $id, int $count): void;
 }

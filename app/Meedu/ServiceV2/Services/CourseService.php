@@ -54,4 +54,15 @@ class CourseService implements CourseServiceInterface
     {
         return $this->courseDao->coursePaginate($page, $size, $params, $with, $withCount);
     }
+
+    public function findAttachment(int $id, int $courseId): array
+    {
+        return $this->courseDao->findCourseAttach($id, $courseId);
+    }
+
+    public function attachmentDownloadTimesInc(int $id): void
+    {
+        $this->courseDao->attachDownloadTimesInc($id, 1);
+    }
+
 }

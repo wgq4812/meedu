@@ -56,8 +56,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     Route::post('/course/{id}/comment', 'CourseController@createComment');
     // 录播课-收藏
     Route::get('/course/{id}/like', 'CourseController@like');
-    // 录播课-附件下载
-    Route::get('/course/attach/{id}/download', 'CourseController@attachDownload');
 
     // 图片上传
     Route::post('/upload/image', 'UploadController@image');

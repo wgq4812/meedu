@@ -11,6 +11,7 @@ namespace App\Meedu\ServiceV2\Dao;
 use Carbon\Carbon;
 use App\Meedu\ServiceV2\Models\Course;
 use App\Meedu\ServiceV2\Models\CourseVideo;
+use App\Meedu\ServiceV2\Models\CourseAttach;
 use App\Meedu\ServiceV2\Models\CourseCategory;
 
 class CourseDao implements CourseDaoInterface
@@ -152,4 +153,16 @@ class CourseDao implements CourseDaoInterface
             'total' => $data->total(),
         ];
     }
+
+    public function findCourseAttach(int $id, int $courseId): array
+    {
+        $attach = CourseAttach::query()->where('id', $id)->where('course_id', $courseId)->first();
+        return $attach ? $attach->toArray() : [];
+    }
+
+    public function attachDownloadTimesInc(int $id, int $count): void
+    {
+        CourseAttach::query()->where('id', $id)->increment('download_times', $count);
+    }
+
 }

@@ -318,29 +318,4 @@ class CourseController extends BaseController
         $status = $this->userService->likeACourse($this->id(), $course['id']);
         return $this->data($status);
     }
-
-    /**
-     * @api {get} /api/v2/course/attach/{attach_id}/download 附件下载
-     * @apiGroup 录播课
-     * @apiName CourseAttachDownload
-     * @apiVersion v2.0.0
-     *
-     * @apiParam {String} token 登录token
-     *
-     * @apiSuccess {Number} code 0成功,非0失败
-     * @apiSuccess {Object} data 数据
-     */
-    public function attachDownload($id)
-    {
-        $courseAttach = $this->courseService->getAttach($id);
-        $course = $this->courseService->find($courseAttach['course_id']);
-
-        if ($course['charge'] > 0 && !$this->businessState->isBuyCourse($this->id(), $courseAttach['course_id'])) {
-            return $this->error(__('请购买课程'));
-        }
-
-        $this->courseService->courseAttachDownloadTimesInc($courseAttach['id']);
-
-        return response()->download(storage_path('app/attach/' . $courseAttach['path']));
-    }
 }

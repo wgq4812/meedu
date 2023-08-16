@@ -100,7 +100,6 @@ class BusinessState
     }
 
     /**
-<<<<<<< HEAD
      * @param int $loginUserId
      * @param array $promoCode
      * @return bool

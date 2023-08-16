@@ -23,4 +23,8 @@ interface CourseServiceInterface
     public function categories(): array;
 
     public function coursePaginate(int $page, int $size, array $params, array $with, array $withCount): array;
+
+    public function findAttachment(int $id, int $courseId): array;
+
+    public function attachmentDownloadTimesInc(int $id): void;
 }

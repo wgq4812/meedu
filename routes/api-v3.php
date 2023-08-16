@@ -39,6 +39,8 @@ Route::post('/auth/register/withWechatScan', 'LoginController@registerWithWechat
 
 // 录播课分页列表
 Route::get('/courses', 'CourseController@index');
+// 课程附件下载
+Route::get('/course/{courseId}/attach/{id}/download', 'CourseAttachController@download')->name('course.attachment.download');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
 
@@ -51,8 +53,11 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
         Route::post('/pay', 'PaymentController@submit');
     });
 
-    // 视频播放地址
-    Route::post('/course/{courseId}/video/{videoId}/play', 'VideoController@play');
+    Route::group(['prefix' => 'course'], function () {
+        // 视频播放地址
+        Route::post('/{courseId}/video/{videoId}/play', 'VideoController@play');
+        Route::post('/{courseId}/attach/{id}/download-url', 'CourseAttachController@getDownloadUrl');
+    });
 
     Route::group(['prefix' => 'member'], function () {
         // 学员已购录播课
