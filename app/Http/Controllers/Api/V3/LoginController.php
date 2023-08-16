@@ -10,20 +10,20 @@ namespace App\Http\Controllers\Api\V3;
 
 use App\Bus\AuthBus;
 use App\Bus\WechatScanBus;
-use App\Meedu\Utils\Wechat;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Constant\CacheConstant;
-use App\Meedu\Utils\AppRedirect;
 use App\Businesses\BusinessState;
+use App\Constant\CacheConstant;
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
-use Illuminate\Support\Facades\Cache;
-use Laravel\Socialite\Facades\Socialite;
-use App\Http\Controllers\Api\V2\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\ApiV3\SocialiteLoginRequest;
-use App\Meedu\ServiceV2\Services\UserServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\UserServiceInterface;
+use App\Meedu\Utils\AppRedirect;
+use App\Meedu\Utils\Wechat;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
+use Laravel\Socialite\Facades\Socialite;
 
 class LoginController extends BaseController
 {

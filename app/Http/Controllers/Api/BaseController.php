@@ -6,15 +6,15 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Controllers\Api\V2;
+namespace App\Http\Controllers\Api;
 
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Member\Services\UserService;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Http\Controllers\Api\Traits\ResponseTrait;
 use App\Services\Member\Interfaces\UserServiceInterface;
+use App\Services\Member\Services\UserService;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class BaseController
 {

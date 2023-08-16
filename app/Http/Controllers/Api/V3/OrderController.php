@@ -8,10 +8,10 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\BaseController;
 use App\Meedu\Bus\Order\OrderHandler;
-use App\Http\Controllers\Api\V2\BaseController;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
+use Illuminate\Http\Request;
 
 class OrderController extends BaseController
 {

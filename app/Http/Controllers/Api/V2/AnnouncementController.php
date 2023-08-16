@@ -8,9 +8,10 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use Illuminate\Http\Request;
-use App\Services\Other\Services\AnnouncementService;
+use App\Http\Controllers\Api\BaseController;
 use App\Services\Other\Interfaces\AnnouncementServiceInterface;
+use App\Services\Other\Services\AnnouncementService;
+use Illuminate\Http\Request;
 
 class AnnouncementController extends BaseController
 {

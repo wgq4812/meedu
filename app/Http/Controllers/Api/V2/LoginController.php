@@ -9,21 +9,22 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Bus\AuthBus;
-use Illuminate\Http\Request;
-use App\Events\UserLogoutEvent;
 use App\Constant\FrontendConstant;
+use App\Events\UserLogoutEvent;
 use App\Exceptions\ServiceException;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Base\Services\CacheService;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Member\Services\UserService;
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\ApiV2\MobileLoginRequest;
 use App\Http\Requests\ApiV2\PasswordLoginRequest;
-use App\Services\Member\Services\SocialiteService;
 use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Member\Interfaces\UserServiceInterface;
+use App\Services\Base\Services\CacheService;
+use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Interfaces\SocialiteServiceInterface;
+use App\Services\Member\Interfaces\UserServiceInterface;
+use App\Services\Member\Services\SocialiteService;
+use App\Services\Member\Services\UserService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends BaseController
 {

@@ -8,21 +8,21 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use Carbon\Carbon;
 use App\Bus\MemberBus;
 use App\Bus\WechatScanBus;
-use App\Meedu\Tencent\Face;
-use Illuminate\Http\Request;
+use App\Businesses\BusinessState;
 use App\Constant\BusConstant;
 use App\Constant\CacheConstant;
-use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
-use App\Exceptions\ServiceException;
-use Illuminate\Support\Facades\Cache;
 use App\Events\UserVerifyFaceSuccessEvent;
-use App\Http\Controllers\Api\V2\BaseController;
-use App\Meedu\ServiceV2\Services\UserServiceInterface;
+use App\Exceptions\ServiceException;
+use App\Http\Controllers\Api\BaseController;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
+use App\Meedu\ServiceV2\Services\UserServiceInterface;
+use App\Meedu\Tencent\Face;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class MemberController extends BaseController
 {

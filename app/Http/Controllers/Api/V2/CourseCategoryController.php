@@ -9,8 +9,9 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Constant\ApiV2Constant;
-use App\Services\Course\Services\CourseCategoryService;
+use App\Http\Controllers\Api\BaseController;
 use App\Services\Course\Interfaces\CourseCategoryServiceInterface;
+use App\Services\Course\Services\CourseCategoryService;
 
 class CourseCategoryController extends BaseController
 {

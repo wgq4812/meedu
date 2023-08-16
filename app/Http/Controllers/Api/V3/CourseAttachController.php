@@ -8,11 +8,11 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use Illuminate\Http\Request;
 use App\Businesses\BusinessState;
-use App\Http\Controllers\Api\V2\BaseController;
+use App\Http\Controllers\Api\BaseController;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class CourseAttachController extends BaseController
 {

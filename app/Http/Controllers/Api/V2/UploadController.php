@@ -8,6 +8,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\ApiV2\UploadImageRequest;
 
 class UploadController extends BaseController

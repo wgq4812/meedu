@@ -8,11 +8,11 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use Illuminate\Http\Request;
 use App\Constant\FrontendConstant;
+use App\Http\Controllers\Api\BaseController;
 use App\Meedu\Payment\PaymentHandler;
-use App\Http\Controllers\Api\V2\BaseController;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
+use Illuminate\Http\Request;
 
 class PaymentController extends BaseController
 {

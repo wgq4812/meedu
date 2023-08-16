@@ -9,21 +9,22 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Bus\VideoBus;
-use App\Meedu\Cache\Inc\Inc;
-use Illuminate\Http\Request;
-use App\Constant\ApiV2Constant;
 use App\Businesses\BusinessState;
+use App\Constant\ApiV2Constant;
 use App\Constant\FrontendConstant;
+use App\Http\Controllers\Api\BaseController;
+use App\Meedu\Cache\Inc\Inc;
 use App\Meedu\Cache\Inc\VideoViewIncItem;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Member\Services\UserService;
-use App\Services\Course\Services\VideoService;
-use App\Services\Course\Services\CourseService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Member\Interfaces\UserServiceInterface;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Services\Course\Interfaces\VideoServiceInterface;
+use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Interfaces\CourseServiceInterface;
+use App\Services\Course\Interfaces\VideoServiceInterface;
+use App\Services\Course\Services\CourseService;
+use App\Services\Course\Services\VideoService;
+use App\Services\Member\Interfaces\UserServiceInterface;
+use App\Services\Member\Services\UserService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 class VideoController extends BaseController
 {
