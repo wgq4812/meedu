@@ -97,34 +97,7 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
         Route::get('credit1Records', 'MemberController@credit1Records');
         // 安全校验[手机号]
         Route::post('verify', 'MemberController@verify');
-        // 微信扫码登录绑定
-        Route::get('wechatScan/bind', 'MemberController@wechatScanBind');
         // 社交账号取消绑定
         Route::delete('socialite/{app}', 'MemberController@socialiteCancelBind');
-    });
-});
-
-
-// 不再推荐继续使用的api
-// MeEdu-v5版本开始新安装系统默认关闭不推荐api的访问，在将来某个版本将会删除这些api
-// 可以通过编辑 .env 文件中的 CLOSE_DEPRECATED_API=true 继续使用这些api
-Route::group(['middleware' => ['deprecated.api']], function () {
-    // 微信公众号授权登录
-    Route::get('/login/wechat/oauth', 'LoginController@wechatLogin');
-    Route::get('/login/wechat/oauth/callback', 'LoginController@wechatLoginCallback')->name('api.v2.login.wechat.callback');
-    // 微信公众号授权绑定回调
-    Route::get('wechatBind/callback', 'MemberController@wechatBindCallback')->name('api.v2.wechatBind.callback');
-    // 社交登录
-    Route::get('/login/socialite/{app}', 'LoginController@socialiteLogin');
-    // 社交登录返回接口
-    Route::get('/login/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v2.login.socialite.callback');
-    // 社交账号绑定回调
-    Route::get('socialite/{app}/bind/callback', 'MemberController@socialiteBindCallback')->name('api.v2.socialite.bind.callback');
-
-    Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
-        // 社交账号绑定
-        Route::get('/member/socialite/{app}', 'MemberController@socialiteBind');
-        // 微信公众号授权绑定
-        Route::get('/member/wechatBind', 'MemberController@wechatBind');
     });
 });

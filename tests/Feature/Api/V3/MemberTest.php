@@ -56,7 +56,7 @@ class MemberTest extends Base
     public function test_socialite_bind_by_code_with_empty_code()
     {
         $user = User::factory()->create();
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => '',
         ]);
         $this->assertResponseError($response, __('参数错误'));
@@ -84,7 +84,7 @@ class MemberTest extends Base
         );
 
         $user = User::factory()->create();
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseSuccess($response);
@@ -121,7 +121,7 @@ class MemberTest extends Base
         ]);
 
         $user = User::factory()->create();
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseError($response, __('当前渠道账号已绑定了其它账号'));
@@ -155,7 +155,7 @@ class MemberTest extends Base
             'app_user_id' => Str::random(16),
         ]);
 
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseError($response, __('您已经绑定了该渠道的账号'));
@@ -185,7 +185,7 @@ class MemberTest extends Base
         );
 
         $user = User::factory()->create();
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseSuccess($response);
@@ -218,7 +218,7 @@ class MemberTest extends Base
         );
 
         $user = User::factory()->create();
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseSuccess($response);
@@ -244,7 +244,7 @@ class MemberTest extends Base
             CacheConstant::USER_SOCIALITE_LOGIN['expire']
         );
 
-        $response = $this->user($user)->postJson('/api/v3/member/socialite/bindWithCode', [
+        $response = $this->user($user)->postJson('/api/v3/member/socialite/bind-with-code', [
             'code' => $code,
         ]);
         $this->assertResponseSuccess($response);

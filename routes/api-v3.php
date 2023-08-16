@@ -19,7 +19,7 @@ Route::group([
     // 微信公众号授权登录
     Route::get('/wechat/oauth', 'LoginController@wechatOauthLogin');
     // 微信公众号授权登录-返回
-    Route::get('/wechat/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
+    Route::get('/wechat/oauth/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
     // 社交登录
     Route::get('/socialite/{app}', 'LoginController@socialiteLogin');
     // 社交登录返回
@@ -33,9 +33,9 @@ Route::group([
 });
 
 // 注册-社交登录
-Route::post('/auth/register/withSocialite', 'LoginController@registerWithSocialite');
+Route::post('/auth/register/with-socialite', 'LoginController@registerWithSocialite');
 // 注册-微信公众号扫码
-Route::post('/auth/register/withWechatScan', 'LoginController@registerWithWechatScan');
+Route::post('/auth/register/with-wechat-scan', 'LoginController@registerWithWechatScan');
 
 // 录播课分页列表
 Route::get('/courses', 'CourseController@index');
@@ -43,7 +43,6 @@ Route::get('/courses', 'CourseController@index');
 Route::get('/course/{courseId}/attach/{id}/download', 'CourseAttachController@download')->name('course.attachment.download');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
-
     Route::group(['prefix' => 'order'], function () {
         // 创建订单
         Route::post('/', 'OrderController@store');
@@ -72,9 +71,9 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
         // 账户注销
         Route::post('/destroy', 'MemberController@destroy');
         // 社交登录绑定
-        Route::post('/socialite/bindWithCode', 'MemberController@socialiteBindByCode');
+        Route::post('/socialite/bind-with-code', 'MemberController@socialiteBindByCode');
         // 微信账号扫码绑定
-        Route::get('/wechatScanBind', 'MemberController@wechatScanBind');
+        Route::get('/wechat-scan-bind', 'MemberController@wechatScanBind');
 
         // 微信实人认证结果查询
         Route::get('/tencent/faceVerify', 'MemberController@queryTencentFaceVerify');
