@@ -111,18 +111,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
 // MeEdu-v5版本开始新安装系统默认关闭不推荐api的访问，在将来某个版本将会删除这些api
 // 可以通过编辑 .env 文件中的 CLOSE_DEPRECATED_API=true 继续使用这些api
 Route::group(['middleware' => ['deprecated.api']], function () {
-    // 装修模块
-    Route::get('/viewBlock/page/blocks', 'ViewBlockController@pageBlocks');
-    // 系统常用配置
-    Route::get('/other/config', 'OtherController@config');
-    // 公告-最新一条
-    Route::get('/announcement/latest', 'AnnouncementController@latest');
-    // 幻灯片
-    Route::get('/sliders', 'SliderController@all');
-    // 友情链接
-    Route::get('/links', 'LinkController@all');
-    // 首页导航
-    Route::get('/navs', 'NavController@all');
     // 微信公众号授权登录
     Route::get('/login/wechat/oauth', 'LoginController@wechatLogin');
     Route::get('/login/wechat/oauth/callback', 'LoginController@wechatLoginCallback')->name('api.v2.login.wechat.callback');
@@ -134,16 +122,8 @@ Route::group(['middleware' => ['deprecated.api']], function () {
     Route::get('/login/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v2.login.socialite.callback');
     // 社交账号绑定回调
     Route::get('socialite/{app}/bind/callback', 'MemberController@socialiteBindCallback')->name('api.v2.socialite.bind.callback');
-    // 课程搜索
-    Route::get('/search', 'SearchController@index');
-    // 录播课-课时-列表
-    Route::get('/videos', 'VideoController@paginate');
-    // 录播课-课时-评论列表
-    Route::get('/video/{id}/comments', 'VideoController@comments');
 
     Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
-        // 录播课-课时-创建评论
-        Route::post('/video/{id}/comment', 'VideoController@createComment');
         // 社交账号绑定
         Route::get('/member/socialite/{app}', 'MemberController@socialiteBind');
         // 微信公众号授权绑定

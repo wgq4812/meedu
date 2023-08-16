@@ -13,21 +13,25 @@ Route::get('/status', 'SystemController@status');
 // 系统配置
 Route::get('/config', 'SystemController@config');
 
-// 微信公众号授权登录
-Route::get('/auth/login/wechat/oauth', 'LoginController@wechatOauthLogin');
-// 微信公众号授权登录-返回
-Route::get('/auth/login/wechat/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
-// 社交登录
-Route::get('/auth/login/socialite/{app}', 'LoginController@socialiteLogin');
-// 社交登录返回
-Route::get('/auth/login/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v3.login.socialite.callback');
-// 微信公众号扫码登录
-Route::get('/auth/login/wechat/scan', 'LoginController@wechatScan');
-// 微信公众号扫码登录-结果查询
-Route::get('/auth/login/wechat/scan/query', 'LoginController@wechatScanQuery');
+Route::group([
+    'prefix' => '/auth/login',
+], function () {
+    // 微信公众号授权登录
+    Route::get('/wechat/oauth', 'LoginController@wechatOauthLogin');
+    // 微信公众号授权登录-返回
+    Route::get('/wechat/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
+    // 社交登录
+    Route::get('/socialite/{app}', 'LoginController@socialiteLogin');
+    // 社交登录返回
+    Route::get('/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v3.login.socialite.callback');
+    // 微信公众号扫码登录
+    Route::get('/wechat/scan', 'LoginController@wechatScan');
+    // 微信公众号扫码登录-结果查询
+    Route::get('/wechat/scan/query', 'LoginController@wechatScanQuery');
+    // 通过code登录系统[code由社交登录、微信扫码登录发放]
+    Route::post('/code', 'LoginController@loginByCode');
+});
 
-// 通过code登录系统[code由社交登录、微信扫码登录发放]
-Route::post('/auth/login/code', 'LoginController@loginByCode');
 // 注册-社交登录
 Route::post('/auth/register/withSocialite', 'LoginController@registerWithSocialite');
 // 注册-微信公众号扫码
@@ -37,12 +41,15 @@ Route::post('/auth/register/withWechatScan', 'LoginController@registerWithWechat
 Route::get('/courses', 'CourseController@index');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
-    // 创建订单
-    Route::post('/order', 'OrderController@store');
-    Route::get('/order/status', 'PaymentController@status');
-    Route::get('/order/promoCode', 'PaymentController@promoCode');
-    // 订单支付
-    Route::post('/order/pay', 'PaymentController@submit');
+
+    Route::group(['prefix' => 'order'], function () {
+        // 创建订单
+        Route::post('/', 'OrderController@store');
+        Route::get('/status', 'PaymentController@status');
+        Route::get('/promoCode', 'PaymentController@promoCode');
+        // 订单支付
+        Route::post('/pay', 'PaymentController@submit');
+    });
 
     // 视频播放地址
     Route::post('/course/{courseId}/video/{videoId}/play', 'VideoController@play');

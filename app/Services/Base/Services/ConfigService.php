@@ -447,7 +447,7 @@ class ConfigService implements ConfigServiceInterface
     public function getMpWechatConfig(): array
     {
         $config = config('meedu.mp_wechat');
-        return $config ? $config : [];
+        return $config ?: [];
     }
 
     /**
