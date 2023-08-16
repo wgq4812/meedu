@@ -8,13 +8,13 @@
 
 namespace App\Http\Middleware\Api;
 
-use App\Constant\FrontendConstant;
+use Closure;
 use App\Events\UserLogoutEvent;
+use App\Constant\FrontendConstant;
+use Illuminate\Support\Facades\Auth;
+use App\Meedu\ServiceV2\Services\UserService;
 use App\Http\Controllers\Api\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
-use App\Meedu\ServiceV2\Services\UserService;
-use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class LoginStatusCheckMiddleware
 {

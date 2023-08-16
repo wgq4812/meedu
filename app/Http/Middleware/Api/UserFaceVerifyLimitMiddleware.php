@@ -10,9 +10,9 @@ namespace App\Http\Middleware\Api;
 
 use App\Bus\MemberBus;
 use App\Constant\FrontendConstant;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Api\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
-use Illuminate\Support\Facades\Auth;
 
 class UserFaceVerifyLimitMiddleware
 {

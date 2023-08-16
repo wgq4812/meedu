@@ -10,11 +10,11 @@ namespace App\Http\Controllers\Api\V2;
 
 use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
-use App\Http\Controllers\Api\Traits\ResponseTrait;
-use App\Services\Member\Interfaces\UserServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use App\Services\Member\Services\UserService;
 use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\Traits\ResponseTrait;
+use App\Services\Member\Interfaces\UserServiceInterface;
 
 class BaseController
 {
