@@ -8,13 +8,13 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Support\Str;
 use App\Constant\ApiV2Constant;
 use App\Constant\BackendApiConstant;
+use App\Http\Controllers\Api\Traits\ResponseTrait;
 use Illuminate\Auth\AuthenticationException;
-use App\Http\Controllers\Traits\ResponseTrait;
-use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\ThrottleRequestsException;
+use Illuminate\Support\Str;
 
 class Handler extends ExceptionHandler
 {

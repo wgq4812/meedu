@@ -8,7 +8,7 @@
 
 namespace App\Exceptions;
 
-use App\Http\Controllers\Traits\ResponseTrait;
+use App\Http\Controllers\Api\Traits\ResponseTrait;
 
 /**
  * 系统成功运行并截断异常

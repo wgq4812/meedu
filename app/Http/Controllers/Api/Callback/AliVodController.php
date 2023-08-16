@@ -8,12 +8,12 @@
 
 namespace App\Http\Controllers\Api\Callback;
 
-use Illuminate\Http\Request;
 use App\Events\AliVodCallbackEvent;
-use Illuminate\Support\Facades\Cache;
-use App\Http\Controllers\Traits\ResponseTrait;
+use App\Http\Controllers\Api\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AliVodController
 {
