@@ -447,7 +447,7 @@ class ConfigService implements ConfigServiceInterface
     public function getMpWechatConfig(): array
     {
         $config = config('meedu.mp_wechat');
-        return $config ? $config : [];
+        return $config ?: [];
     }
 
     /**
@@ -457,16 +457,6 @@ class ConfigService implements ConfigServiceInterface
     public function getMemberRegisterSendVipConfig(): array
     {
         return config('meedu.member.register.vip') ?? [];
-    }
-
-    /**
-     * 获取高德地图应用key
-     *
-     * @return string
-     */
-    public function getAmapkey(): string
-    {
-        return config('meedu.services.amap.key', '');
     }
 
     /**

@@ -8,9 +8,9 @@
 
 namespace App\Hooks\ViewBlock\Data;
 
-use App\Meedu\Hooks\HookParams;
 use App\Meedu\ViewBlock\Constant;
-use App\Meedu\Hooks\HookRuntimeInterface;
+use App\Meedu\Core\Hooks\HookParams;
+use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Services\Course\Services\CourseService;
 use App\Services\Course\Interfaces\CourseServiceInterface;
 
@@ -26,6 +26,7 @@ class VodV1DataHook implements HookRuntimeInterface
 
         $params->setResponse($block);
 
+        // 解析出首页装修板块配置的录播课的id
         $courseIds = collect($block['config_render']['items'])->pluck('id')->map(function ($val) {
             return (int)$val;
         })->toArray();
@@ -45,16 +46,11 @@ class VodV1DataHook implements HookRuntimeInterface
             );
             $courses = array_column($courses, null, 'id');
 
-            $items = [];
             foreach ($block['config_render']['items'] as $index => $courseItem) {
                 $id = $courseItem['id'] ?? 0;
-                if (!$id || !isset($courses[$id])) {
-                    continue;
-                }
-                $items[] = $courses[$id];
+                // 前端渲染要考虑到无效的数据
+                $block['config_render']['items'][$index] = $courses[$id] ?? null;
             }
-            $block['config_render']['items'] = $items;
-
             $params->setResponse($block);
         }
 

@@ -9,6 +9,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class InstallLockCommand extends Command
 {
@@ -36,11 +37,11 @@ class InstallLockCommand extends Command
         parent::__construct();
     }
 
-    public function handle()
+    public function handle(): int
     {
         if (!file_exists(storage_path('install.lock'))) {
             file_put_contents(storage_path('install.lock'), time());
         }
-        return 0;
+        return CommandAlias::SUCCESS;
     }
 }

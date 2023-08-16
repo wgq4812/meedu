@@ -9,7 +9,7 @@
 namespace App\Http\Requests\Backend;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Exceptions\Backend\ValidateException;
+use App\Exceptions\BackendValidateException;
 use Illuminate\Contracts\Validation\Validator;
 
 class BaseRequest extends FormRequest
@@ -26,6 +26,6 @@ class BaseRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
-        throw new ValidateException(implode(',', $validator->errors()->all()));
+        throw new BackendValidateException(implode(',', $validator->errors()->all()));
     }
 }

@@ -12,8 +12,9 @@ use Carbon\Carbon;
 use App\Meedu\MeEdu;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
+use App\Constant\FrontendConstant;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
+use App\Meedu\ServiceV2\Models\Order;
 
 class DashboardController extends BaseController
 {
@@ -27,38 +28,38 @@ class DashboardController extends BaseController
         // 昨日订单支付总额
         $yesterdayPaidSum = (int)Order::query()
             ->whereBetween('created_at', [Carbon::now()->subDays(1)->format('Y-m-d'), date('Y-m-d')])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
 
         // 今日订单支付总额
         $todayPaidSum = (int)Order::query()
             ->where('created_at', '>=', date('Y-m-d'))
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
 
         // 进入付费用户数量
         $todayPaidUserNum = Order::query()
             ->distinct('user_id')
             ->where('created_at', '>=', date('Y-m-d'))
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->count();
 
         // 昨日付费用户数量
         $yesterdayPaidUserNum = Order::query()
             ->distinct('user_id')
             ->whereBetween('created_at', [Carbon::now()->subDays(1)->format('Y-m-d'), date('Y-m-d')])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->count();
 
         // 本月收益
         $thisMonthPaidSum = (int)Order::query()
             ->where('created_at', '>=', date('Y-m') . '-01')
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
         // 上个月收益
         $lastMonthPaidSum = (int)Order::query()
             ->whereBetween('created_at', [Carbon::now()->subMonths(1)->format('Y-m') . '-01', date('Y-m') . '-01'])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
 
         AdministratorLog::storeLog(
@@ -181,7 +182,7 @@ class DashboardController extends BaseController
 
         $paidOrders = Order::query()
             ->select(['created_at', 'charge'])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->whereBetween('created_at', [$startAt, $endAt])
             ->get();
         foreach ($paidOrders as $tmpVal) {

@@ -10,25 +10,30 @@ namespace App\Meedu\Payment\HandPay;
 
 use App\Meedu\Payment\Contract\Payment;
 use App\Meedu\Payment\Contract\PaymentStatus;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class HandPay implements Payment
 {
-    public function create(array $order, array $extra = []): PaymentStatus
+    private $configService;
+
+    public function __construct(ConfigServiceInterface $configService)
     {
-        return new PaymentStatus(true, '');
+        $this->configService = $configService;
     }
 
-    public function query(array $order): PaymentStatus
+    public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
-        return new PaymentStatus(false);
+        return new PaymentStatus(true, response()->json([
+            'code' => 0,
+            'message' => '',
+            'data' => [
+                'desc' => $this->configService->getHandPayDesc(),
+            ],
+        ]));
     }
 
-    public function callback()
+    public function callback(): bool
     {
-    }
-
-    public static function payUrl(array $order): string
-    {
-        return '';
+        return false;
     }
 }

@@ -12,14 +12,15 @@ use Carbon\Carbon;
 use App\Bus\RefundBus;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
+use App\Constant\FrontendConstant;
 use App\Events\OrderRefundCreated;
 use Illuminate\Support\Facades\DB;
-use App\Events\PaymentSuccessEvent;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
-use App\Services\Order\Models\OrderGoods;
-use App\Services\Order\Models\OrderRefund;
-use App\Services\Order\Models\OrderPaidRecord;
+use App\Meedu\ServiceV2\Models\Order;
+use App\Meedu\ServiceV2\Models\OrderGoods;
+use App\Meedu\ServiceV2\Models\OrderRefund;
+use App\Meedu\ServiceV2\Models\OrderPaidRecord;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
 class OrderController extends BaseController
 {
@@ -67,7 +68,11 @@ class OrderController extends BaseController
             ->when($payment, function ($query) use ($payment) {
                 $payments = [$payment];
                 if ($payment === 'wechat') {
-                    $payments = array_merge($payments, ['wechat-jsapi', 'wechat_h5', 'wechatApp']);
+                    $payments = array_merge($payments, ['wechat-jsapi', 'wechat_h5', 'wechatApp', 'wechat-h5', 'wechat-mini', 'wechat-app']);
+                } elseif ($payment === 'alipay') {
+                    $payments = array_merge($payments, ['alipay-h5']);
+                } elseif ($payment === 'handPay') {
+                    $payments = array_merge($payments, ['handPay-h5', 'handPay-wechat', 'handPay-wechat-mini', 'handPay-app']);
                 }
                 $query->whereIn('payment', $payments);
             })
@@ -104,10 +109,10 @@ class OrderController extends BaseController
 
         // 各状态订单数量统计
         $countMap = [
-            Order::STATUS_UNPAY => (clone $query)->where('status', Order::STATUS_UNPAY)->count(),
-            Order::STATUS_CANCELED => (clone $query)->where('status', Order::STATUS_CANCELED)->count(),
-            Order::STATUS_PAID => (clone $query)->where('status', Order::STATUS_PAID)->count(),
-            Order::STATUS_PAYING => (clone $query)->where('status', Order::STATUS_PAYING)->count(),
+            FrontendConstant::ORDER_UN_PAY => (clone $query)->where('status', FrontendConstant::ORDER_UN_PAY)->count(),
+            FrontendConstant::ORDER_CANCELED => (clone $query)->where('status', FrontendConstant::ORDER_CANCELED)->count(),
+            FrontendConstant::ORDER_PAID => (clone $query)->where('status', FrontendConstant::ORDER_PAID)->count(),
+            FrontendConstant::ORDER_PAYING => (clone $query)->where('status', FrontendConstant::ORDER_PAYING)->count(),
         ];
 
         AdministratorLog::storeLog(
@@ -143,15 +148,16 @@ class OrderController extends BaseController
         ]);
     }
 
-    public function finishOrder($id)
+    public function finishOrder(OrderServiceInterface $orderService, $id)
     {
-        $order = Order::query()->where('id', $id)->firstOrFail();
-        event(new PaymentSuccessEvent($order->toArray()));
+        $orderService->remainingAmountHandPay($id);
+
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_ORDER,
             AdministratorLog::OPT_UPDATE,
             compact('id')
         );
+
         return $this->success();
     }
 
@@ -178,7 +184,7 @@ class OrderController extends BaseController
             $order['last_refund_at'] &&
             // 待处理订单最近退款时间距离当前时间必须超过30分钟
             (
-                OrderRefund::query()->where('order_id', $order['id'])->where('status', OrderRefund::STATUS_DEFAULT)->exists() &&
+                OrderRefund::query()->where('order_id', $order['id'])->where('status', FrontendConstant::ORDER_REFUND_STATUS_DEFAULT)->exists() &&
                 Carbon::parse($order['last_refund_at'])->addMinutes(30)->gt(Carbon::now())
             )
         ) {
@@ -196,13 +202,13 @@ class OrderController extends BaseController
         // 一个订单可能包括：实际支付+优惠码
         $directPayAmount = (int)OrderPaidRecord::query()
                 ->where('order_id', $order['id'])
-                ->where('paid_type', OrderPaidRecord::PAID_TYPE_DEFAULT)
+                ->where('paid_type', FrontendConstant::ORDER_PAID_TYPE_DEFAULT)
                 ->sum('paid_total') * 100;
         // 已申请退款额度，包括「处理中+已成功」
         // 数据库存储的单位是：分
         $refundTotalAmount = (int)OrderRefund::query()
             ->where('order_id', $order['id'])
-            ->whereIn('status', [OrderRefund::STATUS_DEFAULT, OrderRefund::STATUS_SUCCESS])
+            ->whereIn('status', [FrontendConstant::ORDER_REFUND_STATUS_DEFAULT, FrontendConstant::ORDER_REFUND_STATUS_SUCCESS])
             ->sum('amount');
         if ($directPayAmount < $refundTotalAmount + $amount) {
             return $this->error('超过订单实际支付额度');
@@ -225,10 +231,10 @@ class OrderController extends BaseController
                 'amount' => $amount,
                 'reason' => $reason,
                 'is_local' => $isLocal,
-                'status' => OrderRefund::STATUS_DEFAULT,
+                'status' => FrontendConstant::ORDER_REFUND_STATUS_DEFAULT,
             ];
             if ($refundData['is_local'] === 1) {
-                $refundData['status'] = OrderRefund::STATUS_SUCCESS;
+                $refundData['status'] = FrontendConstant::ORDER_REFUND_STATUS_SUCCESS;
                 $refundData['success_at'] = Carbon::now()->toDateTimeLocalString();
             }
 

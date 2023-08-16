@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Bus\AuthBus;
-use App\Meedu\Wechat;
+use App\Meedu\Utils\Wechat;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Constant\CacheConstant;
@@ -158,7 +158,7 @@ class LoginController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/login/wechat/oauth 微信公众号授权登录[重定向]
+     * @api {get} /api/v2/login/wechat/oauth [废弃]微信公众号授权登录[重定向]
      * @apiGroup Auth
      * @apiName WechatOauth
      * @apiVersion v2.0.0
@@ -216,7 +216,7 @@ class LoginController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/login/socialite/{app} 社交APP登录[重定向]
+     * @api {get} /api/v2/login/socialite/{app} [废弃]社交APP登录[重定向]
      * @apiGroup Auth
      * @apiName LoginSocialites
      * @apiVersion v2.0.0

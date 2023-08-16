@@ -12,10 +12,11 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Constant\TableConstant;
 use App\Models\AdministratorLog;
+use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\DB;
 use App\Meedu\ServiceV2\Models\User;
-use App\Services\Order\Models\Order;
-use App\Services\Order\Models\OrderRefund;
+use App\Meedu\ServiceV2\Models\Order;
+use App\Meedu\ServiceV2\Models\OrderRefund;
 use App\Services\Member\Models\UserWatchStat;
 
 class StatsController extends BaseController
@@ -32,13 +33,13 @@ class StatsController extends BaseController
         //今日支付总额
         $todayPaidSum = (int)Order::query()
             ->where('created_at', '>=', date('Y-m-d'))
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
 
         //昨日支付总额
         $yesterdayPaidSum = (int)Order::query()
             ->whereBetween('created_at', [Carbon::now()->subDays(1)->format('Y-m-d'), date('Y-m-d')])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->sum('charge');
 
         //今日退款总额
@@ -49,13 +50,13 @@ class StatsController extends BaseController
         //今日已支付订单数
         $todayPaidCount = Order::query()
             ->where('created_at', '>=', date('Y-m-d'))
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->count();
 
         //昨日已支付订单数
         $yesterdayPaidCount = Order::query()
             ->whereBetween('created_at', [Carbon::now()->subDays(1)->format('Y-m-d'), date('Y-m-d')])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->count();
 
         //今日退款订单数
@@ -64,14 +65,14 @@ class StatsController extends BaseController
         //今日已支付订单人数
         $todayPaidUserCount = Order::query()
             ->where('created_at', '>=', date('Y-m-d'))
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->distinct('user_id')
             ->count();
 
         //昨日已支付订单人数
         $yesterdayPaidUserCount = Order::query()
             ->whereBetween('created_at', [Carbon::now()->subDays(1)->format('Y-m-d'), date('Y-m-d')])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->distinct('user_id')
             ->count();
 
@@ -206,7 +207,7 @@ SQL;
         //读取这段时间的已支付订单
         $orders = Order::query()
             ->whereBetween('created_at', [$statAt, $endAt])
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->get();
 
         foreach ($orders as $tmpOrderItem) {
@@ -265,8 +266,8 @@ SQL;
 select `user_id`,sum(`charge`) as `total`,count(`id`) as `count` from `{$tableOrders}` where `status` = ? and `created_at` between ? and ? group by `user_id` order by `total` desc limit ?,?;
 SQL;
 
-        $countResult = DB::selectOne($countSql, [Order::STATUS_PAID, $statAt, $endAt]);
-        $data = DB::select($sql, [Order::STATUS_PAID, $statAt, $endAt, $offset, $size]);
+        $countResult = DB::selectOne($countSql, [FrontendConstant::ORDER_PAID, $statAt, $endAt]);
+        $data = DB::select($sql, [FrontendConstant::ORDER_PAID, $statAt, $endAt, $offset, $size]);
         if ($data) {
             $data = json_decode(json_encode($data), true);
             $userIds = array_column($data, 'user_id');
@@ -361,7 +362,7 @@ SQL;
         $userIds = Order::query()
             ->select(['user_id'])
             ->distinct('user_id')
-            ->where('status', Order::STATUS_PAID)
+            ->where('status', FrontendConstant::ORDER_PAID)
             ->whereBetween('created_at', [$statAt, $endAt])
             ->get();
         $userIds = $userIds->pluck('user_id')->toArray();
@@ -370,7 +371,7 @@ SQL;
         $sql = <<<SQL
 select `user_id`,count(`id`) as `paid_count` from `{$tableOrders}` where `status` = ? group by `user_id`;
 SQL;
-        $paidCount = DB::select($sql, [Order::STATUS_PAID]);
+        $paidCount = DB::select($sql, [FrontendConstant::ORDER_PAID]);
         $paidCount = json_decode(json_encode($paidCount), true);
         $paidCount = array_column($paidCount, null, 'user_id');
 

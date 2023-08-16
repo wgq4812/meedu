@@ -10,9 +10,17 @@ namespace App\Meedu\ServiceV2\Services;
 
 interface CourseServiceInterface
 {
+    public function findOrFail(int $id): array;
+
+    public function videoFindOrFail(int $videoId, int $courseId): array;
+
     public function chunk(array $ids, array $fields, array $params, array $with, array $withCount): array;
 
     public function videoChunk(array $ids, array $fields, array $params, array $with, array $withCount): array;
 
     public function getCoursePublishedVideos(int $courseId, array $fields): array;
+
+    public function categories(): array;
+
+    public function coursePaginate(int $page, int $size, array $params, array $with, array $withCount): array;
 }

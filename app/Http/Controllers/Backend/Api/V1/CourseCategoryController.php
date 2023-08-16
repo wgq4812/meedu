@@ -12,6 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
 use App\Services\Course\Models\Course;
+use App\Events\CourseCategoryUpdateEvent;
 use App\Services\Course\Models\CourseCategory;
 use App\Http\Requests\Backend\CourseCategoryRequest;
 
@@ -74,6 +75,8 @@ class CourseCategoryController extends BaseController
             Arr::only($category->toArray(), ['id', 'sort', 'name', 'parent_id', 'parent_chain', 'is_show'])
         );
 
+        event(new CourseCategoryUpdateEvent());
+
         return $this->success();
     }
 
@@ -104,6 +107,8 @@ class CourseCategoryController extends BaseController
 
         $category->fill($data)->save();
 
+        event(new CourseCategoryUpdateEvent());
+
         return $this->success();
     }
 
@@ -124,6 +129,8 @@ class CourseCategoryController extends BaseController
             AdministratorLog::OPT_DESTROY,
             compact('id')
         );
+
+        event(new CourseCategoryUpdateEvent());
 
         return $this->success();
     }

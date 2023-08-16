@@ -10,19 +10,15 @@ namespace App\Meedu\Payment\Alipay;
 
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class AlipayRefund
 {
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
+    private $config;
 
     public function __construct(ConfigServiceInterface $configService)
     {
-        $this->configService = $configService;
+        $this->config = $configService->getAlipayConfig();
     }
 
     /**
@@ -43,20 +39,13 @@ class AlipayRefund
             'out_request_no' => $refundNo,
         ];
 
-        // 支付宝配置
-        $config = $this->configService->getAlipayPay();
-        // 回调地址
-        $config['notify_url'] = route('payment.callback', ['alipay']);
-
-        $result = Pay::alipay($config)->refund($params);
+        $result = Pay::alipay($this->config)->refund($params);
         Log::info(__METHOD__ . '|支付宝退款返回参数', $result->toArray());
     }
 
     public function queryIsSuccess(string $refundNo, string $orderNo): bool
     {
-        // 支付宝配置
-        $config = $this->configService->getAlipayPay();
-        $alipay = Pay::alipay($config);
+        $alipay = Pay::alipay($this->config);
         $result = $alipay->find(
             [
                 // 本地订单编号

@@ -18,37 +18,37 @@ class EventServiceProvider extends ServiceProvider
         ],
         // 支付成功event
         'App\Events\PaymentSuccessEvent' => [
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidDeliverListener',
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidNotificationListener',
-            '\App\Listeners\PaymentSuccessEvent\OrderPaidStatusChangeListener',
+            '\App\Listeners\PaymentSuccessEvent\DeliverListener',
+            '\App\Listeners\PaymentSuccessEvent\NotificationListener',
+            '\App\Listeners\PaymentSuccessEvent\StatusChangeListener',
             '\App\Listeners\PaymentSuccessEvent\Credit1RewardListener',
         ],
         // 订单取消
         'App\Events\OrderCancelEvent' => [
-            '\App\Listeners\OrderCancelEvent\PromoCodeResumeListener',
+            'App\Listeners\OrderCancelEvent\OrderGoodsCancelHandlerListener',
         ],
-        // 用户注册
+        // 学员注册
         'App\Events\UserRegisterEvent' => [
             'App\Listeners\UserRegisterEvent\WelcomeMessageListener',
             'App\Listeners\UserRegisterEvent\RegisterIpRecordListener',
             'App\Listeners\UserRegisterEvent\RegisterCredit1RewardListener',
             'App\Listeners\UserRegisterEvent\RegisterSendVipListener',
         ],
-        // 用户登录
+        // 学员登录
         'App\Events\UserLoginEvent' => [
             'App\Listeners\UserLoginEvent\LoginRecordListener',
             'App\Listeners\UserLoginEvent\UserDeleteCancelListener',
         ],
-        // 用户退出登录
+        // 学员退出登录
         'App\Events\UserLogoutEvent' => [
             'App\Listeners\UserLogoutEvent\LoginRecordUpdateListener',
         ],
-        // 用户看完视频
+        // 学员看完视频
         'App\Events\UserVideoWatchedEvent' => [
             'App\Listeners\UserVideoWatchedEvent\UserVideoWatchedListener',
             'App\Listeners\UserVideoWatchedEvent\UserVideoWatchedCredit1RewardListener',
         ],
-        // 用户看完录播课程
+        // 学员看完录播课程
         'App\Events\UserCourseWatchedEvent' => [
             'App\Listeners\UserCourseWatchedEvent\UserCourseWatchedListener',
             'App\Listeners\UserCourseWatchedEvent\UserCourseWatchedCredit1RewardListener',
@@ -84,21 +84,47 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\OrderRefundCreated' => [],
         // 退款已处理[不一定成功]
         'App\Events\OrderRefundProcessed' => [
-            'App\Listeners\OrderRefundProcessed\OrderRefundStatusChange',
-            'App\Listeners\OrderRefundProcessed\UserNotify',
+            'App\Listeners\OrderRefundProcessed\StatusChangeListener',
+            'App\Listeners\OrderRefundProcessed\UserNotifyListener',
         ],
-        // 用户删除提交事件
+        // 学员删除-申请
         'App\Events\UserDeleteSubmitEvent' => [],
-        // 用户删除-取消事件
+        // 学员删除-取消
         'App\Events\UserDeleteCancelEvent' => [
             'App\Listeners\UserDeleteCancelEvent\UserNotify',
         ],
-        // 用户已删除事件
+        // 学员删除-确认
         'App\Events\UserDeletedEvent' => [],
-        // 用户实名认证通过事件
+        // 学员实名认证通过
         'App\Events\UserVerifyFaceSuccessEvent' => [
             'App\Listeners\UserVerifyFaceSuccessEvent\UserNotifyListener',
             'App\Listeners\UserVerifyFaceSuccessEvent\UserProfileUpdateListener',
+        ],
+        // 阿里云点播回调
+        'App\Events\AliVodCallbackEvent' => [
+            'App\Listeners\AliVodCallbackEvent\VideoCreatedListener',
+            'App\Listeners\AliVodCallbackEvent\DestroyListener',
+        ],
+        // 腾讯云点播回调
+        'App\Events\TencentVodCallbackEvent' => [
+            'App\Listeners\TencentVodCallbackEvent\VideoCreatedListener',
+            'App\Listeners\TencentVodCallbackEvent\DestroyListener',
+        ],
+        // 导航栏更新
+        'App\Events\NavUpdateEvent' => [
+            'App\Listeners\NavUpdateEvent\CacheClearListener',
+        ],
+        // 友情链接更新
+        'App\Events\LinkUpdateEvent' => [
+            'App\Listeners\LinkUpdateEvent\CacheClearListener',
+        ],
+        // 首页装修模块更新
+        'App\Events\ViewBlockUpdateEvent' => [
+            'App\Listeners\ViewBlockUpdateEvent\CacheClearListener',
+        ],
+        // 录播课分类更新
+        'App\Events\CourseCategoryUpdateEvent' => [
+            'App\Listeners\CourseCategoryUpdateEvent\CacheClearListener',
         ],
     ];
 }

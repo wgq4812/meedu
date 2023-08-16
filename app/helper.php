@@ -137,7 +137,7 @@ if (!function_exists('aliyun_play_url')) {
                 $rows[] = [
                     'format' => $item['Format'],
                     'url' => $item['PlayURL'],
-                    'duration' => $item['Duration'],
+                    'duration' => (int)$item['Duration'],
                     'name' => $item['Height'],
                 ];
             }
@@ -331,26 +331,27 @@ if (!function_exists('get_play_url')) {
     /**
      * 获取播放地址
      * @param array $video
-     * @param bool $isTry
+     * @param $isTry
      * @return \Illuminate\Support\Collection
+     * @throws \App\Exceptions\ServiceException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     function get_play_url(array $video, $isTry = false)
     {
         $playUrl = [];
-        if ($video['aliyun_video_id']) {
-            // 阿里云
+        if ($video['aliyun_video_id']) {//阿里云点播
             $playUrl = aliyun_play_url($video, $isTry);
-        } elseif ($video['tencent_video_id']) {
-            // 腾讯云
+        } elseif ($video['tencent_video_id']) {//腾讯云点播
             $playUrl = get_tencent_play_url($video['tencent_video_id']);
-            // 开启播放key
-            $tencentKey = app()->make(\App\Meedu\Player\TencentKey::class);
-            $playUrl = array_map(function ($item) use ($tencentKey, $isTry, $video) {
-                $item['url'] = $tencentKey->url($item['url'], $isTry, $video);
+            /**
+             * @var \App\Meedu\ServiceV2\Services\TencentVodServiceInterface $vodService
+             */
+            $vodService = app()->make(\App\Meedu\ServiceV2\Services\TencentVodServiceInterface::class);
+            $playUrl = array_map(function ($item) use ($vodService, $isTry, $video) {
+                $item['url'] = $vodService->getSignUrl($item['url'], $isTry ? $video['free_seconds'] : 0);
                 return $item;
             }, $playUrl);
-        } else {
+        } else {//视频URL直链
             $playUrl[] = [
                 'url' => $video['url'],
                 'format' => pathinfo($video['url'], PATHINFO_EXTENSION),
@@ -358,7 +359,6 @@ if (!function_exists('get_play_url')) {
                 'duration' => 0,
             ];
         }
-
         return collect($playUrl);
     }
 }
@@ -496,7 +496,7 @@ if (!function_exists('url_append_query')) {
 if (!function_exists('wechat_qrcode_image')) {
     function wechat_qrcode_image(string $code): string
     {
-        $result = \App\Meedu\Wechat::getInstance()->qrcode->temporary($code, 3600);
+        $result = \App\Meedu\Utils\Wechat::getInstance()->qrcode->temporary($code, 3600);
         $url = $result['url'] ?? '';
         return 'data:image/png;base64, ' . base64_encode(\QrCode::format('png')->size(300)->generate($url));
     }
@@ -644,5 +644,13 @@ if (!function_exists('name_mask')) {
             return mb_substr($name, 0, 1) . '*';
         }
         return mb_substr($name, 0, 1) . '*' . mb_substr($name, -1, 1);
+    }
+}
+
+if (!function_exists('is_backend_api')) {
+    function is_backend_api(): bool
+    {
+        $uri = request()->path();
+        return \Illuminate\Support\Str::startsWith($uri, 'backend');
     }
 }

@@ -21,17 +21,14 @@ class DeprecatedApiGuardMiddleware
         $this->configService = $configService;
     }
 
-    /**
-     * Handle an incoming request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse) $next
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     */
     public function handle(Request $request, Closure $next)
     {
         if ($this->configService->isCloseDeprecatedApi()) {
-            abort(404);
+            return response()->json([
+                'code' => -1,
+                'message' => __('当前请求的API已下线'),
+                'data' => [],
+            ]);
         }
         return $next($request);
     }

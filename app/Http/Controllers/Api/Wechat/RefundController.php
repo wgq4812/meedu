@@ -13,14 +13,13 @@ use Yansongda\Pay\Gateways\Wechat;
 use Illuminate\Support\Facades\Log;
 use App\Events\OrderRefundProcessed;
 use App\Meedu\Payment\Wechat\WechatRefund;
-use App\Services\Order\Services\OrderService;
-use App\Services\Order\Interfaces\OrderServiceInterface;
+use App\Meedu\ServiceV2\Services\OrderServiceInterface;
 
 class RefundController
 {
-    public function notify(WechatRefund $wechatRefund, RefundBus $refundBus)
+    public function notify(WechatRefund $wechatRefund, RefundBus $refundBus, OrderServiceInterface $orderService)
     {
-        return $wechatRefund->callback(function ($wechat) use ($refundBus) {
+        return $wechatRefund->callback(function ($wechat) use ($refundBus, $orderService) {
             /**
              * @var Wechat $wechat
              */
@@ -31,10 +30,6 @@ class RefundController
 
             $refundNo = $result['out_refund_no'];
 
-            /**
-             * @var OrderService $orderService
-             */
-            $orderService = app()->make(OrderServiceInterface::class);
             $refundOrder = $orderService->findOrderRefund($refundNo);
             if ($refundBus->isProcessed($refundOrder)) {
                 return $wechat->success();

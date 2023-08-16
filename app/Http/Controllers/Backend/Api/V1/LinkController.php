@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Backend\Api\V1;
 
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Events\LinkUpdateEvent;
 use App\Models\AdministratorLog;
 use App\Services\Other\Models\Link;
 use App\Http\Requests\Backend\LinkRequest;
@@ -41,6 +42,8 @@ class LinkController extends BaseController
             $data
         );
 
+        event(new LinkUpdateEvent());
+
         return $this->success();
     }
 
@@ -71,6 +74,8 @@ class LinkController extends BaseController
 
         $link->fill($data)->save();
 
+        event(new LinkUpdateEvent());
+
         return $this->success();
     }
 
@@ -83,6 +88,8 @@ class LinkController extends BaseController
             AdministratorLog::OPT_DESTROY,
             []
         );
+
+        event(new LinkUpdateEvent());
 
         return $this->success();
     }

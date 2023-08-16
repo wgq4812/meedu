@@ -52,7 +52,6 @@ class WechatBindBusTest extends TestCase
         config([
             'meedu.mp_wechat.app_id' => env('WECHAT_MP_APP_ID', ''),
             'meedu.mp_wechat.app_secret' => env('WECHAT_MP_APP_SECRET', ''),
-            'meedu.mp_wechat.token' => env('WECHAT_MP_TOKEN', ''),
         ]);
 
         $data = $this->wechatBindBus->qrcode(1);

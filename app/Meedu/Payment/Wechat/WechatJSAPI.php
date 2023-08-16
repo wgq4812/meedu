@@ -10,149 +10,65 @@ namespace App\Meedu\Payment\Wechat;
 
 use Exception;
 use Yansongda\Pay\Pay;
-use App\Meedu\Cache\MemoryCache;
-use App\Businesses\BusinessState;
-use App\Events\PaymentSuccessEvent;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
-use App\Meedu\Payment\Contract\Payment;
-use App\Services\Base\Services\CacheService;
 use App\Meedu\Payment\Contract\PaymentStatus;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Order\Services\OrderService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 
-class WechatJSAPI implements Payment
+class WechatJSAPI extends WechatPayBase
 {
-
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
-    /**
-     * @var OrderService
-     */
-    protected $orderService;
-    /**
-     * @var CacheService
-     */
-    protected $cacheService;
-    protected $businessState;
-
-    public function __construct(
-        ConfigServiceInterface $configService,
-        OrderServiceInterface  $orderService,
-        CacheServiceInterface  $cacheService,
-        BusinessState          $businessState
-    ) {
-        $this->configService = $configService;
-        $this->orderService = $orderService;
-        $this->cacheService = $cacheService;
-        $this->businessState = $businessState;
-    }
-
-    public function create(array $order, array $extra = []): PaymentStatus
+    public function create(string $orderNo, string $title, int $realAmount, array $extra = []): PaymentStatus
     {
-        // 这里无法直接创建微信支付订单
-        // 因为在这个步骤里目前是无法获取openid的
-        // 所以需要先跳转到支付界面然后获取openid之后再创建订单
+        if (!isset($extra['openid'])) {
+            // 跳转到JSAPI支付页面
+            // 下面将发起授权登录
 
-        // 跳转的url
-        $sUrl = request()->input('s_url');
-        $sUrl || $sUrl = request()->input('redirect');
-        $sUrl || $sUrl = url('/');
-        $sUrl = strip_tags($sUrl);//xss过滤[该参数会在wechat-jsapi.blade中渲染]
+            // 跳转的url
+            $sUrl = strip_tags(request()->input('s_url', ''));
+            $fUrl = strip_tags(request()->input('f_url', ''));
+            if (!$sUrl || !$fUrl) {
+                throw new ServiceException(__('未传递回调地址'));
+            }
+            // 构建Response
+            $data = [
+                'order_id' => $orderNo,
+                's_url' => $sUrl,
+                'f_url' => $fUrl,
+                'expired_at' => time() + 3600,
+            ];
 
-        $fUrl = request()->input('f_url');
-        $fUrl || $fUrl = url('/');
-        $fUrl = strip_tags($fUrl);//同上
+            $payUrl = route('order.pay.wechat.jsapi', ['data' => encrypt($data)]);
 
-        // 构建Response
-        $data = [
-            'order_id' => $order['order_id'],
-            's_url' => $sUrl,
-            'f_url' => $fUrl,
-            'expired_at' => time() + 3600,
-        ];
-
-        $payUrl = url_append_query(
-            route('order.pay.wechat.jsapi'),
-            ['data' => encrypt($data)]
-        );
-
-        $response = redirect($payUrl);
-
-        return new PaymentStatus(true, $response);
-    }
-
-    public function createDirect(array $order, string $openid)
-    {
-        // 需支付金额
-        $total = $this->businessState->calculateOrderNeedPaidSum($order);
+            return new PaymentStatus(true, response()->json([
+                'code' => 0,
+                'message' => '',
+                'data' => [
+                    'redirect_url' => $payUrl,
+                ],
+            ]));
+        }
 
         try {
             $payOrderData = [
-                'out_trade_no' => $order['order_id'],
-                'total_fee' => $total * 100,
-                'body' => $order['order_id'],
-                'openid' => $openid,
+                'out_trade_no' => $orderNo,
+                'total_fee' => $realAmount * 100,
+                'body' => $title,
+                'openid' => $extra['openid'],
             ];
 
-            // 微信支付配置
-            $config = $this->configService->getWechatPay();
-            $config['notify_url'] = route('payment.callback', ['wechat']);
+            $createResult = Pay::wechat($this->getConfig())->mp($payOrderData);
 
-            // 创建订单
-            $createResult = Pay::wechat($config)->{$order['payment_method']}($payOrderData);
-
-            return $createResult;
+            return new PaymentStatus(true, response()->json([
+                'code' => 0,
+                'message' => '',
+                'data' => $createResult->toArray(),
+            ]));
         } catch (Exception $exception) {
-            exception_record($exception);
-
-            throw new ServiceException(__('system error'));
+            Log::error(__METHOD__ . '|微信JSAPI支付订单创建失败,信息:' . $exception->getMessage());
+            return new PaymentStatus(false, response()->json([
+                'code' => -1,
+                'message' => '',
+                'data' => [],
+            ]));
         }
-    }
-
-    public function query(array $order): PaymentStatus
-    {
-        return new PaymentStatus(false);
-    }
-
-    public function callback()
-    {
-        $pay = Pay::wechat($this->configService->getWechatPay());
-
-        try {
-            $data = $pay->verify();
-
-            Log::info(__METHOD__ . '|微信支付回调数据', compact('data'));
-
-            // 查找订单
-            $order = $this->orderService->findOrFail($data['out_trade_no']);
-
-            // 支付订单加入内存缓存中
-            MemoryCache::getInstance()->set($data['out_trade_no'], $order, true);
-
-            event(new PaymentSuccessEvent($order));
-
-            return $pay->success();
-        } catch (Exception $e) {
-            exception_record($e);
-
-            return $e->getMessage();
-        }
-    }
-
-    public static function payUrl(array $order): string
-    {
-        $data = ['order_id' => $order['order_id']];
-        return url_append_query(
-            route('order.pay.wechat.jsapi'),
-            [
-                'data' => encrypt($data),
-            ]
-        );
     }
 }

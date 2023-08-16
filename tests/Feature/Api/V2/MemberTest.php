@@ -8,12 +8,12 @@
 
 namespace Tests\Feature\Api\V2;
 
-use App\Meedu\Verify;
+use App\Meedu\Utils\Verify;
 use App\Constant\CacheConstant;
 use Illuminate\Http\UploadedFile;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
 use Illuminate\Support\Facades\Hash;
+use App\Meedu\ServiceV2\Models\Order;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
@@ -236,22 +236,6 @@ class MemberTest extends Base
         $this->assertResponseSuccess($response);
         $this->member->refresh();
         $this->assertEquals(0, $this->member->unreadNotifications->count());
-    }
-
-    public function test_messages_unreadNotificationCount()
-    {
-        $this->member->notify(new SimpleMessageNotification('meedu消息测试1'));
-        $this->member->notify(new SimpleMessageNotification('meedu消息测试2'));
-
-        $response = $this->user($this->member)->getJson('api/v2/member/unreadNotificationCount');
-        $response = $this->assertResponseSuccess($response);
-        $this->assertEquals(2, $response['data']);
-
-        $this->member->notify(new SimpleMessageNotification('meedu消息测试2'));
-
-        $response = $this->user($this->member)->getJson('api/v2/member/unreadNotificationCount');
-        $response = $this->assertResponseSuccess($response);
-        $this->assertEquals(3, $response['data']);
     }
 
     public function test_credit1Records()

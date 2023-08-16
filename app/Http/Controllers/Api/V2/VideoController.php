@@ -15,20 +15,15 @@ use App\Constant\ApiV2Constant;
 use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
 use App\Meedu\Cache\Inc\VideoViewIncItem;
-use App\Http\Requests\ApiV2\CommentRequest;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
-use App\Services\Order\Services\OrderService;
 use App\Services\Course\Services\VideoService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Course\Services\VideoCommentService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
-use App\Services\Course\Interfaces\VideoCommentServiceInterface;
 
 class VideoController extends BaseController
 {
@@ -42,10 +37,6 @@ class VideoController extends BaseController
      */
     protected $configService;
     /**
-     * @var VideoCommentService
-     */
-    protected $videoCommentService;
-    /**
      * @var UserService
      */
     protected $userService;
@@ -57,64 +48,19 @@ class VideoController extends BaseController
      * @var BusinessState
      */
     protected $businessState;
-    /**
-     * @var OrderService
-     */
-    protected $orderService;
 
     public function __construct(
         VideoServiceInterface        $videoService,
         ConfigServiceInterface       $configService,
-        VideoCommentServiceInterface $videoCommentService,
         UserServiceInterface         $userService,
         CourseServiceInterface       $courseService,
-        BusinessState                $businessState,
-        OrderServiceInterface        $orderService
+        BusinessState                $businessState
     ) {
         $this->videoService = $videoService;
         $this->configService = $configService;
-        $this->videoCommentService = $videoCommentService;
         $this->userService = $userService;
         $this->courseService = $courseService;
         $this->businessState = $businessState;
-        $this->orderService = $orderService;
-    }
-
-    /**
-     * @api {get} /api/v2/videos 录播视频列表
-     * @apiGroup 录播课
-     * @apiName Videos
-     * @apiVersion v2.0.0
-     *
-     * @apiSuccess {Number} code 0成功,非0失败
-     * @apiSuccess {Object} data
-     * @apiSuccess {Number} data.total 总数
-     * @apiSuccess {Object[]} data.data
-     * @apiSuccess {Number} data.data.id 视频ID
-     * @apiSuccess {String} data.data.title 视频名
-     * @apiSuccess {Number} data.data.charge 视频价格
-     * @apiSuccess {Number} data.data.view_num 观看数[已废弃]
-     * @apiSuccess {String} data.data.short_description 简短介绍
-     * @apiSuccess {String} data.data.render_desc 详细介绍[已废弃]
-     * @apiSuccess {String} data.data.published_at 上架时间
-     * @apiSuccess {Number} data.data.duration 时长[单位：秒]
-     * @apiSuccess {String} data.data.seo_keywords SEO关键字
-     * @apiSuccess {String} data.data.seo_description SEO描述
-     * @apiSuccess {Number} data.data.is_ban_sell 禁止出售[1:是,0否]
-     * @apiSuccess {Number} data.data.chapter_id 章节ID
-     */
-    public function paginate(Request $request)
-    {
-        $page = $request->input('page', 1);
-        $pageSize = $request->input('page_size', 10);
-        [
-            'list' => $list,
-            'total' => $total
-        ] = $this->videoService->simplePage($page, $pageSize);
-        $list = arr2_clear($list, ApiV2Constant::MODEL_VIDEO_FIELD);
-        $videos = $this->paginator($list, $total, $page, $pageSize);
-
-        return $this->data($videos);
     }
 
     /**
@@ -239,66 +185,6 @@ class VideoController extends BaseController
             'is_watch' => $isWatch,
             'video_watched_progress' => $videoWatchedProgress,
             'buy_videos' => $buyVideos,
-        ]);
-    }
-
-    /**
-     * @api {post} /api/v2/video/{id}/comment 录播视频评论
-     * @apiGroup 录播课
-     * @apiName VideoCommentAction
-     * @apiVersion v2.0.0
-     * @apiHeader Authorization Bearer+空格+token
-     *
-     * @apiParam {String} content 评论内容
-     *
-     * @apiSuccess {Number} code 0成功,非0失败
-     * @apiSuccess {Object} data 数据
-     */
-    public function createComment(CommentRequest $request, $id)
-    {
-        $video = $this->videoService->find($id);
-        if ($this->businessState->videoCanComment($this->user(), $video) === false) {
-            return $this->error(__('视频无法评论'));
-        }
-        ['content' => $content] = $request->filldata();
-        $this->videoCommentService->create($id, $content);
-        return $this->success();
-    }
-
-    /**
-     * @api {get} /api/v2/video/{video_id}/comments 录播视频评论列表
-     * @apiGroup 录播课
-     * @apiName VideoComments
-     * @apiVersion v2.0.0
-     *
-     * @apiParam {Number} [page] 页码
-     * @apiParam {Number} [page_size] 每页条数
-     *
-     * @apiSuccess {Number} code 0成功,非0失败
-     * @apiSuccess {Object} data 数据
-     * @apiSuccess {Object[]} data.comments 评论
-     * @apiSuccess {Number} data.comments.id 评论ID
-     * @apiSuccess {Number} data.comments.id 评论ID
-     * @apiSuccess {Number} data.comments.user_id 用户ID
-     * @apiSuccess {String} data.comments.render_content 评论内容
-     * @apiSuccess {String} data.comments.created_at 时间
-     * @apiSuccess {Object[]} data.users 用户
-     * @apiSuccess {Number} data.users.id 用户ID
-     * @apiSuccess {String} data.users.nick_name 用户昵称
-     * @apiSuccess {String} data.users.avatar 用户头像
-     * @apiSuccess {String} data.users.mobile 用户手机号
-     */
-    public function comments($id)
-    {
-        $comments = $this->videoCommentService->videoComments($id);
-        $comments = arr2_clear($comments, ApiV2Constant::MODEL_VIDEO_COMMENT_FIELD);
-        $commentUsers = $this->userService->getList(array_column($comments, 'user_id'), ['role']);
-        $commentUsers = arr2_clear($commentUsers, ApiV2Constant::MODEL_MEMBER_FIELD);
-        $commentUsers = array_column($commentUsers, null, 'id');
-
-        return $this->data([
-            'comments' => $comments,
-            'users' => $commentUsers,
         ]);
     }
 

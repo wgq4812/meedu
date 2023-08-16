@@ -8,16 +8,18 @@
 
 namespace App\Http\Controllers\Backend\Api\V1;
 
-use App\Meedu\Aliyun\Vod;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
-use App\Events\VideoUploadedEvent;
+use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\DB;
 use App\Services\Course\Models\MediaVideo;
+use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 
 class MediaVideoController extends BaseController
 {
-    public function index(Request $request)
+    public function index(Request $request, AliVodServiceInterface $avService, TencentVodServiceInterface $tvService)
     {
         $keywords = $request->input('keywords');
         $isOpen = (int)$request->input('is_open');
@@ -48,43 +50,39 @@ class MediaVideoController extends BaseController
             compact('keywords', 'isOpen')
         );
 
-        return $this->successData($videos);
+        $aliFileIds = [];
+        $aliTranscodeData = [];
+
+        $tencentFileIds = [];
+        $tencentTranscodeData = [];
+
+        $data = $videos->items();
+        $total = $videos->total();
+
+        foreach ($data as $tmpItem) {
+            if ($tmpItem['storage_driver'] === FrontendConstant::VOD_SERVICE_ALIYUN) {
+                $aliFileIds[] = $tmpItem['storage_file_id'];
+            } elseif ($tmpItem['storage_driver'] === FrontendConstant::VOD_SERVICE_TENCENT) {
+                $tencentFileIds[] = $tmpItem['storage_file_id'];
+            }
+        }
+
+        if ($aliFileIds) {
+            $aliTranscodeData = collect($avService->chunks($aliFileIds))->groupBy('file_id')->toArray();
+        }
+        if ($tencentFileIds) {
+            $tencentTranscodeData = collect($tvService->chunks($tencentFileIds))->groupBy('file_id')->toArray();
+        }
+
+        return $this->successData([
+            'data' => $data,
+            'total' => $total,
+            'ali_transcode' => $aliTranscodeData,
+            'tencent_transcode' => $tencentTranscodeData,
+        ]);
     }
 
-    public function store(Request $request)
-    {
-        $title = mb_substr(strip_tags($request->input('title', '')), 0, 255);
-        $thumb = $request->input('thumb', '');
-        $duration = (int)$request->input('duration');
-        $size = (int)$request->input('size');
-        $storageDriver = $request->input('storage_driver');
-        $storageFileId = $request->input('storage_file_id');
-        $isOpen = (int)$request->input('is_open');
-
-        $data = [
-            'title' => $title,
-            'thumb' => $thumb,
-            'duration' => $duration,
-            'size' => $size,
-            'storage_driver' => $storageDriver,
-            'storage_file_id' => $storageFileId,
-            'is_open' => $isOpen,
-        ];
-
-        $mediaVideo = MediaVideo::create($data);
-
-        AdministratorLog::storeLog(
-            AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
-            AdministratorLog::OPT_STORE,
-            $data
-        );
-
-        event(new VideoUploadedEvent($storageFileId, $storageDriver, 'media_video', $mediaVideo['id']));
-
-        return $this->successData($mediaVideo);
-    }
-
-    public function deleteVideos(Request $request, Vod $aliyunVod, \App\Meedu\Tencent\Vod $tencentVod)
+    public function destroy(Request $request, AliVodServiceInterface $avService, TencentVodServiceInterface $tvService)
     {
         $ids = $request->input('ids');
         if (!$ids || !is_array($ids)) {
@@ -97,31 +95,100 @@ class MediaVideoController extends BaseController
             compact('ids')
         );
 
-        $videos = MediaVideo::query()->whereIn('id', $ids)->select(['id', 'storage_driver', 'storage_file_id'])->get();
+        $videos = MediaVideo::query()->whereIn('id', $ids)->select(['id', 'storage_driver', 'storage_file_id'])->get()->toArray();
         if (!$videos) {
             return $this->error(__('数据为空'));
         }
-        $aliyunFileIds = [];
+
+        $aliFileIds = [];
         $tencentFileIds = [];
         foreach ($videos as $videoItem) {
-            if ($videoItem['storage_driver'] === 'aliyun') {
-                $aliyunFileIds[] = $videoItem['storage_file_id'];
-            } elseif ($videoItem['storage_driver'] === 'tencent') {
+            if ($videoItem['storage_driver'] === FrontendConstant::VOD_SERVICE_ALIYUN) {
+                $aliFileIds[] = $videoItem['storage_file_id'];
+            } elseif ($videoItem['storage_driver'] === FrontendConstant::VOD_SERVICE_TENCENT) {
                 $tencentFileIds[] = $videoItem['storage_file_id'];
             }
         }
 
-        DB::transaction(function () use ($ids, $aliyunFileIds, $tencentFileIds, $aliyunVod, $tencentVod) {
-            // 删除本地记录
+        DB::transaction(function () use ($ids, $aliFileIds, $tencentFileIds, $avService, $tvService) {
             MediaVideo::query()->whereIn('id', $ids)->delete();
-            if ($aliyunFileIds) {
-                $aliyunVod->deleteVideos($aliyunFileIds);
+
+            if ($aliFileIds) {
+                $avService->destroyMulti($aliFileIds);
             }
             if ($tencentFileIds) {
-                $tencentVod->deleteVideos($tencentFileIds);
+                $tvService->destroyMulti($tencentFileIds);
             }
         });
 
         return $this->successData();
+    }
+
+    public function transcodeConfig(ConfigServiceInterface $configService, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $config = $configService->getAliVodConfig();
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ADMIN_MEDIA_VIDEO,
+            AdministratorLog::OPT_VIEW,
+            []
+        );
+
+        return $this->successData([
+            'ali_templates' => $avServ->defaultTranscodeTemplates($config['app_id']),
+            'tencent_templates' => $tvService->transcodeTemplates(),
+        ]);
+    }
+
+    public function transcodeDestroy(Request $request, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $fileId = $request->input('file_id');
+        $service = $request->input('service');
+        if (!$fileId) {
+            return $this->error(__('参数错误'));
+        }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_TENCENT_VOD,
+            AdministratorLog::OPT_DESTROY,
+            compact('fileId', 'service')
+        );
+
+        if ($service === FrontendConstant::VOD_SERVICE_TENCENT) {
+            $tvService->deleteVideo([$fileId]);
+        } elseif ($service === FrontendConstant::VOD_SERVICE_ALIYUN) {
+            $avServ->transcodeDestroy($fileId);
+        }
+
+        return $this->success();
+    }
+
+    public function transcodeSubmit(Request $request, ConfigServiceInterface $configService, AliVodServiceInterface $avServ, TencentVodServiceInterface $tvService)
+    {
+        $fileId = $request->input('file_id');
+        $tempName = $request->input('template_name');
+        $service = $request->input('service');
+        if (!$fileId || !$tempName || !$service) {
+            return $this->error(__('参数错误'));
+        }
+
+        AdministratorLog::storeLog(
+            AdministratorLog::MODULE_ALI_VOD,
+            AdministratorLog::OPT_STORE,
+            compact('fileId', 'tempName', 'service')
+        );
+
+        if ($service === FrontendConstant::VOD_SERVICE_TENCENT) {
+            $tvService->transcodeSubmit($fileId, $tempName);
+        } elseif ($service === FrontendConstant::VOD_SERVICE_ALIYUN) {
+            $tempId = $request->input('template_id');
+            if (!$tempId) {
+                return $this->error(__('参数错误'));
+            }
+            $config = $configService->getAliVodConfig();
+            $avServ->transcodeSubmit($config['app_id'], $fileId, $tempName, $tempId);
+        }
+
+        return $this->success();
     }
 }

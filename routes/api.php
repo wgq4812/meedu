@@ -9,3 +9,11 @@
 Route::any('/wechat/serve', 'Api\\Wechat\\MpWechatController@serve');
 
 Route::any('/wechat/refund/notify', 'Api\\Wechat\\RefundController@notify')->name('wechat.pay.refund.notify');
+
+Route::any('/callback/ali/vod', 'Api\\Callback\\AliVodController@handle')->name('ali.vod.callback');
+Route::any('/ali/vod/play/hls', 'Api\\Callback\\AliVodController@hls')->name('ali.vod.play.hls');
+
+Route::any('/callback/tencent/vod/{key}', 'Api\\Callback\\TencentVodController@handle')->name('tencent.vod.callback');
+
+// 支付回调
+Route::post('/payment/callback/{payment}', 'Api\\Callback\\PaymentController@callback')->name('payment.callback');

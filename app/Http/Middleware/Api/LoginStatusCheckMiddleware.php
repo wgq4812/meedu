@@ -13,7 +13,7 @@ use App\Events\UserLogoutEvent;
 use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\Auth;
 use App\Meedu\ServiceV2\Services\UserService;
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Http\Controllers\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class LoginStatusCheckMiddleware

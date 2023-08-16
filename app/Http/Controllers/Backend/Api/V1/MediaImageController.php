@@ -11,6 +11,7 @@ namespace App\Http\Controllers\Backend\Api\V1;
 use App\Models\MediaImage;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Backend\ImageUploadRequest;
 
 class MediaImageController extends BaseController
@@ -82,5 +83,29 @@ class MediaImageController extends BaseController
         );
 
         return $this->successData($data);
+    }
+
+    public function destroy(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (!$ids || !is_array($ids)) {
+            return $this->error(__('参数错误'));
+        }
+        if (count($ids) > 50) {
+            return $this->error(__('一次最多删除50张图片'));
+        }
+
+        $images = MediaImage::query()->whereIn('id', $ids)->get();
+        foreach ($images as $imageItem) {
+            try {
+                Storage::disk($imageItem['disk'])->delete($imageItem['path']);
+            } catch (\Exception $e) {
+                // 异常无需处理
+            }
+            // 删除数据库记录
+            $imageItem->delete();
+        }
+
+        return $this->success();
     }
 }

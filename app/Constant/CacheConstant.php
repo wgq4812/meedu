@@ -172,4 +172,9 @@ class CacheConstant
         'name' => self::PREFIX_C . 'wechat:scan:user:%s',
         'expire' => 3600, //1小时
     ];
+
+    public const ALI_VOD_CALLBACK_VIDEO = [
+        'name' => self::PREFIX_C . 'ali:vod:cb:%s',
+        'expire' => 3600 * 24,
+    ];
 }

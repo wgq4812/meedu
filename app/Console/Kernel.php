@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
         \Illuminate\Foundation\Bootstrap\RegisterFacades::class,
         \Illuminate\Foundation\Bootstrap\SetRequestForConsole::class,
         \Illuminate\Foundation\Bootstrap\RegisterProviders::class,
-        \App\Meedu\AddonsProvider::class,
+        \App\Meedu\Core\AddonsProvider::class,
         \Illuminate\Foundation\Bootstrap\BootProviders::class,
     ];
 
@@ -70,6 +70,11 @@ class Kernel extends ConsoleKernel
             ->onOneServer()
             ->everyThirtyMinutes()
             ->appendOutputTo(storage_path('logs/user-delete-job.log'));
+
+        // MeEdu系统定时任务监听命令
+        $schedule->command('meedu:schedule:listener')
+            ->onOneServer()
+            ->everyMinute();
 
         // 预留定时任务钩子
         ScheduleContainer::instance()->exec($schedule);

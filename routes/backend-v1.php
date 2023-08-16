@@ -6,8 +6,9 @@
  * (c) 杭州白书科技有限公司
  */
 
+// 登录接口
 Route::post('/login', 'LoginController@login');
-
+// 图形验证码
 Route::get('/captcha/image', 'CaptchaController@image');
 
 Route::group(['middleware' => ['auth:administrator']], function () {
@@ -16,11 +17,16 @@ Route::group(['middleware' => ['auth:administrator']], function () {
 
     Route::get('/addons', 'AddonsController@index');
 
-    // 安全退出
     Route::post('/logout', 'LoginController@logout');
 });
 
-Route::group(['middleware' => ['auth:administrator', 'backend.permission']], function () {
+Route::group([
+    'middleware' => [
+        'auth:administrator',
+        \App\Http\Middleware\Backend\SystemBaseConfigCheckMiddleware::class,
+        'backend.permission',
+    ]
+], function () {
     Route::get('/user', 'LoginController@user');
 
     Route::get('/dashboard', 'DashboardController@index');
@@ -28,10 +34,22 @@ Route::group(['middleware' => ['auth:administrator', 'backend.permission']], fun
     Route::get('/dashboard/system/info', 'DashboardController@systemInfo');
     Route::get('/dashboard/graph', 'DashboardController@graph');
 
-    Route::group(['prefix' => 'media/videos'], function () {
-        Route::get('/index', 'MediaVideoController@index');
-        Route::post('/create', 'MediaVideoController@store');
-        Route::post('/delete/multi', 'MediaVideoController@deleteVideos');
+    Route::group(['prefix' => 'media'], function () {
+        // 视频素材库
+        Route::group(['prefix' => 'videos'], function () {
+            Route::get('/index', 'MediaVideoController@index');
+            Route::post('/delete/multi', 'MediaVideoController@destroy');
+
+            // todo - 权限
+            Route::get('/transcode-config', 'MediaVideoController@transcodeConfig');
+            Route::post('/transcode-destroy', 'MediaVideoController@transcodeDestroy');
+            Route::post('/transcode-submit', 'MediaVideoController@transcodeSubmit');
+        });
+
+        // 图片素材库
+        Route::group(['prefix' => 'images'], function () {
+            Route::post('/destroy', 'MediaImageController@destroy');
+        });
     });
 
     Route::group(['prefix' => 'video/token'], function () {
@@ -322,7 +340,7 @@ Route::group(['middleware' => ['auth:administrator', 'backend.permission']], fun
         });
     });
 
-    // 装修
+    // 首页装修
     Route::group(['prefix' => 'viewBlock'], function () {
         Route::get('/index', 'ViewBlockController@index');
         Route::get('/create', 'ViewBlockController@create');
@@ -332,6 +350,7 @@ Route::group(['middleware' => ['auth:administrator', 'backend.permission']], fun
         Route::delete('/{id}', 'ViewBlockController@destroy');
     });
 
+    // 系统日志
     Route::group(['prefix' => 'log'], function () {
         Route::get('/admin', 'LogController@admin');
         Route::get('/userLogin', 'LogController@userLogin');

@@ -11,7 +11,7 @@ namespace App\Http\Middleware\Api;
 use App\Bus\MemberBus;
 use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Api\V2\Traits\ResponseTrait;
+use App\Http\Controllers\Traits\ResponseTrait;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class UserFaceVerifyLimitMiddleware

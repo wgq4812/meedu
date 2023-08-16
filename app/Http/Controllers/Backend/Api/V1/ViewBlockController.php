@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Meedu\ViewBlock\Render;
 use App\Models\AdministratorLog;
 use App\Meedu\ViewBlock\Constant;
+use App\Events\ViewBlockUpdateEvent;
 use App\Services\Other\Models\ViewBlock;
 
 class ViewBlockController extends BaseController
@@ -79,6 +80,8 @@ class ViewBlockController extends BaseController
             $data
         );
 
+        event(new ViewBlockUpdateEvent($page, $platform));
+
         return $this->success();
     }
 
@@ -110,17 +113,23 @@ class ViewBlockController extends BaseController
 
         $block->fill($updateData)->save();
 
+        event(new ViewBlockUpdateEvent($block['page'], $block['platform']));
+
         return $this->success();
     }
 
     public function destroy($id)
     {
-        ViewBlock::query()->where('id', $id)->delete();
+        $block = ViewBlock::query()->where('id', $id)->firstOrFail();
+        $page = $block['page'];
+        $platform = $block['platform'];
+        $block->delete();
         AdministratorLog::storeLog(
             AdministratorLog::MODULE_VIEW_BLOCK,
             AdministratorLog::OPT_DESTROY,
             compact('id')
         );
+        event(new ViewBlockUpdateEvent($page, $platform));
         return $this->success();
     }
 }

@@ -93,10 +93,13 @@ return [
         'video' => [
             'default_service' => '',
             'aliyun' => [
+                'app_id' => '',//子应用id
                 'region' => 'cn-shanghai',
                 'host' => '',
                 'access_key_id' => '',
                 'access_key_secret' => '',
+                'callback_key' => '',//回调key
+                'domain' => '',//加速域名
             ],
         ],
         'attach' => [
@@ -116,30 +119,52 @@ return [
     'payment' => [
         'alipay' => [
             'enabled' => 0,
-            'handler' => \App\Meedu\Payment\Alipay\Alipay::class,
+            'handler' => \App\Meedu\Payment\Alipay\AlipayPayWeb::class,
             'name' => '支付宝',
             'logo' => '/images/icons/alipay.png',
             'sign' => 'alipay',
-            'default_method' => 'web',
-            'pc' => 'web',
-            'h5' => 'wap',
+        ],
+        'alipay-h5' => [
+            'enabled' => 0,
+            'handler' => \App\Meedu\Payment\Alipay\AlipayPayH5::class,
+            'name' => '支付宝',
+            'logo' => '/images/icons/alipay.png',
+            'sign' => 'alipay-h5',
         ],
         'wechat' => [
             'enabled' => 0,
             'handler' => \App\Meedu\Payment\Wechat\WechatScan::class,
-            'name' => '微信扫码支付',
+            'name' => '微信支付',
             'logo' => '/images/icons/wechat-pay.png',
             'sign' => 'wechat',
-            'default_method' => 'scan',
-            'pc' => 'scan',
         ],
         'wechat-jsapi' => [
             'enabled' => 0,
-            'name' => '微信JSAPI支付',
+            'name' => '微信支付',
             'logo' => '/images/icons/wechat-pay.png',
             'sign' => 'wechat-jsapi',
             'handler' => \App\Meedu\Payment\Wechat\WechatJSAPI::class,
-            'wechat' => 'mp',
+        ],
+        'wechat-h5' => [
+            'enabled' => 0,
+            'name' => '微信支付',
+            'logo' => '/images/icons/wechat-pay.png',
+            'sign' => 'wechat-h5',
+            'handler' => \App\Meedu\Payment\Wechat\WechatPayH5::class,
+        ],
+        'wechat-mini' => [
+            'enabled' => 0,
+            'name' => '微信支付',
+            'logo' => '/images/icons/wechat-pay.png',
+            'sign' => 'wechat-mini',
+            'handler' => \App\Meedu\Payment\Wechat\WechatPayMini::class,
+        ],
+        'wechat-app' => [
+            'enabled' => 0,
+            'name' => '微信支付',
+            'logo' => '/images/icons/wechat-pay.png',
+            'sign' => 'wechat-app',
+            'handler' => \App\Meedu\Payment\Wechat\WechatPayApp::class,
         ],
         'handPay' => [
             'enabled' => 0,
@@ -147,10 +172,46 @@ return [
             'name' => '手动打款',
             'logo' => '/images/icons/handpay.png',
             'sign' => 'handPay',
-            'default_method' => 'hand',
-            'pc' => 'hand',
-            'h5' => 'hand',
-            'wechat' => 'hand',
+        ],
+        'handPay-h5' => [
+            'enabled' => 0,
+            'handler' => \App\Meedu\Payment\HandPay\HandPay::class,
+            'name' => '手动打款',
+            'logo' => '/images/icons/handpay.png',
+            'sign' => 'handPay-h5',
+        ],
+        'handPay-wechat' => [
+            'enabled' => 0,
+            'handler' => \App\Meedu\Payment\HandPay\HandPay::class,
+            'name' => '手动打款',
+            'logo' => '/images/icons/handpay.png',
+            'sign' => 'handPay-wechat',
+        ],
+        'handPay-wechat-mini' => [
+            'enabled' => 0,
+            'handler' => \App\Meedu\Payment\HandPay\HandPay::class,
+            'name' => '手动打款',
+            'logo' => '/images/icons/handpay.png',
+            'sign' => 'handPay-wechat-mini',
+        ],
+        'handPay-app' => [
+            'enabled' => 0,
+            'handler' => \App\Meedu\Payment\HandPay\HandPay::class,
+            'name' => '手动打款',
+            'logo' => '/images/icons/handpay.png',
+            'sign' => 'handPay-app',
+        ],
+    ],
+
+    // 系统订单网关
+    'orderHandler' => [
+        \App\Constant\FrontendConstant::ORDER_TYPE_ROLE => [
+            'enabled' => 1,
+            'handler' => \App\Meedu\Bus\Order\Core\OrderRole::class,
+        ],
+        \App\Constant\FrontendConstant::ORDER_TYPE_COURSE => [
+            'enabled' => 1,
+            'handler' => \App\Meedu\Bus\Order\Core\OrderCourse::class,
         ],
     ],
 
@@ -183,7 +244,7 @@ return [
                 'color' => '', //默认red
                 'opacity' => 1, //默认1
             ],
-            // 腾讯云播放key
+            // 腾讯云播放key-用户视频url的防盗链签名
             'tencent_play_key' => '',
             // 播放格式
             'video_format_whitelist' => '',

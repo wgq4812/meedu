@@ -10,9 +10,9 @@ namespace Tests\Commands;
 
 use Tests\OriginalTestCase;
 use App\Services\Member\Models\User;
-use App\Services\Order\Models\Order;
+use App\Meedu\ServiceV2\Models\Order;
 use App\Meedu\Payment\Alipay\AlipayRefund;
-use App\Services\Order\Models\OrderRefund;
+use App\Meedu\ServiceV2\Models\OrderRefund;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
 class RefundQueryCommandTest extends OriginalTestCase

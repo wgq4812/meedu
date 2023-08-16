@@ -13,13 +13,6 @@ use App\Services\Other\Interfaces\AnnouncementServiceInterface;
 
 class AnnouncementService implements AnnouncementServiceInterface
 {
-    public function latest(): array
-    {
-        $a = Announcement::query()->latest()->first();
-
-        return $a ? $a->toArray() : [];
-    }
-
     /**
      * @param $page
      * @param $size
@@ -50,13 +43,5 @@ class AnnouncementService implements AnnouncementServiceInterface
     {
         $a = Announcement::query()->where('id', $id)->firstOrFail();
         return $a->toArray();
-    }
-
-    /**
-     * @param int $id
-     */
-    public function viewTimesInc(int $id): void
-    {
-        Announcement::query()->where('id', $id)->increment('view_times');
     }
 }

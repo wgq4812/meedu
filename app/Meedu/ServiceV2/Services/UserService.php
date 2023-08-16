@@ -298,4 +298,19 @@ class UserService implements UserServiceInterface
     {
         return $this->userDao->getUserVideoWatchRecordsByVideoIds($userId, $videoIds);
     }
+
+    public function unreadNotificationCount(int $userId): int
+    {
+        return $this->userDao->unreadNotificationCount($userId);
+    }
+
+    public function userCourseChunks(int $userId, array $courseIds): array
+    {
+        return $this->userDao->getUserCourses($userId, $courseIds);
+    }
+
+    public function storeUserCourse(int $userId, int $courseId, int $charge = 0): void
+    {
+        $this->userDao->storeUserCourse($userId, $courseId, $charge);
+    }
 }

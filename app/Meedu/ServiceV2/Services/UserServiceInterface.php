@@ -59,4 +59,10 @@ interface UserServiceInterface
     public function change2Verified(int $userId, string $name, string $idNumber, string $verifyImageUrl): int;
 
     public function getUserVideoWatchRecordsByChunkVideoIds(int $userId, array $videoIds): array;
+
+    public function unreadNotificationCount(int $userId): int;
+
+    public function userCourseChunks(int $userId, array $courseIds): array;
+
+    public function storeUserCourse(int $userId, int $courseId, int $charge = 0): void;
 }

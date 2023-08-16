@@ -14,13 +14,11 @@ use App\Businesses\BusinessState;
 use App\Http\Requests\ApiV2\CommentRequest;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
-use App\Services\Order\Services\OrderService;
 use App\Services\Course\Services\VideoService;
 use App\Services\Course\Services\CourseService;
 use App\Services\Course\Services\CourseCommentService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
-use App\Services\Order\Interfaces\OrderServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
 use App\Services\Course\Interfaces\CourseCommentServiceInterface;
@@ -48,10 +46,6 @@ class CourseController extends BaseController
      * @var VideoService
      */
     protected $videoService;
-    /**
-     * @var OrderService
-     */
-    protected $orderService;
 
     /**
      * @var BusinessState
@@ -59,20 +53,18 @@ class CourseController extends BaseController
     protected $businessState;
 
     public function __construct(
-        CourseServiceInterface $courseService,
-        ConfigServiceInterface $configService,
+        CourseServiceInterface        $courseService,
+        ConfigServiceInterface        $configService,
         CourseCommentServiceInterface $courseCommentService,
-        UserServiceInterface $userService,
-        VideoServiceInterface $videoService,
-        OrderServiceInterface $orderService,
-        BusinessState $businessState
+        UserServiceInterface          $userService,
+        VideoServiceInterface         $videoService,
+        BusinessState                 $businessState
     ) {
         $this->courseService = $courseService;
         $this->configService = $configService;
         $this->courseCommentService = $courseCommentService;
         $this->userService = $userService;
         $this->videoService = $videoService;
-        $this->orderService = $orderService;
         $this->businessState = $businessState;
     }
 

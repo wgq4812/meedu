@@ -19,16 +19,6 @@ return [
                 'login' => '',
             ],
         ],
-        'yunpian' => [
-            'api_key' => env('SMS_YUNPIAN_API_KEY', ''),
-            'signature' => '',
-            'template' => [
-                'password_reset' => '',
-                'register' => '',
-                'mobile_bind' => '',
-                'login' => '',
-            ],
-        ],
         'tencent' => [
             'region' => '',
             // 短信SDKAppId

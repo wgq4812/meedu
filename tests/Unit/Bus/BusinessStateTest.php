@@ -16,10 +16,8 @@ use App\Services\Member\Models\Role;
 use App\Services\Member\Models\User;
 use App\Services\Course\Models\Video;
 use App\Services\Course\Models\Course;
-use App\Services\Order\Models\PromoCode;
 use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
-use App\Services\Order\Models\OrderPaidRecord;
 
 class BusinessStateTest extends TestCase
 {
@@ -122,39 +120,6 @@ class BusinessStateTest extends TestCase
         $user->role_expired_at = Carbon::now()->addDays(1);
         $user->save();
         $this->assertTrue($this->businessStatus->isRole($user->toArray()));
-    }
-
-    public function test_promoCodeCanUse_with_self()
-    {
-        $user = User::factory()->create();
-        $promoCode = PromoCode::factory()->create(['user_id' => $user->id]);
-        $this->assertFalse($this->businessStatus->promoCodeCanUse($user['id'], $promoCode->toArray()));
-    }
-
-    public function test_promoCodeCanUse_with_used_times()
-    {
-        $user = User::factory()->create();
-        $promoCode = PromoCode::factory()->create([
-            'user_id' => $user->id + 1,
-            'used_times' => 1,
-            'use_times' => 1,
-        ]);
-        $this->assertFalse($this->businessStatus->promoCodeCanUse($user['id'], $promoCode->toArray()));
-    }
-
-    public function test_promoCodeCanUse_with_used()
-    {
-        $user = User::factory()->create();
-        $promoCode = PromoCode::factory()->create([
-            'user_id' => $user['id'] + 1,
-        ]);
-        OrderPaidRecord::factory()->create([
-            'user_id' => $user['id'],
-            'paid_total' => 1,
-            'paid_type' => OrderPaidRecord::PAID_TYPE_PROMO_CODE,
-            'paid_type_id' => $promoCode->id,
-        ]);
-        $this->assertFalse($this->businessStatus->promoCodeCanUse($user['id'], $promoCode->toArray()));
     }
 
     public function test_orderIsPaid()
