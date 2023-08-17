@@ -51,18 +51,27 @@ class CaptchaController extends BaseController
      */
     public function sms(SendSmsRequest $request, SmsServiceInterface $service, OtherServiceInterface $otherService, SmsCodeCache $cache)
     {
-        if (captcha_image_check() === false) {
+        if (is_dev()) {
+            return $this->success();
+        }
+
+        if (!captcha_image_check()) {
             return $this->error(__('图形验证码错误'));
         }
 
         ['mobile' => $mobile, 'scene' => $scene] = $request->filldata();
 
-        $code = str_pad(random_int(0, 999999), 6, 0, STR_PAD_LEFT);
-
-        if (!is_dev()) {
-            $service->sendCode($mobile, $code, $scene);
-            $otherService->storeSmsCodeSendRecord($mobile, $code, $scene);
+        if (!$cache->beyondLimit($mobile)) {
+            return $this->error(__('请 :seconds 秒后再试', ['seconds' => $cache->ttl($mobile)]));
         }
+
+        $code = $cache->get($mobile);
+        if (!$code) {
+            $code = str_pad(random_int(0, 999999), 6, 0, STR_PAD_LEFT);
+        }
+
+        $service->sendCode($mobile, $code, $scene);
+        $otherService->storeSmsCodeSendRecord($mobile, $code, $scene);
 
         $cache->put($mobile, $code);
 

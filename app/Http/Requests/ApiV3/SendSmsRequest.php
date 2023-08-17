@@ -21,7 +21,7 @@ class SendSmsRequest extends BaseRequest
             'mobile' => 'required',
             'image_captcha' => 'required',
             'image_key' => 'required',
-            'scene' => 'in:' . implode(',', $scenes),
+            'scene' => 'required|in:' . implode(',', $scenes),
         ];
     }
 
@@ -31,6 +31,7 @@ class SendSmsRequest extends BaseRequest
             'mobile.required' => __('请输入手机号'),
             'image_captcha.required' => __('请输入图形验证码'),
             'image_key.required' => __('参数错误'),
+            'scene.required' => __('参数错误'),
             'scene.in' => __('参数错误'),
         ];
     }

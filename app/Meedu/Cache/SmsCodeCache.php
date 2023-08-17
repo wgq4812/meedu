@@ -9,6 +9,7 @@
 namespace App\Meedu\Cache;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class SmsCodeCache
 {
@@ -18,8 +19,28 @@ class SmsCodeCache
 
     public function put(string $mobile, string $code)
     {
-        $key = sprintf(self::KEY, $mobile);
-        Cache::put($key, $code, self::EXPIRE);
+        Cache::put($this->key($mobile), $code, self::EXPIRE);
+    }
+
+    public function get(string $mobile)
+    {
+        return Cache::get($this->key($mobile));
+    }
+
+    public function beyondLimit(string $mobile)
+    {
+        return self::EXPIRE - $this->ttl($mobile) >= 120;
+    }
+
+    public function ttl(string $mobile)
+    {
+        $prefix = Cache::getStore()->getPrefix();
+        return Redis::connection()->client()->ttl($prefix . $this->key($mobile));
+    }
+
+    private function key(string $mobile)
+    {
+        return sprintf(self::KEY, $mobile);
     }
 
 }

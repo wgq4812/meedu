@@ -30,5 +30,5 @@ interface OtherServiceInterface
 
     public function latestAnnouncement(): array;
 
-    public function storeSmsCodeSendRecord($mobile, string $code, $scene): array;
+    public function storeSmsCodeSendRecord($mobile, string $code, $scene): void;
 }

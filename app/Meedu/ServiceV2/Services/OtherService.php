@@ -57,9 +57,9 @@ class OtherService implements OtherServiceInterface
         return $this->otherDao->latestAnnouncement();
     }
 
-    public function storeSmsCodeSendRecord($mobile, string $code, $scene): array
+    public function storeSmsCodeSendRecord($mobile, string $code, $scene): void
     {
-        return $this->otherDao->storeSmsRecord([
+        $this->otherDao->storeSmsRecord([
             'mobile' => $mobile,
             'send_data' => json_encode(compact('code', 'scene')),
             'response_data' => '',
