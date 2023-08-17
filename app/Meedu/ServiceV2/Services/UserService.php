@@ -15,6 +15,7 @@ use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Hash;
 use App\Events\UserDeleteCancelEvent;
 use App\Events\UserDeleteSubmitEvent;
+use App\Events\UserPasswordResetEvent;
 use App\Meedu\ServiceV2\Models\UserProfile;
 use App\Meedu\ServiceV2\Dao\UserDaoInterface;
 use App\Meedu\ServiceV2\Models\UserFaceVerifyTencentRecord;
@@ -325,6 +326,9 @@ class UserService implements UserServiceInterface
         if (!$user || !Hash::check($password, $user['password'])) {
             throw new ServiceException(__('手机号或密码错误'));
         }
+        if ($user['is_lock'] === 1) {
+            throw new ServiceException(__('账号已被锁定'));
+        }
         return $user['id'];
     }
 
@@ -341,6 +345,17 @@ class UserService implements UserServiceInterface
         event(new UserRegisterEvent($user['id']));
 
         return $user;
+    }
+
+    public function resetPassword(int $id, string $password): void
+    {
+        $this->userDao->changePassword($id, $password);
+    }
+
+    public function passwordSetCompleted(int $id): void
+    {
+        $this->userDao->setIsPasswordSet2One($id);
+        event(new UserPasswordResetEvent($id));
     }
 
 

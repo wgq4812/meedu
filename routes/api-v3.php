@@ -21,6 +21,7 @@ Route::group(['prefix' => 'captcha'], function () {
 Route::group([
     'prefix' => 'auth',
 ], function () {
+    Route::post('/password-reset', 'PasswordController@reset');
 
     Route::group([
         'prefix' => 'register',

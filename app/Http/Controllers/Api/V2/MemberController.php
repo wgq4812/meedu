@@ -24,7 +24,6 @@ use App\Services\Member\Services\CreditService;
 use App\Http\Requests\ApiV2\AvatarChangeRequest;
 use App\Http\Requests\ApiV2\MobileChangeRequest;
 use App\Http\Requests\ApiV2\NicknameChangeRequest;
-use App\Http\Requests\ApiV2\PasswordChangeRequest;
 use App\Services\Member\Services\SocialiteService;
 use App\Meedu\Cache\UserUnreadNotificationCountCache;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
@@ -151,33 +150,6 @@ class MemberController extends BaseController
         }
 
         return $this->data($user);
-    }
-
-    /**
-     * @api {post} /api/v2/member/detail/password 修改密码
-     * @apiGroup 用户
-     * @apiName MemberPasswordChange
-     * @apiVersion v2.0.0
-     * @apiHeader Authorization Bearer+空格+token
-     *
-     * @apiParam {String} mobile 手机号
-     * @apiParam {String} mobile_code 短信验证码
-     * @apiParam {String} password 新密码
-     *
-     * @apiSuccess {Number} code 0成功,非0失败
-     * @apiSuccess {Object} data 数据
-     */
-    public function passwordChange(PasswordChangeRequest $request)
-    {
-        $this->mobileCodeCheck();
-        ['password' => $password, 'mobile' => $mobile] = $request->filldata();
-        $user = $this->userService->find($this->id());
-        if ($user['mobile'] !== $mobile) {
-            return $this->error(__('请绑定手机号'));
-        }
-        $this->userService->changePassword($this->id(), $password);
-
-        return $this->success();
     }
 
     /**

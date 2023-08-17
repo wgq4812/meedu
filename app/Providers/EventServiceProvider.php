@@ -126,5 +126,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\CourseCategoryUpdateEvent' => [
             'App\Listeners\CourseCategoryUpdateEvent\CacheClearListener',
         ],
+        // 学员密码更新
+        'App\Events\UserPasswordResetEvent' => [
+            'App\Listeners\UserPasswordResetEvent\UserStateListener',
+        ],
     ];
 }

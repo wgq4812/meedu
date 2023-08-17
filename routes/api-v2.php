@@ -6,9 +6,6 @@
  * (c) 杭州白书科技有限公司
  */
 
-// 密码重置
-Route::post('/password/reset', 'PasswordController@reset');
-
 // 录播课-列表
 Route::get('/courses', 'CourseController@paginate');
 // 录播课-详情
@@ -38,8 +35,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     Route::group(['prefix' => 'member'], function () {
         // 用户详情
         Route::get('detail', 'MemberController@detail');
-        // 密码修改
-        Route::post('detail/password', 'MemberController@passwordChange');
         // 头像修改
         Route::post('detail/avatar', 'MemberController@avatarChange');
         // 昵称修改

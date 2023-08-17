@@ -73,4 +73,8 @@ interface UserDaoInterface
     public function storeUserCourse(int $userId, int $courseId, int $charge = 0);
 
     public function createWithMobile(string $mobile, string $nickname, string $password, string $avatar, int $isLock, int $isActive): array;
+
+    public function changePassword(int $id, string $password): void;
+
+    public function setIsPasswordSet2One(int $id): void;
 }

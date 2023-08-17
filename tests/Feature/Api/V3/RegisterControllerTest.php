@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Services\Base\Services\CacheService;
 use App\Services\Base\Interfaces\CacheServiceInterface;
 
-class RegisterTest extends Base
+class RegisterControllerTest extends Base
 {
     public function test_register_ok()
     {

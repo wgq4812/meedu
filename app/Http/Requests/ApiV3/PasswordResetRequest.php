@@ -6,10 +6,13 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\ApiV3;
 
-class PasswordChangeRequest extends BaseRequest
+use App\Http\Requests\ApiV2\BaseRequest;
+
+class PasswordResetRequest extends BaseRequest
 {
+
     public function rules()
     {
         return [
@@ -35,4 +38,5 @@ class PasswordChangeRequest extends BaseRequest
             'mobile' => $this->post('mobile'),
         ];
     }
+
 }

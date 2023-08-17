@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Cache;
 use App\Meedu\ServiceV2\Models\Socialite;
 use App\Meedu\ServiceV2\Models\UserDeleteJob;
 
-class MemberTest extends Base
+class MemberControllerTest extends Base
 {
     public function test_user_destroy()
     {

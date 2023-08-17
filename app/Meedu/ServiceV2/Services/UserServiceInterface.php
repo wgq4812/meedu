@@ -69,4 +69,8 @@ interface UserServiceInterface
     public function loginByMobileAndPass(string $mobile, string $password): int;
 
     public function createWithMobile(string $mobile, string $password = ''): array;
+
+    public function resetPassword(int $id, string $password): void;
+
+    public function passwordSetCompleted(int $id): void;
 }

@@ -12,7 +12,6 @@ use App\Meedu\Utils\Verify;
 use App\Constant\CacheConstant;
 use Illuminate\Http\UploadedFile;
 use App\Services\Member\Models\User;
-use Illuminate\Support\Facades\Hash;
 use App\Meedu\ServiceV2\Models\Order;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Member\Models\UserVideo;
@@ -40,20 +39,6 @@ class MemberTest extends Base
         $response = $this->assertResponseSuccess($response);
         $this->assertEquals($this->member->id, $response['data']['id']);
         $this->assertEquals($this->member->nick_name, $response['data']['nick_name']);
-    }
-
-    public function test_password()
-    {
-        $cacheService = $this->app->make(CacheServiceInterface::class);
-        $cacheService->put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $this->member->mobile), 'code', 1);
-        $response = $this->user($this->member)->postJson('api/v2/member/detail/password', [
-            'mobile_code' => 'code',
-            'mobile' => $this->member->mobile,
-            'password' => '123123',
-        ]);
-        $this->assertResponseSuccess($response);
-        $this->member->refresh();
-        $this->assertTrue(Hash::check('123123', $this->member->password));
     }
 
     public function test_mobile_bind()

@@ -359,4 +359,14 @@ SQL;
         return $user->toArray();
     }
 
+    public function changePassword(int $id, string $password): void
+    {
+        User::query()->where('id', $id)->update(['password' => Hash::make($password)]);
+    }
+
+    public function setIsPasswordSet2One(int $id): void
+    {
+        User::query()->where('id', $id)->update(['is_password_set' => 1]);
+    }
+
 }

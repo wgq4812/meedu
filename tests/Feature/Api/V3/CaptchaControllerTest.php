@@ -13,7 +13,7 @@ use Mews\Captcha\Captcha;
 use Tests\Feature\Api\V2\Base;
 use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
-class CaptchaSmsTest extends Base
+class CaptchaControllerTest extends Base
 {
     use MockeryPHPUnitIntegration;
 
