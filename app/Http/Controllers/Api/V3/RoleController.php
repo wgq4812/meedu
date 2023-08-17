@@ -23,6 +23,10 @@ class RoleController extends BaseController
      * @apiSuccess {Number} code 0成功,非0失败
      * @apiSuccess {Object[]} data
      * @apiSuccess {String} data.name VIP名
+     * @apiSuccess {String} data.id VIP-ID
+     * @apiSuccess {String} data.charge 收费价格
+     * @apiSuccess {String} data.expire_days 有效天数
+     * @apiSuccess {String} data.description 权限描述
      */
     public function index(RoleServiceInterface $roleService)
     {

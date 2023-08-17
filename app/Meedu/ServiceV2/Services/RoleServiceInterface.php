@@ -10,7 +10,6 @@ namespace App\Meedu\ServiceV2\Services;
 
 interface RoleServiceInterface
 {
-    public function findOrFail(int $id): array;
 
     public function all(): array;
 

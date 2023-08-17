@@ -8,11 +8,12 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
-use Hashids\Hashids;
 use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
+use App\Meedu\ServiceV2\Services\Traits\HashIdTrait;
 
 class AnnouncementService implements AnnouncementServiceInterface
 {
+    use HashIdTrait;
 
     private $dao;
 
@@ -39,18 +40,6 @@ class AnnouncementService implements AnnouncementServiceInterface
             $data['id'] = $this->idEncode($data['id']);
         }
         return $data;
-    }
-
-    public function idEncode(int $id): string
-    {
-        $hashId = new Hashids(__CLASS__, 5);
-        return $hashId->encode($id);
-    }
-
-    public function idDecode(string $str): int
-    {
-        $hashId = new Hashids(__CLASS__, 5);
-        return (int)($hashId->decode($str)[0] ?? 0);
     }
 
 
