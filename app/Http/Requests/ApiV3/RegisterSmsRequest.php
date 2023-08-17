@@ -6,10 +6,13 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\ApiV3;
+
+use App\Http\Requests\ApiV2\BaseRequest;
 
 class RegisterSmsRequest extends BaseRequest
 {
+
     public function rules()
     {
         return [
@@ -38,4 +41,5 @@ class RegisterSmsRequest extends BaseRequest
             'password' => $this->input('password'),
         ];
     }
+
 }

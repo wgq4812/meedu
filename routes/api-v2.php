@@ -6,8 +6,6 @@
  * (c) 杭州白书科技有限公司
  */
 
-// 手机短信注册
-Route::post('/register/sms', 'RegisterController@smsHandler');
 // 密码重置
 Route::post('/password/reset', 'PasswordController@reset');
 

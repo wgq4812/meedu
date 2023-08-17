@@ -19,32 +19,43 @@ Route::group(['prefix' => 'captcha'], function () {
 });
 
 Route::group([
-    'prefix' => '/auth/login',
+    'prefix' => 'auth',
 ], function () {
-    // 密码登录
-    Route::post('/password', 'LoginController@password');
-    // 短信登录
-    Route::post('/sms', 'LoginController@sms');
-    // 微信公众号授权登录
-    Route::get('/wechat/oauth', 'LoginController@wechatOauthLogin');
-    // 微信公众号授权登录-返回
-    Route::get('/wechat/oauth/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
-    // 社交登录
-    Route::get('/socialite/{app}', 'LoginController@socialiteLogin');
-    // 社交登录返回
-    Route::get('/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v3.login.socialite.callback');
-    // 微信公众号扫码登录
-    Route::get('/wechat/scan', 'LoginController@wechatScan');
-    // 微信公众号扫码登录-结果查询
-    Route::get('/wechat/scan/query', 'LoginController@wechatScanQuery');
-    // 通过code登录系统[code由社交登录、微信扫码登录发放]
-    Route::post('/code', 'LoginController@loginByCode');
-});
 
-// 注册-社交登录
-Route::post('/auth/register/with-socialite', 'LoginController@registerWithSocialite');
-// 注册-微信公众号扫码
-Route::post('/auth/register/with-wechat-scan', 'LoginController@registerWithWechatScan');
+    Route::group([
+        'prefix' => 'register',
+    ], function () {
+        // 短信注册
+        Route::post('/sms', 'RegisterController@sms');
+        // 注册-社交登录
+        Route::post('/socialite', 'RegisterController@socialite');
+        // 注册-微信公众号扫码
+        Route::post('/wechat-scan', 'RegisterController@wechatScan');
+    });
+
+    Route::group([
+        'prefix' => 'login',
+    ], function () {
+        // 密码登录
+        Route::post('/password', 'LoginController@password');
+        // 短信登录
+        Route::post('/sms', 'LoginController@sms');
+        // 微信公众号授权登录
+        Route::get('/wechat/oauth', 'LoginController@wechatOauthLogin');
+        // 微信公众号授权登录-返回
+        Route::get('/wechat/oauth/callback', 'LoginController@wechatOauthCallback')->name('api.v3.login.wechat.callback');
+        // 社交登录
+        Route::get('/socialite/{app}', 'LoginController@socialiteLogin');
+        // 社交登录返回
+        Route::get('/socialite/{app}/callback', 'LoginController@socialiteLoginCallback')->name('api.v3.login.socialite.callback');
+        // 微信公众号扫码登录
+        Route::get('/wechat/scan', 'LoginController@wechatScan');
+        // 微信公众号扫码登录-结果查询
+        Route::get('/wechat/scan/query', 'LoginController@wechatScanQuery');
+        // 通过code登录系统[code由社交登录、微信扫码登录发放]
+        Route::post('/code', 'LoginController@loginByCode');
+    });
+});
 
 // 录播课分页列表
 Route::get('/courses', 'CourseController@index');

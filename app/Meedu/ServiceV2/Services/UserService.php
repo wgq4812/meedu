@@ -328,11 +328,11 @@ class UserService implements UserServiceInterface
         return $user['id'];
     }
 
-    public function createWithMobile(string $mobile): array
+    public function createWithMobile(string $mobile, string $password = ''): array
     {
+        $password || $password = 'random' . Hash::make(Str::random(12));
         $avatar = $this->configService->getMemberDefaultAvatar();
         $nickname = __('新注册学员') . '-' . Str::random(4);
-        $password = Hash::make(Str::random(12));
         $isLock = $this->configService->getMemberIsLock();
         $isActive = $this->configService->getMemberIsActive();
 

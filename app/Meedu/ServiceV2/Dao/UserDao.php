@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use App\Constant\TableConstant;
 use Illuminate\Support\Facades\DB;
 use App\Meedu\ServiceV2\Models\User;
+use Illuminate\Support\Facades\Hash;
 use App\Meedu\ServiceV2\Models\Socialite;
 use App\Meedu\ServiceV2\Models\UserCourse;
 use App\Meedu\ServiceV2\Models\UserProfile;
@@ -342,17 +343,18 @@ SQL;
 
     public function createWithMobile(string $mobile, string $nickname, string $password, string $avatar, int $isLock, int $isActive): array
     {
+        $isSetPassword = mb_substr($password, 0, 6) === 'random' ? 0 : 1;
         $user = User::create([
             'avatar' => $avatar,
             'nick_name' => $nickname,
             'mobile' => $mobile,
-            'password' => $password,
+            'password' => Hash::make($password),
             'is_lock' => $isLock,
             'is_active' => $isActive,
             'role_id' => 0,
             'role_expired_at' => Carbon::now(),
             'is_set_nickname' => 0,
-            'is_password_set' => 0,
+            'is_password_set' => $isSetPassword,
         ]);
         return $user->toArray();
     }
