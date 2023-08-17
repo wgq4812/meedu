@@ -6,8 +6,11 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Services\Other\Interfaces;
+namespace App\Meedu\ServiceV2\Services;
 
 interface SmsServiceInterface
 {
+
+    public function sendCode(string $mobile, string $code, string $scene): void;
+
 }

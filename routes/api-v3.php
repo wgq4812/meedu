@@ -13,6 +13,11 @@ Route::get('/status', 'SystemController@status');
 // 系统配置
 Route::get('/config', 'SystemController@config');
 
+Route::group(['prefix' => 'captcha'], function () {
+    Route::post('/sms', 'CaptchaController@sms');
+    Route::get('/image', 'CaptchaController@image');
+});
+
 Route::group([
     'prefix' => '/auth/login',
 ], function () {

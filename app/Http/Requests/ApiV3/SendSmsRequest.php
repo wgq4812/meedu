@@ -6,15 +6,16 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\ApiV3;
 
-class SmsRequest extends BaseRequest
+use App\Http\Requests\ApiV2\BaseRequest;
+
+class SendSmsRequest extends BaseRequest
 {
+
     public function rules()
     {
-        $scenes = [
-            'register', 'login', 'password_reset', 'mobile_bind',
-        ];
+        $scenes = ['register', 'login', 'password_reset', 'mobile_bind'];
 
         return [
             'mobile' => 'required',
@@ -41,4 +42,5 @@ class SmsRequest extends BaseRequest
             'scene' => $this->post('scene'),
         ];
     }
+
 }

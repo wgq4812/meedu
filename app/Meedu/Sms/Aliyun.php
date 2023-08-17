@@ -8,18 +8,28 @@
 
 namespace App\Meedu\Sms;
 
-use App\Services\Base\Services\ConfigService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Exceptions\ServiceException;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class Aliyun implements SmsInterface
 {
-    public function sendCode(string $mobile, $code, $template)
+
+    public function sendCode(string $mobile, string $code, string $scene): void
     {
         /**
-         * @var ConfigService $configService
+         * @var ConfigServiceInterface $configService
          */
         $configService = app()->make(ConfigServiceInterface::class);
-        $config = $configService->getSms()['gateways']['aliyun'];
+        $config = $configService->getAliSmsConfig();
+
+        if (!$config['access_key_id'] || !$config['access_key_secret'] || !$config['sign_name']) {
+            throw new ServiceException(__('阿里云短信服务未配置'));
+        }
+
+        $templateId = $config['template'][$scene] ?? '';
+        if (!$templateId) {
+            throw new ServiceException(__('短信模板不存在'));
+        }
 
         \AlibabaCloud\Client\AlibabaCloud::accessKeyClient($config['access_key_id'], $config['access_key_secret'])
             ->regionId('cn-hangzhou')
@@ -36,7 +46,7 @@ class Aliyun implements SmsInterface
                 'query' => [
                     'PhoneNumbers' => $mobile,
                     'SignName' => $config['sign_name'],
-                    'TemplateCode' => $template,
+                    'TemplateCode' => $templateId,
                     'TemplateParam' => json_encode([
                         'code' => $code,
                     ]),
@@ -47,7 +57,7 @@ class Aliyun implements SmsInterface
         $responseCode = $result['Code'];
         $responseMessage = $result['Message'];
         if (!($responseCode === 'OK' && $responseMessage === 'OK')) {
-            throw new \Exception($responseMessage);
+            throw new ServiceException($responseMessage);
         }
     }
 }

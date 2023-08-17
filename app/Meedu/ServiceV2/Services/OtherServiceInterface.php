@@ -29,4 +29,6 @@ interface OtherServiceInterface
     public function viewBlocks(string $page, string $platform): array;
 
     public function latestAnnouncement(): array;
+
+    public function storeSmsCodeSendRecord($mobile, string $code, $scene): array;
 }

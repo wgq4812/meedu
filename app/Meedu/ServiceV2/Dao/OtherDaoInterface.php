@@ -33,4 +33,6 @@ interface OtherDaoInterface
     public function findAnnouncement(int $id): array;
 
     public function announcementPaginate(int $page, int $size): array;
+
+    public function storeSmsRecord(array $array): void;
 }

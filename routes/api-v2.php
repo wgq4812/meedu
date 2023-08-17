@@ -6,9 +6,6 @@
  * (c) 杭州白书科技有限公司
  */
 
-Route::get('/captcha/image', 'CaptchaController@imageCaptcha');
-// 发送手机验证码
-Route::post('/captcha/sms', 'CaptchaController@sentSms');
 // 手机短信注册
 Route::post('/register/sms', 'RegisterController@smsHandler');
 // 密码重置

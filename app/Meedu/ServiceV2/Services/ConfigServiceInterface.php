@@ -125,4 +125,8 @@ interface ConfigServiceInterface
     public function getMemberIsLock(): int;
 
     public function getMemberIsActive(): int;
+
+    public function getAliSmsConfig(): array;
+
+    public function getTencentSmsConfig(): array;
 }

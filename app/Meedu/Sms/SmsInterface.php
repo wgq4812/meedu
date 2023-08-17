@@ -10,5 +10,5 @@ namespace App\Meedu\Sms;
 
 interface SmsInterface
 {
-    public function sendCode(string $mobile, $code, $template);
+    public function sendCode(string $mobile, string $code, string $scene): void;
 }

@@ -11,6 +11,7 @@ namespace App\Meedu\ServiceV2\Dao;
 use Carbon\Carbon;
 use App\Meedu\ServiceV2\Models\Nav;
 use App\Meedu\ServiceV2\Models\Link;
+use App\Meedu\ServiceV2\Models\SmsRecord;
 use App\Meedu\ServiceV2\Models\ViewBlock;
 use App\Meedu\ServiceV2\Models\Announcement;
 use App\Meedu\ServiceV2\Models\UserUploadImage;
@@ -95,5 +96,11 @@ class OtherDao implements OtherDaoInterface
             'total' => $total,
         ];
     }
+
+    public function storeSmsRecord(array $data): void
+    {
+        SmsRecord::create($data);
+    }
+
 
 }

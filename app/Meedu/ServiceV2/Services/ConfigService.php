@@ -293,5 +293,15 @@ class ConfigService implements ConfigServiceInterface
         return (int)config('meedu.member.is_active_default');
     }
 
+    public function getAliSmsConfig(): array
+    {
+        return config('sms.gateways.aliyun');
+    }
+
+    public function getTencentSmsConfig(): array
+    {
+        return config('sms.gateways.tencent');
+    }
+
 
 }

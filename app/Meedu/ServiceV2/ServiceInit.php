@@ -15,6 +15,7 @@ use App\Meedu\ServiceV2\Dao\OrderDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
+use App\Meedu\ServiceV2\Services\SmsService;
 use App\Meedu\ServiceV2\Dao\RoleDaoInterface;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDao;
 use App\Meedu\ServiceV2\Dao\UserDaoInterface;
@@ -31,6 +32,7 @@ use App\Meedu\ServiceV2\Services\CourseService;
 use App\Meedu\ServiceV2\Services\SettingService;
 use App\Meedu\ServiceV2\Services\TencentVodService;
 use App\Meedu\ServiceV2\Services\AnnouncementService;
+use App\Meedu\ServiceV2\Services\SmsServiceInterface;
 use App\Meedu\ServiceV2\Dao\RuntimeStatusDaoInterface;
 use App\Meedu\ServiceV2\Services\RoleServiceInterface;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
@@ -69,6 +71,7 @@ class ServiceInit
         OrderServiceInterface::class => OrderService::class,
         RoleServiceInterface::class => RoleService::class,
         AnnouncementServiceInterface::class => AnnouncementService::class,
+        SmsServiceInterface::class => SmsService::class,
     ];
 
     public function run()
