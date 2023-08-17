@@ -20,14 +20,17 @@
         <testsuite name="Commands">
             <directory suffix="Test.php">./tests/Commands</directory>
         </testsuite>
-        <testsuite name="MeEdu">
-            <directory suffix="Test.php">./tests/MeEdu</directory>
+        <testsuite name="Core">
+            <directory suffix="Test.php">./tests/Core</directory>
         </testsuite>
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests/Feature</directory>
+        <testsuite name="API">
+            <directory suffix="Test.php">./tests/API</directory>
         </testsuite>
         <testsuite name="Unit">
             <directory suffix="Test.php">./tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Services">
+            <directory suffix="Test.php">./tests/Services</directory>
         </testsuite>
     </testsuites>
     <logging/>
