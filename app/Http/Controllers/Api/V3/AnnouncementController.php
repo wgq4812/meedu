@@ -19,8 +19,8 @@ class AnnouncementController extends BaseController
     /**
      * @api {get} /api/v3/announcements 公告列表
      * @apiGroup 其它
-     * @apiName Announcements
-     * @apiVersion v2.0.0
+     * @apiName V3-Announcements
+     * @apiVersion v3.0.0
      *
      * @apiParam {Number=1} [page] page
      * @apiParam {Number=10} [size] size
@@ -44,10 +44,10 @@ class AnnouncementController extends BaseController
     }
 
     /**
-     * @api {get} /api/v2/announcement/{slug} 公告详情
+     * @api {get} /api/v3/announcement/{slug} 公告详情
      * @apiGroup 其它
-     * @apiName AnnouncementDetail
-     * @apiVersion v2.0.0
+     * @apiName V3-AnnouncementDetail
+     * @apiVersion v3.0.0
      *
      * @apiSuccess {Number} code 0成功,非0失败
      * @apiSuccess {Object} data 数据

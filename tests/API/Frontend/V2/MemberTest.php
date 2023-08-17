@@ -8,21 +8,21 @@
 
 namespace Tests\API\Frontend\V2;
 
-use App\Constant\CacheConstant;
-use App\Meedu\ServiceV2\Models\Order;
 use App\Meedu\Utils\Verify;
-use App\Services\Base\Interfaces\CacheServiceInterface;
-use App\Services\Course\Models\CourseUserRecord;
+use Tests\API\Frontend\Base;
+use App\Constant\CacheConstant;
+use Illuminate\Http\UploadedFile;
 use App\Services\Member\Models\User;
+use App\Meedu\ServiceV2\Models\Order;
+use Illuminate\Support\Facades\Storage;
+use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
+use App\Services\Member\Models\UserLikeCourse;
+use App\Services\Course\Models\CourseUserRecord;
 use App\Services\Member\Models\UserCreditRecord;
 use App\Services\Member\Models\UserJoinRoleRecord;
-use App\Services\Member\Models\UserLikeCourse;
-use App\Services\Member\Models\UserVideo;
+use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Member\Notifications\SimpleMessageNotification;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Tests\API\Frontend\Base;
 
 class MemberTest extends Base
 {

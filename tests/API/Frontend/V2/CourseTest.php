@@ -8,15 +8,15 @@
 
 namespace Tests\API\Frontend\V2;
 
-use App\Services\Course\Models\Course;
-use App\Services\Course\Models\CourseCategory;
-use App\Services\Course\Models\CourseComment;
-use App\Services\Member\Models\Role;
-use App\Services\Member\Models\User;
-use App\Services\Member\Models\UserCourse;
-use App\Services\Member\Models\UserLikeCourse;
 use Carbon\Carbon;
 use Tests\API\Frontend\Base;
+use App\Services\Member\Models\Role;
+use App\Services\Member\Models\User;
+use App\Services\Course\Models\Course;
+use App\Services\Member\Models\UserCourse;
+use App\Services\Course\Models\CourseComment;
+use App\Services\Course\Models\CourseCategory;
+use App\Services\Member\Models\UserLikeCourse;
 
 class CourseTest extends Base
 {

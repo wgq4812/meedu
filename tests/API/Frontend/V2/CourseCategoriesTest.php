@@ -8,8 +8,8 @@
 
 namespace Tests\API\Frontend\V2;
 
-use App\Services\Course\Models\CourseCategory;
 use Tests\API\Frontend\Base;
+use App\Services\Course\Models\CourseCategory;
 
 class CourseCategoriesTest extends Base
 {

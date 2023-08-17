@@ -20,7 +20,7 @@ class CourseAttachController extends BaseController
     /**
      * @api {get} /api/v3/course/{courseId}/attach/{id}/download-url 获取课件下载URL
      * @apiGroup 录播课
-     * @apiName CourseAttachDownloadV3
+     * @apiName V3-CourseAttachDownload
      * @apiVersion v3.0.0
      *
      * @apiParam {String} token 登录token

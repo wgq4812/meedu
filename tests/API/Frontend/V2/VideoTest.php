@@ -8,17 +8,17 @@
 
 namespace Tests\API\Frontend\V2;
 
-use App\Constant\CacheConstant;
-use App\Services\Course\Models\Course;
-use App\Services\Course\Models\Video;
-use App\Services\Member\Models\User;
-use App\Services\Member\Models\UserCourse;
-use App\Services\Member\Models\UserVideo;
-use App\Services\Member\Models\UserVideoWatchRecord;
-use App\Services\Member\Models\UserWatchStat;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Tests\API\Frontend\Base;
+use App\Constant\CacheConstant;
+use App\Services\Member\Models\User;
+use App\Services\Course\Models\Video;
+use Illuminate\Support\Facades\Cache;
+use App\Services\Course\Models\Course;
+use App\Services\Member\Models\UserVideo;
+use App\Services\Member\Models\UserCourse;
+use App\Services\Member\Models\UserWatchStat;
+use App\Services\Member\Models\UserVideoWatchRecord;
 
 class VideoTest extends Base
 {
