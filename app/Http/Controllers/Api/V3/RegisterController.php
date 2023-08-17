@@ -17,7 +17,7 @@ use App\Constant\FrontendConstant;
 use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Api\BaseController;
-use App\Http\Requests\ApiV3\RegisterSmsRequest;
+use App\Http\Requests\Api\V3\RegisterSmsRequest;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 
 class RegisterController extends BaseController

@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\Api;
 
 use App\Exceptions\ServiceException;
 use Illuminate\Foundation\Http\FormRequest;

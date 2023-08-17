@@ -6,9 +6,9 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV3;
+namespace App\Http\Requests\Api\V3;
 
-use App\Http\Requests\ApiV2\BaseRequest;
+use App\Http\Requests\Api\BaseRequest;
 
 class SendSmsRequest extends BaseRequest
 {

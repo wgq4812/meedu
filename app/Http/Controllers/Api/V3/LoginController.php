@@ -21,9 +21,9 @@ use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Api\BaseController;
-use App\Http\Requests\ApiV3\LoginSmsRequest;
-use App\Http\Requests\ApiV3\LoginPasswordRequest;
-use App\Http\Requests\ApiV3\SocialiteLoginRequest;
+use App\Http\Requests\Api\V3\LoginSmsRequest;
+use App\Http\Requests\Api\V3\LoginPasswordRequest;
+use App\Http\Requests\Api\V3\SocialiteLoginRequest;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 

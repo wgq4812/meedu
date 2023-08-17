@@ -9,7 +9,7 @@
 namespace App\Http\Controllers\Api\V3;
 
 use App\Http\Controllers\Api\BaseController;
-use App\Http\Requests\ApiV3\PasswordResetRequest;
+use App\Http\Requests\Api\V3\PasswordResetRequest;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 
 class PasswordController extends BaseController

@@ -6,15 +6,17 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\Api\V3;
 
-class MobileChangeRequest extends BaseRequest
+use App\Http\Requests\Api\BaseRequest;
+
+class LoginSmsRequest extends BaseRequest
 {
+
     public function rules()
     {
         return [
             'mobile' => 'required',
-            'mobile_code' => 'required',
         ];
     }
 
@@ -22,7 +24,6 @@ class MobileChangeRequest extends BaseRequest
     {
         return [
             'mobile.required' => __('请输入手机号'),
-            'mobile_code.required' => __('请输入短信验证码'),
         ];
     }
 
@@ -32,4 +33,5 @@ class MobileChangeRequest extends BaseRequest
             'mobile' => $this->post('mobile'),
         ];
     }
+
 }

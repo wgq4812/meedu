@@ -6,7 +6,9 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\ApiV2;
+namespace App\Http\Requests\Api\V2;
+
+use App\Http\Requests\Api\BaseRequest;
 
 class AvatarChangeRequest extends BaseRequest
 {
