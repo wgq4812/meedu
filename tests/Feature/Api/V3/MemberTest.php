@@ -43,7 +43,7 @@ class MemberTest extends Base
         $response = $this->user($user)->postJson('/api/v3/member/destroy', []);
         $this->assertResponseSuccess($response);
 
-        $response = $this->user($user)->postJson('/api/v2/login/password', [
+        $response = $this->user($user)->postJson('/api/v3/auth/login/password', [
             'mobile' => $user['mobile'],
             'password' => '123123',
         ]);

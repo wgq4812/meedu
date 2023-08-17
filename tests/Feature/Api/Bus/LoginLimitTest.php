@@ -27,7 +27,7 @@ class LoginLimitTest extends OriginalTestCase
         ]);
 
         // 第一次登录
-        $response = $this->post('/api/v2/login/password', [
+        $response = $this->post('/api/v3/auth/login/password', [
             'mobile' => $user['mobile'],
             'password' => '123123',
         ]);
@@ -35,7 +35,7 @@ class LoginLimitTest extends OriginalTestCase
         $token1 = $content['data']['token'];
 
         // 第二次登录
-        $response = $this->post('/api/v2/login/password', [
+        $response = $this->post('/api/v3/auth/login/password', [
             'mobile' => $user['mobile'],
             'password' => '123123',
         ]);
@@ -69,7 +69,7 @@ class LoginLimitTest extends OriginalTestCase
         ]);
 
         // 第一次登录
-        $response = $this->post('/api/v2/login/password', [
+        $response = $this->post('/api/v3/auth/login/password', [
             'mobile' => $user['mobile'],
             'password' => '123123',
         ]);
@@ -77,7 +77,7 @@ class LoginLimitTest extends OriginalTestCase
         $token1 = $content['data']['token'];
 
         // 第二次登录
-        $response = $this->post('/api/v2/login/password', [
+        $response = $this->post('/api/v3/auth/login/password', [
             'mobile' => $user['mobile'],
             'password' => '123123',
         ]);

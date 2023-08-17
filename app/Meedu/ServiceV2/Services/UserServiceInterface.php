@@ -65,4 +65,8 @@ interface UserServiceInterface
     public function userCourseChunks(int $userId, array $courseIds): array;
 
     public function storeUserCourse(int $userId, int $courseId, int $charge = 0): void;
+
+    public function loginByMobileAndPass(string $mobile, string $password): int;
+
+    public function createWithMobile(string $mobile): array;
 }

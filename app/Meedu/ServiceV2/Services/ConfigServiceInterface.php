@@ -117,4 +117,12 @@ interface ConfigServiceInterface
     public function getMemberPrivateProtocol(): string;
 
     public function getAboutUs(): string;
+
+    public function getEnabledCreateNewAccountOnSmsLogin(): bool;
+
+    public function getMemberDefaultAvatar(): string;
+
+    public function getMemberIsLock(): int;
+
+    public function getMemberIsActive(): int;
 }

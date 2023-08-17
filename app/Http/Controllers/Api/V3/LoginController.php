@@ -21,12 +21,71 @@ use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Socialite\Facades\Socialite;
 use App\Http\Controllers\Api\BaseController;
+use App\Http\Requests\ApiV3\LoginSmsRequest;
+use App\Http\Requests\ApiV3\LoginPasswordRequest;
 use App\Http\Requests\ApiV3\SocialiteLoginRequest;
 use App\Meedu\ServiceV2\Services\UserServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class LoginController extends BaseController
 {
+
+    /**
+     * @api {post} /api/v3/auth/login/password 密码登录
+     * @apiGroup Auth-V3
+     * @apiName V3-LoginPassword
+     * @apiVersion v3.0.0
+     * @apiDescription v5.0新增
+     *
+     * @apiParam {String} mobile 手机号
+     * @apiParam {String} password 密码
+     *
+     * @apiSuccess {Number} code 0成功,非0失败
+     * @apiSuccess {Object} data 数据
+     * @apiSuccess {String} data.token token
+     */
+    public function password(LoginPasswordRequest $request, UserServiceInterface $userService, AuthBus $authBus)
+    {
+        [
+            'mobile' => $mobile,
+            'password' => $password,
+        ] = $request->filldata();
+
+        $userId = $userService->loginByMobileAndPass($mobile, $password);
+
+        $token = $authBus->tokenLogin($userId, get_platform());
+
+        return $this->data(compact('token'));
+    }
+
+    /**
+     * @api {post} /api/v2/auth/login/sms 短信登录
+     * @apiGroup Auth-V3
+     * @apiName V3-LoginSMS
+     * @apiVersion v3.0.0
+     * @apiDescription v5.0新增
+     *
+     * @apiParam {String} mobile 手机号
+     * @apiParam {String} mobile_code 短信验证码
+     *
+     * @apiSuccess {Number} code 0成功,非0失败
+     * @apiSuccess {Object} data 数据
+     * @apiSuccess {String} data.token token
+     */
+    public function sms(LoginSmsRequest $request, UserServiceInterface $userService, ConfigServiceInterface $configService, AuthBus $authBus)
+    {
+        $this->mobileCodeCheck();
+        ['mobile' => $mobile] = $request->filldata();
+        $user = $userService->findUserByMobile($mobile);
+        if (!$user) {
+            if (!$configService->getEnabledCreateNewAccountOnSmsLogin()) {
+                return $this->error(__('用户不存在'));
+            }
+            $user = $userService->createWithMobile($mobile);
+        }
+        $token = $authBus->tokenLogin($user['id'], get_platform());
+        return $this->data(compact('token'));
+    }
 
     /**
      * @api {GET} /api/v3/auth/login/wechat/oauth 微信公众号授权登录
@@ -203,9 +262,9 @@ class LoginController extends BaseController
     }
 
     /**
-     * @api {POST} /api/v3/auth/login/code 三方账号登录
+     * @api {POST} /api/v3/auth/login/code code登录
      * @apiGroup Auth-V3
-     * @apiName  AuthLoginWithCode
+     * @apiName AuthLoginWithCode
      * @apiVersion v3.0.0
      * @apiDescription v4.8新增
      *
@@ -278,7 +337,7 @@ class LoginController extends BaseController
     }
 
     /**
-     * @api {POST} /api/v3/auth/register/withSocialite 社交账号注册[绑定手机号]
+     * @api {POST} /api/v3/auth/register/withSocialite 社交账号注册+手机号绑定
      * @apiGroup Auth-V3
      * @apiName  AuthRegisterWithCode
      * @apiVersion v3.0.0
@@ -418,7 +477,7 @@ class LoginController extends BaseController
     }
 
     /**
-     * @api {POST} /api/v3/auth/register/withWechatScan 微信扫码注册[绑定手机号]
+     * @api {POST} /api/v3/auth/register/with-wechat-scan 微信扫码登录+手机号绑定
      * @apiGroup Auth-V3
      * @apiName  AuthRegisterWithWechatScan
      * @apiVersion v3.0.0

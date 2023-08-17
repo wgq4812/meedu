@@ -16,6 +16,10 @@ Route::get('/config', 'SystemController@config');
 Route::group([
     'prefix' => '/auth/login',
 ], function () {
+    // 密码登录
+    Route::post('/password', 'LoginController@password');
+    // 短信登录
+    Route::post('/sms', 'LoginController@sms');
     // 微信公众号授权登录
     Route::get('/wechat/oauth', 'LoginController@wechatOauthLogin');
     // 微信公众号授权登录-返回
@@ -50,6 +54,9 @@ Route::get('/announcements', 'AnnouncementController@index');
 Route::get('/announcement/{slug}', 'AnnouncementController@detail');
 
 Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], function () {
+    // 安全退出
+    Route::post('/auth/logout', 'LogoutController@logout');
+
     Route::group(['prefix' => 'order'], function () {
         // 创建订单
         Route::post('/', 'OrderController@store');

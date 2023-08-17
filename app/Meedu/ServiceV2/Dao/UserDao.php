@@ -226,6 +226,25 @@ SQL;
         return $user ? $user->toArray() : [];
     }
 
+    public function findUserWithMobile(array $filter): array
+    {
+        $user = User::query()
+            ->when(isset($filter['id']), function ($query) use ($filter) {
+                $query->where('id', $filter['id']);
+            })
+            ->when(isset($filter['mobile']), function ($query) use ($filter) {
+                $query->where('mobile', $filter['mobile']);
+            })
+            ->first();
+        if (!$user) {
+            return [];
+        }
+        $data = $user->toArray();
+        $data['password'] = $user['password'];
+        return $data;
+    }
+
+
     public function storeUserLoginRecord(int $userId, string $token, string $platform, string $ua, string $ip): int
     {
         $tokenPayload = token_payload($token);
@@ -320,4 +339,22 @@ SQL;
             'created_at' => Carbon::now()->toDateTimeLocalString(),
         ]);
     }
+
+    public function createWithMobile(string $mobile, string $nickname, string $password, string $avatar, int $isLock, int $isActive): array
+    {
+        $user = User::create([
+            'avatar' => $avatar,
+            'nick_name' => $nickname,
+            'mobile' => $mobile,
+            'password' => $password,
+            'is_lock' => $isLock,
+            'is_active' => $isActive,
+            'role_id' => 0,
+            'role_expired_at' => Carbon::now(),
+            'is_set_nickname' => 0,
+            'is_password_set' => 0,
+        ]);
+        return $user->toArray();
+    }
+
 }

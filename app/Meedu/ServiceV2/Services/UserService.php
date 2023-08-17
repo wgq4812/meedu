@@ -8,8 +8,11 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
+use Illuminate\Support\Str;
 use App\Events\UserDeletedEvent;
+use App\Events\UserRegisterEvent;
 use App\Exceptions\ServiceException;
+use Illuminate\Support\Facades\Hash;
 use App\Events\UserDeleteCancelEvent;
 use App\Events\UserDeleteSubmitEvent;
 use App\Meedu\ServiceV2\Models\UserProfile;
@@ -19,10 +22,12 @@ use App\Meedu\ServiceV2\Models\UserFaceVerifyTencentRecord;
 class UserService implements UserServiceInterface
 {
     protected $userDao;
+    private $configService;
 
-    public function __construct(UserDaoInterface $userDao)
+    public function __construct(UserDaoInterface $userDao, ConfigServiceInterface $configService)
     {
         $this->userDao = $userDao;
+        $this->configService = $configService;
     }
 
     public function getUserCoursePaginateWithProgress(int $userId, int $page, int $size): array
@@ -313,4 +318,30 @@ class UserService implements UserServiceInterface
     {
         $this->userDao->storeUserCourse($userId, $courseId, $charge);
     }
+
+    public function loginByMobileAndPass(string $mobile, string $password): int
+    {
+        $user = $this->userDao->findUserWithMobile(['mobile' => $mobile]);
+        if (!$user || !Hash::check($password, $user['password'])) {
+            throw new ServiceException(__('手机号或密码错误'));
+        }
+        return $user['id'];
+    }
+
+    public function createWithMobile(string $mobile): array
+    {
+        $avatar = $this->configService->getMemberDefaultAvatar();
+        $nickname = __('新注册学员') . '-' . Str::random(4);
+        $password = Hash::make(Str::random(12));
+        $isLock = $this->configService->getMemberIsLock();
+        $isActive = $this->configService->getMemberIsActive();
+
+        $user = $this->userDao->createWithMobile($mobile, $nickname, $password, $avatar, $isLock, $isActive);
+
+        event(new UserRegisterEvent($user['id']));
+
+        return $user;
+    }
+
+
 }

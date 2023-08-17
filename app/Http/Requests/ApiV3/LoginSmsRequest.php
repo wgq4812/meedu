@@ -6,30 +6,32 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\Frontend\Member;
+namespace App\Http\Requests\ApiV3;
 
-use App\Http\Requests\Frontend\BaseRequest;
+use App\Http\Requests\ApiV2\BaseRequest;
 
-class ReadAMessageRequest extends BaseRequest
+class LoginSmsRequest extends BaseRequest
 {
+
     public function rules()
     {
         return [
-            'id' => 'required',
+            'mobile' => 'required',
         ];
     }
 
     public function messages()
     {
         return [
-            'id.required' => __('参数错误'),
+            'mobile.required' => __('请输入手机号'),
         ];
     }
 
     public function filldata()
     {
         return [
-            'id' => $this->post('id'),
+            'mobile' => $this->post('mobile'),
         ];
     }
+
 }

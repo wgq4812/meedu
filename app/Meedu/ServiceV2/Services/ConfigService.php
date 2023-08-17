@@ -269,4 +269,29 @@ class ConfigService implements ConfigServiceInterface
         return config('meedu.aboutus') ?? '';
     }
 
+    public function getEnabledCreateNewAccountOnSmsLogin(): bool
+    {
+        return (int)config('meedu.member.is_create_account_on_sms_login') === 1;
+    }
+
+    public function getMemberDefaultAvatar(): string
+    {
+        $avatar = config('meedu.member.default_avatar');
+        if (mb_substr($avatar, 0, 4) !== 'http') {
+            $avatar = url($avatar);
+        }
+        return $avatar;
+    }
+
+    public function getMemberIsLock(): int
+    {
+        return (int)config('meedu.member.is_lock_default');
+    }
+
+    public function getMemberIsActive(): int
+    {
+        return (int)config('meedu.member.is_active_default');
+    }
+
+
 }

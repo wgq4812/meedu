@@ -13,10 +13,6 @@ Route::post('/captcha/sms', 'CaptchaController@sentSms');
 Route::post('/register/sms', 'RegisterController@smsHandler');
 // 密码重置
 Route::post('/password/reset', 'PasswordController@reset');
-// 密码登录
-Route::post('/login/password', 'LoginController@passwordLogin');
-// 手机号登录
-Route::post('/login/mobile', 'LoginController@mobileLogin');
 
 // 录播课-列表
 Route::get('/courses', 'CourseController@paginate');
@@ -36,8 +32,6 @@ Route::group(['middleware' => ['auth:apiv2', 'api.login.status.check']], functio
     Route::post('/video/{id}/record', 'VideoController@recordVideo');
     // 录播课-课时-获取播放地址
     Route::get('/video/{id}/playinfo', 'VideoController@playInfo');
-    // 安全退出
-    Route::post('/logout', 'LoginController@logout');
     // 录播课-评论
     Route::post('/course/{id}/comment', 'CourseController@createComment');
     // 录播课-收藏

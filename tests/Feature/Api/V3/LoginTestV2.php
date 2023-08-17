@@ -6,15 +6,16 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Tests\Feature\Api\V2;
+namespace Tests\Feature\Api\V3;
 
+use Tests\Feature\Api\V2\Base;
 use App\Constant\CacheConstant;
 use App\Services\Member\Models\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\Base\Services\CacheService;
 use App\Services\Base\Interfaces\CacheServiceInterface;
 
-class LoginTest extends Base
+class LoginTestV2 extends Base
 {
     public function test_with_correct_password()
     {
@@ -22,7 +23,7 @@ class LoginTest extends Base
             'mobile' => '13890900909',
             'is_lock' => User::LOCK_NO,
         ]);
-        $response = $this->postJson('/api/v2/login/password', [
+        $response = $this->postJson('/api/v3/auth/login/password', [
             'mobile' => $user->mobile,
             'password' => '123456',
         ]);
@@ -36,7 +37,7 @@ class LoginTest extends Base
             'password' => Hash::make('123123'),
             'is_lock' => User::LOCK_YES,
         ]);
-        $response = $this->postJson('/api/v2/login/password', [
+        $response = $this->postJson('/api/v3/auth/login/password', [
             'mobile' => $user->mobile,
             'password' => '123123',
         ]);
@@ -49,7 +50,7 @@ class LoginTest extends Base
             'mobile' => '13890900909',
             'is_lock' => User::LOCK_NO,
         ]);
-        $response = $this->postJson('/api/v2/login/password', [
+        $response = $this->postJson('/api/v3/auth/login/password', [
             'mobile' => $user->mobile,
             'password' => 'asd12312',
         ]);
@@ -72,7 +73,7 @@ class LoginTest extends Base
         $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
         $cacheService->put($key, '123456', 100);
 
-        $response = $this->postJson('/api/v2/login/mobile', [
+        $response = $this->postJson('/api/v3/auth/login/sms', [
             'mobile' => $mobile,
             'mobile_code' => '123456',
         ]);
@@ -91,7 +92,7 @@ class LoginTest extends Base
         $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
         $cacheService->put($key, '123456', 100);
 
-        $response = $this->postJson('/api/v2/login/mobile', [
+        $response = $this->postJson('/api/v3/auth/login/sms', [
             'mobile' => $mobile,
             'mobile_code' => '123456',
         ]);

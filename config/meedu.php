@@ -13,8 +13,12 @@ return [
 
     // 会员配置
     'member' => [
-        'is_active_default' => 1,//注册学员默认激活[1:是,0:否]
-        'is_lock_default' => 0,//注册学员默认锁定[1:是,0:否]
+        //注册学员默认激活[1:是,0:否]
+        'is_active_default' => 1,
+        //注册学员默认锁定[1:是,0:否]
+        'is_lock_default' => 0,
+        // 短信登录情况下，手机号不存在的情况下是否创建新账号
+        'is_create_account_on_sms_login' => 1,
 
         // 用户协议
         'protocol' => '',

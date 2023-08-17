@@ -44,6 +44,8 @@ interface UserDaoInterface
 
     public function findUser(array $filter, array $fields): array;
 
+    public function findUserWithMobile(array $filter): array;
+
     public function storeUserLoginRecord(int $userId, string $token, string $platform, string $ua, string $ip): int;
 
     public function updateUserLastLoginId(int $userId, int $loginId): int;
@@ -69,4 +71,6 @@ interface UserDaoInterface
     public function unreadNotificationCount(int $userId): int;
 
     public function storeUserCourse(int $userId, int $courseId, int $charge = 0);
+
+    public function createWithMobile(string $mobile, string $nickname, string $password, string $avatar, int $isLock, int $isActive): array;
 }

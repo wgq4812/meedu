@@ -42,14 +42,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * @return array
-     */
-    public function currentUser(): array
-    {
-        return $this->find(Auth::id(), ['role']);
-    }
-
-    /**
      * @param string $mobile
      *
      * @return array
@@ -70,25 +62,6 @@ class UserService implements UserServiceInterface
         $user = User::whereNickName($nickname)->first();
 
         return $user ? $user->toArray() : [];
-    }
-
-    /**
-     * @param string $mobile
-     * @param string $password
-     *
-     * @return array
-     */
-    public function passwordLogin(string $mobile, string $password): array
-    {
-        $user = User::whereMobile($mobile)->first();
-        if (!$user) {
-            return [];
-        }
-        if (!Hash::check($password, $user->password)) {
-            return [];
-        }
-
-        return $user->toArray();
     }
 
     /**
@@ -369,29 +342,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * @param array $nicknames
-     * @return array
-     */
-    public function getUsersInNicknames(array $nicknames): array
-    {
-        return User::whereIn('nick_name', $nicknames)->get(['id', 'nick_name'])->keyBy('nick_name')->toArray();
-    }
-
-    /**
-     * @param int $page
-     * @param int $pageSize
-     * @return array
-     */
-    public function inviteUsers(int $page, int $pageSize): array
-    {
-        $query = User::whereInviteUserId(Auth::id())->orderByDesc('id');
-        $total = $query->count();
-        $list = $query->forPage($page, $pageSize)->get()->toArray();
-
-        return compact('list', 'total');
-    }
-
-    /**
      * @param int $userId
      * @return int
      */
@@ -537,18 +487,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * 获取课程的最新一条观看记录
-     * @param int $userId
-     * @param int $courseId
-     * @return array
-     */
-    public function getLatestRecord(int $userId, int $courseId): array
-    {
-        $record = UserVideoWatchRecord::query()->where('user_id', $userId)->where('course_id', $courseId)->orderByDesc('updated_at')->first();
-        return $record ? $record->toArray() : [];
-    }
-
-    /**
      * @param int $id
      * @param string $ip
      */
@@ -619,65 +557,6 @@ class UserService implements UserServiceInterface
     {
         $profile = UserProfile::query()->where('user_id', $userId)->first();
         return $profile ? $profile->toArray() : [];
-    }
-
-    /**
-     * @param int $userId
-     * @param array $profileData
-     */
-    public function saveProfile(int $userId, array $profileData): void
-    {
-        $updateData = [];
-        foreach (UserProfile::EDIT_COLUMNS as $column) {
-            if (!isset($profileData[$column])) {
-                continue;
-            }
-            if ($profileData[$column] !== null) {
-                $updateData[$column] = $profileData[$column];
-            }
-        }
-
-        $profile = UserProfile::query()->where('user_id', $userId)->first();
-        if ($profile) {
-            $profile->fill($updateData)->save();
-        } else {
-            $updateData['user_id'] = $userId;
-            UserProfile::create($updateData);
-        }
-    }
-
-    public function getUserWatchStatForYear(int $userId, int $year): int
-    {
-        return (int)UserWatchStat::query()
-            ->where('user_id', $userId)
-            ->where('year', $year)
-            ->sum('seconds');
-    }
-
-    public function getUserWatchStatForMonth(int $userId, int $year, int $month): int
-    {
-        return (int)UserWatchStat::query()
-            ->where('user_id', $userId)
-            ->where('year', $year)
-            ->where('month', $month)
-            ->sum('seconds');
-    }
-
-    /**
-     * @param int $userId
-     * @param int $year
-     * @param int $month
-     * @param int $day
-     * @return int
-     */
-    public function getUserWatchStatForDay(int $userId, int $year, int $month, int $day): int
-    {
-        return (int)UserWatchStat::query()
-            ->where('user_id', $userId)
-            ->where('year', $year)
-            ->where('month', $month)
-            ->where('day', $day)
-            ->sum('seconds');
     }
 
     /**

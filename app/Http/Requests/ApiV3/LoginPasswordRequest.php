@@ -6,14 +6,17 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Http\Requests\Frontend;
+namespace App\Http\Requests\ApiV3;
+
+use App\Http\Requests\ApiV2\BaseRequest;
 
 class LoginPasswordRequest extends BaseRequest
 {
+
     public function rules()
     {
         return [
-            'mobile' => 'required',
+            'mobile' => 'bail|required',
             'password' => 'required',
         ];
     }
@@ -33,4 +36,5 @@ class LoginPasswordRequest extends BaseRequest
             'password' => $this->post('password'),
         ];
     }
+
 }
