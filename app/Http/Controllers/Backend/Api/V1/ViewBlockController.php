@@ -14,7 +14,7 @@ use App\Meedu\ViewBlock\Render;
 use App\Models\AdministratorLog;
 use App\Meedu\ViewBlock\Constant;
 use App\Events\ViewBlockUpdateEvent;
-use App\Services\Other\Models\ViewBlock;
+use App\Meedu\ServiceV2\Models\ViewBlock;
 
 class ViewBlockController extends BaseController
 {

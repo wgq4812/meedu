@@ -11,7 +11,7 @@ namespace Tests\API\Backend;
 use App\Models\Administrator;
 use App\Models\AdministratorRole;
 use Illuminate\Support\Facades\DB;
-use App\Services\Other\Models\Announcement;
+use App\Meedu\ServiceV2\Models\Announcement;
 
 class AnnouncementTest extends Base
 {

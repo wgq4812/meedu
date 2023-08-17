@@ -11,7 +11,7 @@ namespace Tests\API\Backend;
 use App\Models\Administrator;
 use App\Models\AdministratorRole;
 use Illuminate\Support\Facades\DB;
-use App\Services\Other\Models\Link;
+use App\Meedu\ServiceV2\Models\Link;
 
 class LinkTest extends Base
 {

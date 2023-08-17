@@ -10,9 +10,6 @@ namespace App\Meedu\ViewBlock;
 
 class Constant
 {
-    public const PLATFORM_PC = 'pc';
-    public const PLATFORM_H5 = 'h5';
-
     // blocks
     public const H5_BLOCK_SIGN_VOD_V1 = 'h5-vod-v1';
     // PC点播

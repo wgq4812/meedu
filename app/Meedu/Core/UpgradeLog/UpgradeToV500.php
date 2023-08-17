@@ -87,6 +87,11 @@ class UpgradeToV500
             ->whereIn('slug', [
                 'administrator_role.edit',
                 'media.video.store',//视频上传后的本地存储
+
+                'slider',
+                'slider.store',
+                'slider.update',
+                'slider.destroy',
             ])
             ->delete();
     }

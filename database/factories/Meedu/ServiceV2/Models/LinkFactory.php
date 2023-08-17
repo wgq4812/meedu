@@ -6,9 +6,9 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Other\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
-use App\Services\Other\Models\Link;
+use App\Meedu\ServiceV2\Models\Link;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LinkFactory extends Factory

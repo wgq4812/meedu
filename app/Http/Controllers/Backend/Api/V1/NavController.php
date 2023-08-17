@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Events\NavUpdateEvent;
 use App\Models\AdministratorLog;
 use App\Constant\FrontendConstant;
-use App\Services\Other\Models\Nav;
+use App\Meedu\ServiceV2\Models\Nav;
 use App\Http\Requests\Backend\NavRequest;
 
 class NavController extends BaseController

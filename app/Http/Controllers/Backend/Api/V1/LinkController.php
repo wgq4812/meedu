@@ -12,7 +12,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Events\LinkUpdateEvent;
 use App\Models\AdministratorLog;
-use App\Services\Other\Models\Link;
+use App\Meedu\ServiceV2\Models\Link;
 use App\Http\Requests\Backend\LinkRequest;
 
 class LinkController extends BaseController

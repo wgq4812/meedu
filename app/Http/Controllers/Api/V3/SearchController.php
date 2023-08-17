@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Other\Proxies\SearchRecordService;
+use App\Services\Other\Services\SearchRecordService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 

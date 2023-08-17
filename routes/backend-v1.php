@@ -67,15 +67,6 @@ Route::group([
         Route::delete('/{id}', 'LinkController@destroy');
     });
 
-    // 幻灯片
-    Route::group(['prefix' => 'slider'], function () {
-        Route::get('/', 'SliderController@index');
-        Route::post('/', 'SliderController@store');
-        Route::get('/{id}', 'SliderController@edit');
-        Route::put('/{id}', 'SliderController@update');
-        Route::delete('/{id}', 'SliderController@destroy');
-    });
-
     // 公告
     Route::group(['prefix' => 'announcement'], function () {
         Route::get('/', 'AnnouncementController@index');

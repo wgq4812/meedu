@@ -742,32 +742,6 @@ class AdministratorPermissionSeeder extends Seeder
                         'url' => 'viewBlock/\d+',
                     ],
 
-                    // 幻灯片
-                    [
-                        'display_name' => '装修-幻灯片-列表',
-                        'slug' => 'slider',
-                        'method' => 'GET',
-                        'url' => 'slider',
-                    ],
-                    [
-                        'display_name' => '装修-幻灯片-添加',
-                        'slug' => 'slider.store',
-                        'method' => 'POST',
-                        'url' => 'slider',
-                    ],
-                    [
-                        'display_name' => '装修-幻灯片-编辑',
-                        'slug' => 'slider.update',
-                        'method' => 'GET|PUT',
-                        'url' => 'slider/\d+',
-                    ],
-                    [
-                        'display_name' => '装修-幻灯片-删除',
-                        'slug' => 'slider.destroy',
-                        'method' => 'DELETE',
-                        'url' => 'slider/\d+',
-                    ],
-
                     // 友情链接
                     [
                         'display_name' => '装修-友情链接-列表',

@@ -6,10 +6,10 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Other\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
 use App\Constant\FrontendConstant;
-use App\Services\Other\Models\Nav;
+use App\Meedu\ServiceV2\Models\Nav;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NavFactory extends Factory

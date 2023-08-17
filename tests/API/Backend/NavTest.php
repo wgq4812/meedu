@@ -11,8 +11,8 @@ namespace Tests\API\Backend;
 use App\Models\Administrator;
 use App\Models\AdministratorRole;
 use App\Constant\FrontendConstant;
-use App\Services\Other\Models\Nav;
 use Illuminate\Support\Facades\DB;
+use App\Meedu\ServiceV2\Models\Nav;
 
 class NavTest extends Base
 {

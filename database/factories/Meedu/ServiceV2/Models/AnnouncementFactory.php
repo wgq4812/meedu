@@ -6,11 +6,11 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace Database\Factories\Services\Other\Models;
+namespace Database\Factories\Meedu\ServiceV2\Models;
 
 use Carbon\Carbon;
 use App\Models\Administrator;
-use App\Services\Other\Models\Announcement;
+use App\Meedu\ServiceV2\Models\Announcement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AnnouncementFactory extends Factory

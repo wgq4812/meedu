@@ -10,7 +10,7 @@ namespace App\Http\Controllers\Backend\Api\V1;
 
 use Illuminate\Support\Arr;
 use App\Models\AdministratorLog;
-use App\Services\Other\Models\Announcement;
+use App\Meedu\ServiceV2\Models\Announcement;
 use App\Http\Requests\Backend\AnnouncementRequest;
 
 class AnnouncementController extends BaseController

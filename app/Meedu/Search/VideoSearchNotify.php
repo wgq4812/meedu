@@ -9,7 +9,7 @@
 namespace App\Meedu\Search;
 
 use App\Services\Base\Services\ConfigService;
-use App\Services\Other\Proxies\SearchRecordService;
+use App\Services\Other\Services\SearchRecordService;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 
