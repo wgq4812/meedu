@@ -54,12 +54,6 @@ class CacheConstant
         'expire' => 43200, //12个小时
     ];
 
-    // adFrom访问统计
-    public const AD_FROM_INCREMENT_ = [
-        'name' => self::PREFIX_I . 'af:%s:%s',
-        'expire' => -1,
-    ];
-
     // [courseService]最新课程
     public const COURSE_SERVICE_LATEST = [
         'name' => self::PREFIX_S . 'c:cs:lc:%d',

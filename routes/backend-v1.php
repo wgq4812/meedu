@@ -76,16 +76,6 @@ Route::group([
         Route::delete('/{id}', 'SliderController@destroy');
     });
 
-    // 广告推广
-    Route::group(['prefix' => 'ad_from'], function () {
-        Route::get('/', 'AdFromController@index');
-        Route::post('/', 'AdFromController@store');
-        Route::get('/{id}', 'AdFromController@edit');
-        Route::get('/{id}/number', 'AdFromController@number');
-        Route::put('/{id}', 'AdFromController@update');
-        Route::delete('/{id}', 'AdFromController@destroy');
-    });
-
     // 公告
     Route::group(['prefix' => 'announcement'], function () {
         Route::get('/', 'AnnouncementController@index');
