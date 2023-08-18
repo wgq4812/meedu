@@ -15,6 +15,7 @@ use App\Meedu\ServiceV2\Dao\OrderDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
 use App\Meedu\ServiceV2\Dao\SearchDao;
+use App\Meedu\ServiceV2\Dao\MpWechatDao;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 use App\Meedu\ServiceV2\Services\SmsService;
 use App\Meedu\ServiceV2\Dao\RoleDaoInterface;
@@ -33,6 +34,8 @@ use App\Meedu\ServiceV2\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\CourseService;
 use App\Meedu\ServiceV2\Services\SearchService;
 use App\Meedu\ServiceV2\Services\SettingService;
+use App\Meedu\ServiceV2\Dao\MpWechatDaoInterface;
+use App\Meedu\ServiceV2\Services\MpWechatService;
 use App\Meedu\ServiceV2\Services\TencentVodService;
 use App\Meedu\ServiceV2\Services\AnnouncementService;
 use App\Meedu\ServiceV2\Services\SmsServiceInterface;
@@ -46,6 +49,7 @@ use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 use App\Meedu\ServiceV2\Services\SearchServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
+use App\Meedu\ServiceV2\Services\MpWechatServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusStatusService;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
 use App\Meedu\ServiceV2\Services\AnnouncementServiceInterface;
@@ -61,7 +65,8 @@ class ServiceInit
         VodDaoInterface::class => VodDao::class,
         OrderDaoInterface::class => OrderDao::class,
         RoleDaoInterface::class => RoleDao::class,
-        SearchDaoInterface::class=>SearchDao::class
+        SearchDaoInterface::class => SearchDao::class,
+        MpWechatDaoInterface::class => MpWechatDao::class,
     ];
 
     public $service = [
@@ -78,6 +83,7 @@ class ServiceInit
         AnnouncementServiceInterface::class => AnnouncementService::class,
         SmsServiceInterface::class => SmsService::class,
         SearchServiceInterface::class => SearchService::class,
+        MpWechatServiceInterface::class => MpWechatService::class,
     ];
 
     public function run()

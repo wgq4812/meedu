@@ -6,29 +6,34 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Services\Other\Services;
+namespace App\Meedu\ServiceV2\Services;
 
-use App\Services\Other\Models\MpWechatMessageReply;
-use App\Services\Other\Interfaces\MpWechatServiceInterface;
+use App\Meedu\ServiceV2\Dao\MpWechatDaoInterface;
+use App\Meedu\ServiceV2\Models\MpWechatMessageReply;
 
 class MpWechatService implements MpWechatServiceInterface
 {
 
-    /**
-     * 获取文本消息匹配的回复内容
-     * @param string $text
-     * @return string
-     */
+    private $dao;
+
+    public function __construct(MpWechatDaoInterface $dao)
+    {
+        $this->dao = $dao;
+    }
+
     public function textMessageReplyFind(string $text): string
     {
-        $messages = MpWechatMessageReply::query()->where('type', MpWechatMessageReply::TYPE_TEXT)->select(['id', 'rule'])->get();
+        $messages = $this->dao->get(['type' => MpWechatMessageReply::TYPE_TEXT], ['id', 'rule']);
+        if (!$messages) {
+            return '';
+        }
+
         $id = 0;
         foreach ($messages as $message) {
             $rule = $message['rule'] ?? '';
             if (!$rule) {
                 continue;
             }
-
             if (preg_match('#' . $rule . '#', $text)) {
                 $id = $message['id'];
                 break;
@@ -39,21 +44,14 @@ class MpWechatService implements MpWechatServiceInterface
         return $message['reply_content'] ?? '';
     }
 
-    /**
-     * 获取事件的回复内容
-     * @param string $event
-     * @param mixed $eventKey
-     * @return string
-     */
     public function eventMessageReplyFind(string $event, $eventKey = ''): string
     {
-        $messages = MpWechatMessageReply::query()
-            ->where('type', MpWechatMessageReply::TYPE_EVENT)
-            ->where('event_type', $event)
-            ->orderByDesc('id')
-            ->get();
+        $messages = $this->dao->get([
+            'type' => MpWechatMessageReply::TYPE_EVENT,
+            'event_type' => $event,
+        ], ['*']);
 
-        if ($messages->isEmpty()) {
+        if (!$messages) {
             return '';
         }
 
@@ -81,4 +79,6 @@ class MpWechatService implements MpWechatServiceInterface
 
         return $content;
     }
+
+
 }

@@ -11,7 +11,7 @@ namespace App\Http\Controllers\Backend\Api\V1;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\AdministratorLog;
-use App\Services\Other\Models\MpWechatMessageReply;
+use App\Meedu\ServiceV2\Models\MpWechatMessageReply;
 use App\Http\Requests\Backend\MpWechatMessageReplyRequest;
 
 class MpWechatMessageReplyController extends BaseController
