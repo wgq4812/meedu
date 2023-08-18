@@ -8,24 +8,19 @@
 
 namespace App\Meedu\Cache\Inc;
 
-use App\Services\Base\Services\CacheService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
+use Illuminate\Support\Facades\Cache;
 
 class Inc
 {
     public static function record(IncItem $incItem): void
     {
-        /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-
-        if ($cacheService->has($incItem->getKey())) {
-            $val = $cacheService->inc($incItem->getKey());
+        $key = $incItem->getKey();
+        $times = (int)Cache::get($key, 0);
+        if ($times + 1 >= $incItem->getLimit()) {
+            Cache::forget($key);
+            $incItem->save();
         } else {
-            $val = 1;
-            $cacheService->forever($incItem->getKey(), $val);
+            Cache::increment($key);
         }
-        $val >= $incItem->getLimit() && $incItem->save();
     }
 }

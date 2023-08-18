@@ -37,7 +37,6 @@ abstract class IncItem
         $this->limit = $limit;
     }
 
-
     public function getKey(): string
     {
     }

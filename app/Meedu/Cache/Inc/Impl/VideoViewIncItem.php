@@ -6,12 +6,10 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Cache\Inc;
+namespace App\Meedu\Cache\Inc\Impl;
 
-use App\Constant\CacheConstant;
-use App\Services\Base\Services\CacheService;
+use App\Meedu\Cache\Inc\IncItem;
 use App\Services\Course\Services\VideoService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 
 class VideoViewIncItem extends IncItem
@@ -28,21 +26,15 @@ class VideoViewIncItem extends IncItem
 
     public function getKey(): string
     {
-        return get_cache_key(CacheConstant::VIDEO_VIEW_INCREMENT['name'], $this->videoId);
+        return sprintf('video-view:%d', $this->videoId);
     }
 
     public function save(): void
     {
         /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $val = (int)$cacheService->pull($this->getKey());
-
-        /**
          * @var VideoService $videoService
          */
         $videoService = app()->make(VideoServiceInterface::class);
-        $videoService->viewNumIncrement($this->videoId, $val);
+        $videoService->viewNumIncrement($this->videoId, $this->limit);
     }
 }
