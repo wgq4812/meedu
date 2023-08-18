@@ -32,6 +32,9 @@
         <testsuite name="Services">
             <directory suffix="Test.php">./tests/Services</directory>
         </testsuite>
+        <testsuite name="ServicesV2">
+            <directory suffix="Test.php">./tests/ServicesV2</directory>
+        </testsuite>
     </testsuites>
     <logging/>
     <php>
