@@ -9,22 +9,14 @@
 namespace App\Meedu\Core;
 
 use App\Meedu\Sms\SmsInterface;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class Setting
 {
     const VERSION = 1;
 
-    /**
-     * @var ConfigService
-     */
     protected $configService;
 
-    /**
-     * Setting constructor.
-     * @param ConfigServiceInterface $configService
-     */
     public function __construct(ConfigServiceInterface $configService)
     {
         $this->configService = $configService;
@@ -68,7 +60,7 @@ class Setting
     public function put(array $setting): void
     {
         $setting = $this->removeUnChange($setting);
-        $this->configService->setConfig($setting);
+        $this->configService->putConfig($setting);
     }
 
     /**

@@ -15,7 +15,6 @@ use App\Constant\ApiV2Constant;
 use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
 use App\Http\Controllers\Api\BaseController;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\RoleService;
 use App\Services\Member\Services\UserService;
 use App\Services\Course\Services\VideoService;
@@ -27,7 +26,6 @@ use App\Services\Member\Services\SocialiteService;
 use App\Http\Requests\Api\V2\NicknameChangeRequest;
 use App\Meedu\Cache\UserUnreadNotificationCountCache;
 use App\Meedu\ServiceV2\Services\OrderServiceInterface;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\RoleServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
@@ -59,10 +57,6 @@ class MemberController extends BaseController
     protected $socialiteService;
 
     protected $businessState;
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
 
     public function __construct(
         UserServiceInterface      $userService,
@@ -70,8 +64,7 @@ class MemberController extends BaseController
         VideoServiceInterface     $videoService,
         RoleServiceInterface      $roleService,
         SocialiteServiceInterface $socialiteService,
-        BusinessState             $businessState,
-        ConfigServiceInterface    $configService
+        BusinessState             $businessState
     ) {
         $this->userService = $userService;
         $this->courseService = $courseService;
@@ -79,7 +72,6 @@ class MemberController extends BaseController
         $this->roleService = $roleService;
         $this->socialiteService = $socialiteService;
         $this->businessState = $businessState;
-        $this->configService = $configService;
     }
 
     /**

@@ -1200,7 +1200,7 @@ class AppConfigSeeder extends Seeder
         }
 
         foreach ($config as $item) {
-            $configItem = \App\Services\Base\Model\AppConfig::query()->where('key', $item['key'])->first();
+            $configItem = \App\Meedu\ServiceV2\Models\AppConfig::query()->where('key', $item['key'])->first();
             if ($configItem) {
                 if (
                     $item['group'] !== $configItem['group'] ||
@@ -1220,7 +1220,7 @@ class AppConfigSeeder extends Seeder
             } else {
                 $val = \Illuminate\Support\Arr::get($localConfig, $item['key']);
                 $item['value'] = $val ?: ($item['value'] ?? '');
-                \App\Services\Base\Model\AppConfig::create($item);
+                \App\Meedu\ServiceV2\Models\AppConfig::create($item);
             }
         }
     }

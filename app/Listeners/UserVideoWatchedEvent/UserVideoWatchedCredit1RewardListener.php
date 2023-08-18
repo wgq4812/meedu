@@ -11,10 +11,9 @@ namespace App\Listeners\UserVideoWatchedEvent;
 use App\Events\UserVideoWatchedEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\CreditService;
 use App\Services\Member\Services\NotificationService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Services\Member\Interfaces\CreditServiceInterface;
 use App\Services\Member\Interfaces\NotificationServiceInterface;
 

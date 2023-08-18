@@ -43,9 +43,9 @@ if (!function_exists('aliyun_play_auth')) {
         ($isTry && $video['free_seconds'] > 0) && $playConfig['PreviewTime'] = $video['free_seconds'];
 
         /**
-         * @var \App\Services\Base\Services\ConfigService $configService
+         * @var \App\Meedu\ServiceV2\Services\ConfigService $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigService::class);
 
         try {
             aliyun_sdk_client();
@@ -53,7 +53,7 @@ if (!function_exists('aliyun_play_auth')) {
             $query = ['VideoId' => $video['aliyun_video_id']];
             $playConfig && $query['PlayConfig'] = json_encode($playConfig);
 
-            $config = $configService->getAliyunVodConfig();
+            $config = $configService->getAliVodConfig();
 
             $result = \AlibabaCloud\Client\AlibabaCloud::rpc()
                 ->product('Vod')
@@ -103,10 +103,10 @@ if (!function_exists('aliyun_play_url')) {
 
 
         /**
-         * @var \App\Services\Base\Services\ConfigService $configService
+         * @var \App\Meedu\ServiceV2\Services\ConfigServiceInterface $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
-        $config = $configService->getAliyunVodConfig();
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigServiceInterface::class);
+        $config = $configService->getAliVodConfig();
 
         $videoFormatWhitelist = $configService->getPlayVideoFormatWhitelist();
 
@@ -160,38 +160,15 @@ if (!function_exists('aliyun_sdk_client')) {
     function aliyun_sdk_client()
     {
         /**
-         * @var \App\Services\Base\Services\ConfigService $configService
+         * @var \App\Meedu\ServiceV2\Services\ConfigServiceInterface $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
-        $aliyunVodConfig = $configService->getAliyunVodConfig();
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigServiceInterface::class);
+        $aliyunVodConfig = $configService->getAliVodConfig();
         \AlibabaCloud\Client\AlibabaCloud::accessKeyClient($aliyunVodConfig['access_key_id'], $aliyunVodConfig['access_key_secret'])
             ->regionId($aliyunVodConfig['region'])
             ->connectTimeout(3)
             ->timeout(30)
             ->asDefaultClient();
-    }
-}
-
-if (!function_exists('get_payments')) {
-    /**
-     * @param $scene
-     * @return \Illuminate\Support\Collection
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    function get_payments($scene)
-    {
-        /**
-         * @var \App\Services\Base\Services\ConfigService
-         */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
-        $payments = collect($configService->getPayments())->filter(function ($payment) use ($scene) {
-            $enabled = (int)$payment['enabled'] === 1;
-            $isSet = $payment[$scene] ?? false;
-
-            return $enabled && $isSet;
-        });
-
-        return $payments;
     }
 }
 
@@ -270,9 +247,9 @@ if (!function_exists('get_tencent_play_url')) {
     function get_tencent_play_url(string $vid): array
     {
         /**
-         * @var $configService \App\Services\Base\Services\ConfigService
+         * @var \App\Meedu\ServiceV2\Services\ConfigServiceInterface $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigServiceInterface::class);
         $config = $configService->getTencentVodConfig();
 
         try {
@@ -437,9 +414,9 @@ if (!function_exists('save_image')) {
          */
 
         /**
-         * @var $configService \App\Services\Base\Services\ConfigService
+         * @var \App\Meedu\ServiceV2\Services\ConfigServiceInterface $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigServiceInterface::class);
 
         /**
          * @var \App\Meedu\ServiceV2\Services\OtherServiceInterface $otherService
@@ -600,9 +577,9 @@ if (!function_exists('base64_save')) {
     function base64_save(string $base64Content, string $path, string $namePrefix, string $extension)
     {
         /**
-         * @var $configService \App\Services\Base\Services\ConfigService
+         * @var \App\Meedu\ServiceV2\Services\ConfigServiceInterface $configService
          */
-        $configService = app()->make(\App\Services\Base\Interfaces\ConfigServiceInterface::class);
+        $configService = app()->make(\App\Meedu\ServiceV2\Services\ConfigServiceInterface::class);
 
         $name = ($namePrefix ? $namePrefix . '-' : '') . \Illuminate\Support\Str::random(32) . '.' . $extension;
         $path .= DIRECTORY_SEPARATOR . $name;

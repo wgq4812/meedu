@@ -13,12 +13,10 @@ use App\Constant\ApiV2Constant;
 use App\Businesses\BusinessState;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\Api\V2\CommentRequest;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
 use App\Services\Course\Services\VideoService;
 use App\Services\Course\Services\CourseService;
 use App\Services\Course\Services\CourseCommentService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
@@ -31,10 +29,6 @@ class CourseController extends BaseController
      * @var CourseService
      */
     protected $courseService;
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
     /**
      * @var CourseCommentService
      */
@@ -55,14 +49,12 @@ class CourseController extends BaseController
 
     public function __construct(
         CourseServiceInterface        $courseService,
-        ConfigServiceInterface        $configService,
         CourseCommentServiceInterface $courseCommentService,
         UserServiceInterface          $userService,
         VideoServiceInterface         $videoService,
         BusinessState                 $businessState
     ) {
         $this->courseService = $courseService;
-        $this->configService = $configService;
         $this->courseCommentService = $courseCommentService;
         $this->userService = $userService;
         $this->videoService = $videoService;

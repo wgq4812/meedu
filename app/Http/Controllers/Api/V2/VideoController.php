@@ -16,11 +16,9 @@ use App\Businesses\BusinessState;
 use App\Constant\FrontendConstant;
 use App\Meedu\Cache\Inc\VideoViewIncItem;
 use App\Http\Controllers\Api\BaseController;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
 use App\Services\Course\Services\VideoService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Services\Course\Interfaces\VideoServiceInterface;
@@ -33,10 +31,6 @@ class VideoController extends BaseController
      * @var VideoService
      */
     protected $videoService;
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
     /**
      * @var UserService
      */
@@ -52,13 +46,11 @@ class VideoController extends BaseController
 
     public function __construct(
         VideoServiceInterface        $videoService,
-        ConfigServiceInterface       $configService,
         UserServiceInterface         $userService,
         CourseServiceInterface       $courseService,
         BusinessState                $businessState
     ) {
         $this->videoService = $videoService;
-        $this->configService = $configService;
         $this->userService = $userService;
         $this->courseService = $courseService;
         $this->businessState = $businessState;

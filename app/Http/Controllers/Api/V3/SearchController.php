@@ -10,10 +10,9 @@ namespace App\Http\Controllers\Api\V3;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Services\CourseService;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\SearchServiceInterface;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 
 class SearchController extends BaseController
 {
@@ -41,7 +40,7 @@ class SearchController extends BaseController
      * @apiSuccess {String} data.data.thumb 封面
      * @apiSuccess {Number} data.data.charge 价格
      */
-    public function index(Request $request, SearchServiceInterface $searchService)
+    public function index(Request $request, SearchServiceInterface $searchService, ConfigServiceInterface $configService)
     {
         $type = $request->input('type', '');
         $page = abs((int)$request->input('page'));
@@ -55,10 +54,6 @@ class SearchController extends BaseController
             return $this->error(__('请输入关键字'));
         }
 
-        /**
-         * @var ConfigService $configService
-         */
-        $configService = app()->make(ConfigServiceInterface::class);
         if (!$configService->enabledFullSearch()) {
             return $this->error(__('搜索服务未配置'));
         }

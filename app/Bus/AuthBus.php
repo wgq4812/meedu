@@ -14,10 +14,9 @@ use App\Constant\FrontendConstant;
 use Illuminate\Support\Facades\DB;
 use App\Exceptions\ServiceException;
 use Illuminate\Support\Facades\Auth;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Services\UserService;
 use App\Services\Member\Services\SocialiteService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
 use App\Services\Member\Interfaces\SocialiteServiceInterface;
 
@@ -36,7 +35,7 @@ class AuthBus
     protected $userService;
 
     /**
-     * @var ConfigService
+     * @var ConfigServiceInterface
      */
     protected $configService;
 
@@ -71,7 +70,7 @@ class AuthBus
             return $socialiteRecord['user_id'];
         }
 
-        if ($this->configService->getEnabledMobileBindAlert() === 1) {//强制绑定手机号
+        if ($this->configService->enabledMustBindMobile() === 1) {//强制绑定手机号
             return self::ERROR_CODE_BIND_MOBILE;
         }
 
@@ -90,7 +89,7 @@ class AuthBus
         if ($userId > 0) {
             return $userId;
         }
-        if ($this->configService->getEnabledMobileBindAlert() === 1) {//强制绑定手机号
+        if ($this->configService->enabledMustBindMobile() === 1) {//强制绑定手机号
             return self::ERROR_CODE_BIND_MOBILE;
         }
         // 自动创建新用户

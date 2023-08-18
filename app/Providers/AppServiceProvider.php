@@ -26,23 +26,17 @@ class AppServiceProvider extends ServiceProvider
     {
         // service-v2
         (new ServiceInit())->run();
+        // service-v1
+        $this->app->register(BaseServiceRegisterProvider::class);
+        $this->app->register(MemberServiceRegisterProvider::class);
+        $this->app->register(CourseServiceRegisterProvider::class);
+
         // 数据库
         Schema::defaultStringLength(191);
         // 自定义配置同步
         $this->app->make(Setting::class)->sync();
         // 日志链路
         $this->logInit();
-    }
-
-    /**
-     * Register any application services.
-     */
-    public function register()
-    {
-        // 服务注册
-        $this->app->register(BaseServiceRegisterProvider::class);
-        $this->app->register(MemberServiceRegisterProvider::class);
-        $this->app->register(CourseServiceRegisterProvider::class);
     }
 
     protected function logInit()

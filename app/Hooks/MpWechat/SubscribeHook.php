@@ -16,10 +16,9 @@ use App\Constant\CacheConstant;
 use App\Exceptions\ServiceException;
 use App\Meedu\Core\Hooks\HookParams;
 use App\Services\Base\Services\CacheService;
-use App\Services\Base\Services\ConfigService;
 use App\Meedu\Core\Hooks\HookRuntimeInterface;
 use App\Services\Base\Interfaces\CacheServiceInterface;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 // @Deprecated
 class SubscribeHook implements HookRuntimeInterface
@@ -100,10 +99,10 @@ class SubscribeHook implements HookRuntimeInterface
         );
 
         /**
-         * @var ConfigService $configService
+         * @var ConfigServiceInterface $configService
          */
         $configService = app()->make(ConfigServiceInterface::class);
-        $replyContent = $configService->getMpWechatScanLoginAlert() ?? '';
+        $replyContent = $configService->getMpWechatScanLoginAlert();
 
         // 登录成功的回复语
         $params->setResponse($replyContent);

@@ -20,18 +20,14 @@ use App\Events\UserVideoWatchedEvent;
 use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
 use App\Services\Member\Models\UserProfile;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Member\Models\UserWatchStat;
 use App\Services\Member\Models\UserLikeCourse;
 use App\Services\Member\Models\UserVideoWatchRecord;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Services\Member\Interfaces\UserServiceInterface;
 
 class UserService implements UserServiceInterface
 {
-    /**
-     * @var ConfigService
-     */
     protected $configService;
     protected $businessState;
 
@@ -117,8 +113,8 @@ class UserService implements UserServiceInterface
             'nick_name' => $name ?? Str::random(16),
             'mobile' => random_int(2, 9) . random_int(1000, 9999) . random_int(1000, 9999),
             'password' => Hash::make(Str::random(16)),
-            'is_lock' => $this->configService->getMemberLockStatus(),
-            'is_active' => $this->configService->getMemberActiveStatus(),
+            'is_lock' => $this->configService->getMemberIsLock(),
+            'is_active' => $this->configService->getMemberIsActive(),
             'role_id' => 0,
             'role_expired_at' => Carbon::now(),
             'is_set_nickname' => 0,
@@ -143,8 +139,8 @@ class UserService implements UserServiceInterface
             'nick_name' => $nickname ?: Str::random(12),
             'mobile' => $mobile,
             'password' => Hash::make($password ?: Str::random(10)),
-            'is_lock' => $this->configService->getMemberLockStatus(),
-            'is_active' => $this->configService->getMemberActiveStatus(),
+            'is_lock' => $this->configService->getMemberIsLock(),
+            'is_active' => $this->configService->getMemberIsActive(),
             'role_id' => 0,
             'role_expired_at' => Carbon::now(),
             'is_set_nickname' => $nickname ? 1 : 0,

@@ -11,14 +11,13 @@ namespace App\Meedu\Payment\Wechat;
 use Yansongda\Pay\Pay;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
-use App\Services\Base\Services\ConfigService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class WechatRefund
 {
 
     /**
-     * @var ConfigService
+     * @var ConfigServiceInterface
      */
     protected $configService;
 
@@ -47,7 +46,7 @@ class WechatRefund
 
     protected function config()
     {
-        $config = $this->configService->getWechatPay();
+        $config = $this->configService->getWechatPayConfig();
         // 退款异步通知
         $config['notify_url'] = route('wechat.pay.refund.notify');
 

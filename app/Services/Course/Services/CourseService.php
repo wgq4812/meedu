@@ -11,26 +11,14 @@ namespace App\Services\Course\Services;
 use Carbon\Carbon;
 use App\Services\Course\Models\Course;
 use App\Services\Course\Models\CourseAttach;
-use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Models\CourseChapter;
 use App\Services\Course\Models\CourseCategory;
 use App\Services\Course\Models\CourseUserRecord;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 use App\Services\Course\Interfaces\CourseServiceInterface;
 
 class CourseService implements CourseServiceInterface
 {
-    /**
-     * @var ConfigService
-     */
-    protected $configService;
-
-    public function __construct(ConfigServiceInterface $configService)
-    {
-        $this->configService = $configService;
-    }
-
     /**
      * @param int $page
      * @param int $pageSize

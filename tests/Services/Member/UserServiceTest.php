@@ -282,31 +282,6 @@ class UserServiceTest extends TestCase
         $this->assertNotEmpty($this->service->findNickname('meedu'));
     }
 
-
-    public function test_getCurrentUserCourseCount()
-    {
-        config(['meedu.system.cache.status' => 1]);
-        $user = User::factory()->create();
-        UserCourse::factory()->count(10)->create(['user_id' => $user]);
-
-        $this->assertEquals(10, $this->service->getUserCourseCount($user['id']));
-
-        UserCourse::factory()->count(3)->create(['user_id' => $user]);
-        $this->assertEquals(10, $this->service->getUserCourseCount($user['id']));
-    }
-
-    public function test_getCurrentUserVideoCount()
-    {
-        config(['meedu.system.cache.status' => 1]);
-        $user = User::factory()->create();
-        UserVideo::factory()->count(11)->create(['user_id' => $user]);
-
-        $this->assertEquals(11, $this->service->getUserVideoCount($user['id']));
-
-        UserVideo::factory()->count(5)->create(['user_id' => $user]);
-        $this->assertEquals(11, $this->service->getUserVideoCount($user['id']));
-    }
-
     public function test_changeMobile()
     {
         $user = User::factory()->create(['mobile' => '199000012341']);

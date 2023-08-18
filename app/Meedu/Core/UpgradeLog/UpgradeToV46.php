@@ -9,7 +9,7 @@
 namespace App\Meedu\Core\UpgradeLog;
 
 use App\Constant\FrontendConstant;
-use App\Services\Base\Model\AppConfig;
+use App\Meedu\ServiceV2\Models\AppConfig;
 
 class UpgradeToV46
 {

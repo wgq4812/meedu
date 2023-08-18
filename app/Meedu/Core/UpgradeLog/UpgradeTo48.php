@@ -8,8 +8,8 @@
 
 namespace App\Meedu\Core\UpgradeLog;
 
-use App\Services\Base\Model\AppConfig;
 use App\Models\AdministratorPermission;
+use App\Meedu\ServiceV2\Models\AppConfig;
 
 class UpgradeTo48
 {

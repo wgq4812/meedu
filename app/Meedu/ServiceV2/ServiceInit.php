@@ -13,6 +13,7 @@ use App\Meedu\ServiceV2\Dao\RoleDao;
 use App\Meedu\ServiceV2\Dao\UserDao;
 use App\Meedu\ServiceV2\Dao\OrderDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
+use App\Meedu\ServiceV2\Dao\ConfigDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
 use App\Meedu\ServiceV2\Dao\SearchDao;
 use App\Meedu\ServiceV2\Dao\MpWechatDao;
@@ -27,6 +28,7 @@ use App\Meedu\ServiceV2\Dao\OrderDaoInterface;
 use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
 use App\Meedu\ServiceV2\Services\OrderService;
 use App\Meedu\ServiceV2\Services\OtherService;
+use App\Meedu\ServiceV2\Dao\ConfigDaoInterface;
 use App\Meedu\ServiceV2\Dao\CourseDaoInterface;
 use App\Meedu\ServiceV2\Dao\SearchDaoInterface;
 use App\Meedu\ServiceV2\Services\AliVodService;
@@ -58,6 +60,7 @@ use App\Meedu\ServiceV2\Services\RuntimeStatusServiceInterface;
 class ServiceInit
 {
     public $dao = [
+        ConfigDaoInterface::class => ConfigDao::class,
         UserDaoInterface::class => UserDao::class,
         CourseDaoInterface::class => CourseDao::class,
         OtherDaoInterface::class => OtherDao::class,

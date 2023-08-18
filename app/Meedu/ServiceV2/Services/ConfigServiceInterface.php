@@ -131,4 +131,28 @@ interface ConfigServiceInterface
     public function getTencentSmsConfig(): array;
 
     public function enabledFullSearch(): bool;
+
+    public function getWatchedVideoSceneCredit1(): int;
+
+    public function getWatchedCourseSceneCredit1(): int;
+
+    public function getPaidOrderSceneCredit1();
+
+    public function getRegisterSceneCredit1(): int;
+
+    public function all(): array;
+
+    public function getPlayVideoFormatWhitelist(): array;
+
+    public function getMpWechatConfig(): array;
+
+    public function getMemberRegisterSendVipConfig(): array;
+
+    public function getCacheExpire(): int;
+
+    public function getImageStorageDisk(): string;
+
+    public function getImageStoragePath(): string;
+
+    public function putConfig(array $configData): void;
 }

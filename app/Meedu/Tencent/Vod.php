@@ -13,7 +13,6 @@ use App\Constant\TencentConstant;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use App\Meedu\Tencent\Sub\RefererAuthPolicy;
-use App\Services\Base\Services\ConfigService;
 use App\Meedu\Tencent\Sub\UrlSignatureAuthPolicy;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use TencentCloud\Vod\V20180717\Models\DeleteMediaRequest;
@@ -413,7 +412,7 @@ class Vod
     protected function config(): array
     {
         /**
-         * @var ConfigService $configService
+         * @var ConfigServiceInterface $configService
          */
         $configService = app()->make(ConfigServiceInterface::class);
         $config = $configService->getTencentVodConfig();

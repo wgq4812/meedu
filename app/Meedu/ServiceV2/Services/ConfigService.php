@@ -8,8 +8,18 @@
 
 namespace App\Meedu\ServiceV2\Services;
 
+use App\Meedu\ServiceV2\Dao\ConfigDaoInterface;
+
 class ConfigService implements ConfigServiceInterface
 {
+
+    private $dao;
+
+    public function __construct(ConfigDaoInterface $configDao)
+    {
+        $this->dao = $configDao;
+    }
+
     public function getSuperAdministratorSlug(): string
     {
         return config('meedu.administrator.super_slug') ?? '';
@@ -307,5 +317,77 @@ class ConfigService implements ConfigServiceInterface
     {
         return (bool)config('scout.meilisearch.host');
     }
+
+    public function getWatchedVideoSceneCredit1(): int
+    {
+        return (int)config('meedu.member.credit1.watched_video');
+    }
+
+    public function getWatchedCourseSceneCredit1(): int
+    {
+        return (int)config('meedu.member.credit1.watched_course');
+    }
+
+    public function getPaidOrderSceneCredit1()
+    {
+        return config('meedu.member.credit1.paid_order');
+    }
+
+    public function getRegisterSceneCredit1(): int
+    {
+        return (int)config('meedu.member.credit1.register');
+    }
+
+    public function getPlayVideoFormatWhitelist(): array
+    {
+        $whitelist = config('meedu.system.player.video_format_whitelist') ?? '';
+        if (!$whitelist) {
+            return [];
+        }
+        return array_map('strtolower', explode(',', $whitelist));
+    }
+
+    public function getMpWechatConfig(): array
+    {
+        $config = config('meedu.mp_wechat');
+        return $config ?: [];
+    }
+
+    public function getMemberRegisterSendVipConfig(): array
+    {
+        return config('meedu.member.register.vip') ?? [];
+    }
+
+    public function getCacheExpire(): int
+    {
+        return (int)config('meedu.system.cache.expire');
+    }
+
+    public function getImageStorageDisk(): string
+    {
+        return config('meedu.upload.image.disk');
+    }
+
+    public function getImageStoragePath(): string
+    {
+        return config('meedu.upload.image.path');
+    }
+
+    public function all(): array
+    {
+        return $this->dao->all();
+    }
+
+    public function putConfig(array $configData): void
+    {
+        $configKeys = array_column($this->all(), 'key');
+        foreach ($configData as $key => $value) {
+            if (!in_array($key, $configKeys)) {
+                continue;
+            }
+            $this->dao->updateByKey($key, $value);
+        }
+    }
+
 
 }

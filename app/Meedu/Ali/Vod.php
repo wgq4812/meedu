@@ -13,16 +13,12 @@ use App\Constant\AliConstant;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\ServiceException;
 use AlibabaCloud\Client\AlibabaCloud;
-use App\Services\Base\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 class Vod
 {
     public const API_VERSION = '2017-03-21';
 
-    /**
-     * @var ConfigService
-     */
     protected $configService;
 
     private $errMsg;
