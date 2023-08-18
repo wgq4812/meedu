@@ -12,12 +12,10 @@ use App\Bus\AuthBus;
 use App\Bus\WechatBindBus;
 use App\Bus\WechatScanBus;
 use App\Meedu\Utils\Wechat;
-use App\Constant\CacheConstant;
 use App\Exceptions\ServiceException;
 use App\Meedu\Core\Hooks\HookParams;
-use App\Services\Base\Services\CacheService;
+use App\Meedu\Cache\Impl\WechatScanCodeCache;
 use App\Meedu\Core\Hooks\HookRuntimeInterface;
-use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 
 // @Deprecated
@@ -87,16 +85,8 @@ class SubscribeHook implements HookRuntimeInterface
         $userId = $authBus->wechatLogin($openid, $unionId, (array)$userData);
 
         // 写入到缓存
-        /**
-         * @var CacheService $cacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-
-        $cacheService->put(
-            get_cache_key(CacheConstant::WECHAT_SCAN_LOGIN['name'], $eventKey),
-            $userId,
-            CacheConstant::WECHAT_SCAN_LOGIN['expire']
-        );
+        $wechatScanCodeCache = new WechatScanCodeCache($eventKey);
+        $wechatScanCodeCache->put($userId);
 
         /**
          * @var ConfigServiceInterface $configService

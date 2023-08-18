@@ -83,19 +83,10 @@ if (!function_exists('aliyun_play_url')) {
      */
     function aliyun_play_url(array $video, $isTry = false)
     {
-        /**
-         * @var \App\Services\Base\Services\CacheService $cacheService
-         */
-        $cacheService = app()->make(\App\Services\Base\Interfaces\CacheServiceInterface::class);
-        $cacheKey = '';
+        $aliVodPlayUrlCache = new \App\Meedu\Cache\Impl\AliVodPlayUrlCache($video['id'], $isTry ? 1 : 0, $video['aliyun_video_id']);
+
         if (isset($video['id']) && $video['id']) {
-            $cacheKey = get_cache_key(
-                \App\Constant\CacheConstant::ALIYUN_PLAY_URL['name'],
-                $video['id'],
-                $isTry ? 1 : 0,
-                $video['aliyun_video_id']
-            );
-            $playUrl = $cacheService->get($cacheKey);
+            $playUrl = $aliVodPlayUrlCache->get();
             if ($playUrl) {
                 return unserialize($playUrl);
             }
@@ -142,10 +133,7 @@ if (!function_exists('aliyun_play_url')) {
                 ];
             }
 
-            if ($cacheKey && $rows) {
-                // 写入缓存
-                $cacheService->put($cacheKey, serialize($rows), \App\Constant\CacheConstant::ALIYUN_PLAY_URL['expire']);
-            }
+            $rows && $aliVodPlayUrlCache->put(serialize($rows));
 
             return $rows;
         } catch (Exception $exception) {

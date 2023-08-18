@@ -10,14 +10,13 @@ namespace Tests\API\Frontend\V2;
 
 use Carbon\Carbon;
 use Tests\API\Frontend\Base;
-use App\Constant\CacheConstant;
 use App\Services\Member\Models\User;
 use App\Services\Course\Models\Video;
-use Illuminate\Support\Facades\Cache;
 use App\Services\Course\Models\Course;
 use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
 use App\Services\Member\Models\UserWatchStat;
+use App\Meedu\Cache\Impl\UserLastWatchTimeCache;
 use App\Services\Member\Models\UserVideoWatchRecord;
 
 class VideoTest extends Base
@@ -168,7 +167,7 @@ class VideoTest extends Base
         $user = User::factory()->create();
         $video = Video::factory()->create([
             'is_show' => Video::IS_SHOW_YES,
-            'published_at' => Carbon::now()->subDays(1),
+            'published_at' => Carbon::now()->subDays(),
             'duration' => 100,
         ]);
 
@@ -176,8 +175,8 @@ class VideoTest extends Base
         $this->assertFalse(UserWatchStat::query()->where('user_id', $user['id'])->exists());
 
         // 前置环境
-        $cacheKey = sprintf(CacheConstant::USER_VIDEO_WATCH_DURATION['name'], $video['id']);
-        Cache::put($cacheKey, 1, 10);
+        $userLastWatchTimeCache = new UserLastWatchTimeCache($user['id']);
+        $userLastWatchTimeCache->put(microtime(true) - 10000);
 
         $this->user($user)->postJson('api/v2/video/' . $video->id . '/record', [
             'duration' => 10,
@@ -188,16 +187,13 @@ class VideoTest extends Base
         $this->assertEquals(date('Y'), $record['year']);
         $this->assertEquals(date('m'), $record['month']);
         $this->assertEquals(date('d'), $record['day']);
-        $this->assertEquals(9, $record['seconds']);
+        $this->assertEquals(10, $record['seconds'], '前后请求间隔超过10s记录已观看10s');
 
-        $this->user($user)->postJson('api/v2/video/' . $video->id . '/record', [
-            'duration' => 67,
+        $this->user($user)->postJson('api/v2/video/' . $video['id'] . '/record', [
+            'duration' => 20,
         ]);
 
         $record->refresh();
-        $this->assertEquals(66, $record['seconds']);
-
-        // 清空前置配置
-        Cache::forget($cacheKey);
+        $this->assertEquals(10, $record['seconds'], '前后间隔不超过10s故不记录');
     }
 }

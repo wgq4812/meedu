@@ -13,7 +13,6 @@ use Illuminate\Support\Str;
 use App\Meedu\ServiceV2\ServiceInit;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use App\Services\Base\Providers\BaseServiceRegisterProvider;
 use App\Services\Course\Providers\CourseServiceRegisterProvider;
 use App\Services\Member\Providers\MemberServiceRegisterProvider;
 
@@ -27,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
         // service-v2
         (new ServiceInit())->run();
         // service-v1
-        $this->app->register(BaseServiceRegisterProvider::class);
         $this->app->register(MemberServiceRegisterProvider::class);
         $this->app->register(CourseServiceRegisterProvider::class);
 

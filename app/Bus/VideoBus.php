@@ -8,11 +8,9 @@
 
 namespace App\Bus;
 
-use App\Constant\CacheConstant;
-use App\Services\Base\Services\CacheService;
 use App\Services\Member\Services\UserService;
 use App\Services\Course\Services\VideoService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
+use App\Meedu\Cache\Impl\UserLastWatchTimeCache;
 use App\Services\Member\Interfaces\UserServiceInterface;
 use App\Services\Course\Interfaces\VideoServiceInterface;
 
@@ -43,12 +41,8 @@ class VideoBus
         // 计算是否看完
         $isWatched = $video['duration'] <= $duration;
 
-        /**
-         * @var CacheService $cacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $cacheKey = get_cache_key(CacheConstant::USER_VIDEO_WATCH_DURATION['name'], $video['id']);
-        $lastSubmitTimestamp = (int)$cacheService->get($cacheKey);
+        $userLastWatchTimeCache = new UserLastWatchTimeCache($userId);
+        $lastSubmitTimestamp = $userLastWatchTimeCache->get();
 
         /**
          * @var UserService $userService
@@ -56,14 +50,13 @@ class VideoBus
         $userService = app()->make(UserServiceInterface::class);
 
         // 用户每天的观看时间统计
-        if (($diffSeconds = $duration - $lastSubmitTimestamp) >= 0) {
-            $userService->watchStatSave($userId, $diffSeconds);
+        // 此方法要求前端没10s就需要请求一次
+        $nowTime = microtime(true);
+        if (($nowTime - $lastSubmitTimestamp) >= 9500) {
+            $userService->watchStatSave($userId, 10);
+            $userLastWatchTimeCache->put($nowTime);
         }
 
-        // 用户视频观看进度
         $userService->recordUserVideoWatch($userId, $video['course_id'], $videoId, $duration, $isWatched);
-
-        // 提交时间写入缓存
-        $cacheService->put($cacheKey, $duration, CacheConstant::USER_VIDEO_WATCH_DURATION['expire']);
     }
 }
