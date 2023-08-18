@@ -9,10 +9,9 @@
 namespace Tests\API\Frontend\V3;
 
 use Tests\API\Frontend\Base;
-use App\Constant\CacheConstant;
 use App\Services\Member\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Services\Base\Interfaces\CacheServiceInterface;
+use App\Meedu\Cache\Impl\SmsCodeCache;
 
 class PasswordControllerTest extends Base
 {
@@ -21,8 +20,8 @@ class PasswordControllerTest extends Base
     {
         $user = User::factory()->create();
 
-        $cacheService = $this->app->make(CacheServiceInterface::class);
-        $cacheService->put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $user['mobile']), 'code', 1);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($user['mobile'], 'code');
 
         $response = $this->postJson('/api/v3/auth/password-reset', [
             'mobile' => $user['mobile'],

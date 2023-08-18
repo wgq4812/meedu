@@ -10,11 +10,9 @@ namespace Tests\API\Frontend\V3;
 
 use Illuminate\Support\Str;
 use Tests\API\Frontend\Base;
-use App\Constant\CacheConstant;
 use App\Services\Member\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Services\Base\Services\CacheService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
+use App\Meedu\Cache\Impl\SmsCodeCache;
 
 class RegisterControllerTest extends Base
 {
@@ -24,12 +22,8 @@ class RegisterControllerTest extends Base
         $password = Str::random(6);
         $mobileCode = Str::random(6);
 
-        /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
-        $cacheService->put($key, $mobileCode, 100);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/sms', [
             'mobile' => $mobile,
@@ -53,12 +47,8 @@ class RegisterControllerTest extends Base
 
         User::factory()->create(['mobile' => $mobile]);
 
-        /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
-        $cacheService->put($key, $mobileCode, 100);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/sms', [
             'mobile' => $mobile,

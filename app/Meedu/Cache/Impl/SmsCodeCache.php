@@ -38,6 +38,11 @@ class SmsCodeCache
         return Redis::connection()->client()->ttl($prefix . $this->key($mobile));
     }
 
+    public function delete(string $mobile)
+    {
+        Cache::forget($this->key($mobile));
+    }
+
     private function key(string $mobile)
     {
         return sprintf(self::KEY, $mobile);

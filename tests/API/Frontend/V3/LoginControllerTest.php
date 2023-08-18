@@ -15,9 +15,8 @@ use App\Constant\FrontendConstant;
 use App\Meedu\ServiceV2\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
+use App\Meedu\Cache\Impl\SmsCodeCache;
 use App\Services\Member\Models\Socialite;
-use App\Services\Base\Services\CacheService;
-use App\Services\Base\Interfaces\CacheServiceInterface;
 
 class LoginControllerTest extends Base
 {
@@ -446,7 +445,8 @@ class LoginControllerTest extends Base
 
         $mobile = '13899990001';
         $mobileCode = '123123';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/socialite', [
             'code' => $code,
@@ -476,7 +476,8 @@ class LoginControllerTest extends Base
     {
         $mobile = '13899990001';
         $mobileCode = '123123';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/socialite', [
             'code' => Str::random(32),
@@ -508,7 +509,9 @@ class LoginControllerTest extends Base
 
         $mobile = '13899990001';
         $mobileCode = '123123';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/socialite', [
             'code' => $code,
@@ -584,7 +587,8 @@ class LoginControllerTest extends Base
 
         $mobile = '13899990001';
         $mobileCode = '123123';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/socialite', [
             'code' => $code,
@@ -595,7 +599,8 @@ class LoginControllerTest extends Base
 
         $mobile = '13899990002';
         $mobileCode = '123456';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         $response = $this->postJson('/api/v3/auth/register/socialite', [
             'code' => $code,
@@ -628,7 +633,8 @@ class LoginControllerTest extends Base
 
         $mobile = '13899990001';
         $mobileCode = '123123';
-        Cache::put(get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile), $mobileCode, CacheConstant::MOBILE_CODE['expire']);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, $mobileCode);
 
         User::factory()->create(['mobile' => $mobile]);
 
@@ -689,12 +695,8 @@ class LoginControllerTest extends Base
             'is_lock' => 0,
         ]);
 
-        /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
-        $cacheService->put($key, '123456', 100);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, '123456');
 
         $response = $this->postJson('/api/v3/auth/login/sms', [
             'mobile' => $mobile,
@@ -708,12 +710,8 @@ class LoginControllerTest extends Base
         $mobile = '13890900909';
         config(['meedu.member.is_lock_default' => 0]);
 
-        /**
-         * @var $cacheService CacheService
-         */
-        $cacheService = app()->make(CacheServiceInterface::class);
-        $key = get_cache_key(CacheConstant::MOBILE_CODE['name'], $mobile);
-        $cacheService->put($key, '123456', 100);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put($mobile, '123456');
 
         $response = $this->postJson('/api/v3/auth/login/sms', [
             'mobile' => $mobile,

@@ -10,10 +10,10 @@ namespace Tests\API\Frontend\V2;
 
 use App\Meedu\Utils\Verify;
 use Tests\API\Frontend\Base;
-use App\Constant\CacheConstant;
 use Illuminate\Http\UploadedFile;
 use App\Services\Member\Models\User;
 use App\Meedu\ServiceV2\Models\Order;
+use App\Meedu\Cache\Impl\SmsCodeCache;
 use Illuminate\Support\Facades\Storage;
 use App\Services\Member\Models\UserVideo;
 use App\Services\Member\Models\UserCourse;
@@ -21,7 +21,6 @@ use App\Services\Member\Models\UserLikeCourse;
 use App\Services\Course\Models\CourseUserRecord;
 use App\Services\Member\Models\UserCreditRecord;
 use App\Services\Member\Models\UserJoinRoleRecord;
-use App\Services\Base\Interfaces\CacheServiceInterface;
 use App\Services\Member\Notifications\SimpleMessageNotification;
 
 class MemberTest extends Base
@@ -44,8 +43,8 @@ class MemberTest extends Base
 
     public function test_mobile_bind()
     {
-        $cacheService = $this->app->make(CacheServiceInterface::class);
-        $cacheService->put(get_cache_key(CacheConstant::MOBILE_CODE['name'], '17898765423'), 'code', 1);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put('17898765423', 'code');
 
         $sign = $this->app->make(Verify::class)->gen();
 
@@ -66,8 +65,9 @@ class MemberTest extends Base
     public function test_mobile_bind_has_binded()
     {
         User::factory()->create(['mobile' => '12345679876']);
-        $cacheService = $this->app->make(CacheServiceInterface::class);
-        $cacheService->put(get_cache_key(CacheConstant::MOBILE_CODE['name'], '12345679876'), 'code', 1);
+
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put('12345679876', 'code');
 
         $sign = $this->app->make(Verify::class)->gen();
 
@@ -88,8 +88,8 @@ class MemberTest extends Base
         User::factory()->create(['mobile' => '12345679876']);
 
         // 短信验证码写入缓存
-        $cacheService = $this->app->make(CacheServiceInterface::class);
-        $cacheService->put(get_cache_key(CacheConstant::MOBILE_CODE['name'], '12345679876'), 'code', 1);
+        $smsCodeCache = new SmsCodeCache();
+        $smsCodeCache->put('12345679876', 'code');
 
         // 必须是未绑定的手机号才能绑定
         $this->member->mobile = '27898765423';
@@ -117,7 +117,6 @@ class MemberTest extends Base
         // 已设置过昵称
         $this->member->is_set_nickname = 1;
         $this->member->save();
-
 
         $response = $this->user($this->member)->postJson('api/v2/member/detail/nickname', [
             'nick_name' => 'nick1',
