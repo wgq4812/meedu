@@ -12,15 +12,15 @@ Route::get('/search', 'SearchController@index');
 Route::get('/status', 'SystemController@status');
 // 系统配置
 Route::get('/config', 'SystemController@config');
-
-Route::group(['prefix' => 'captcha'], function () {
-    Route::post('/sms', 'CaptchaController@sms');
-    Route::get('/image', 'CaptchaController@image');
-});
+// 短信验证码
+Route::post('/captcha/sms', 'CaptchaController@sms');
+// 图形验证码
+Route::get('/captcha/image', 'CaptchaController@image');
 
 Route::group([
     'prefix' => 'auth',
 ], function () {
+    // 密码重置
     Route::post('/password-reset', 'PasswordController@reset');
 
     Route::group([
