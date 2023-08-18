@@ -129,4 +129,6 @@ interface ConfigServiceInterface
     public function getAliSmsConfig(): array;
 
     public function getTencentSmsConfig(): array;
+
+    public function enabledFullSearch(): bool;
 }

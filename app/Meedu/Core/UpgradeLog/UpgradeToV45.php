@@ -12,7 +12,7 @@ use App\Services\Course\Models\Video;
 use App\Services\Base\Model\AppConfig;
 use App\Services\Course\Models\Course;
 use App\Models\AdministratorPermission;
-use App\Services\Other\Models\SearchRecord;
+use App\Meedu\ServiceV2\Models\SearchRecord;
 
 class UpgradeToV45
 {

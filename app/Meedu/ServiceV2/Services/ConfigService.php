@@ -303,5 +303,9 @@ class ConfigService implements ConfigServiceInterface
         return config('sms.gateways.tencent');
     }
 
+    public function enabledFullSearch(): bool
+    {
+        return (bool)config('scout.meilisearch.host');
+    }
 
 }

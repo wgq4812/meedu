@@ -12,9 +12,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 use App\Services\Base\Services\ConfigService;
 use App\Services\Course\Services\CourseService;
-use App\Services\Other\Services\SearchRecordService;
+use App\Meedu\ServiceV2\Services\SearchServiceInterface;
 use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Other\Interfaces\SearchRecordServiceInterface;
 
 class SearchController extends BaseController
 {
@@ -42,7 +41,7 @@ class SearchController extends BaseController
      * @apiSuccess {String} data.data.thumb 封面
      * @apiSuccess {Number} data.data.charge 价格
      */
-    public function index(Request $request)
+    public function index(Request $request, SearchServiceInterface $searchService)
     {
         $type = $request->input('type', '');
         $page = abs((int)$request->input('page'));
@@ -63,11 +62,6 @@ class SearchController extends BaseController
         if (!$configService->enabledFullSearch()) {
             return $this->error(__('搜索服务未配置'));
         }
-
-        /**
-         * @var SearchRecordService $searchService
-         */
-        $searchService = app()->make(SearchRecordServiceInterface::class);
 
         $data = $searchService->search($keywords, $page, $size, $type);
 

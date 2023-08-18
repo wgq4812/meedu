@@ -14,6 +14,7 @@ use App\Meedu\ServiceV2\Dao\UserDao;
 use App\Meedu\ServiceV2\Dao\OrderDao;
 use App\Meedu\ServiceV2\Dao\OtherDao;
 use App\Meedu\ServiceV2\Dao\CourseDao;
+use App\Meedu\ServiceV2\Dao\SearchDao;
 use App\Meedu\ServiceV2\Dao\VodDaoInterface;
 use App\Meedu\ServiceV2\Services\SmsService;
 use App\Meedu\ServiceV2\Dao\RoleDaoInterface;
@@ -26,9 +27,11 @@ use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
 use App\Meedu\ServiceV2\Services\OrderService;
 use App\Meedu\ServiceV2\Services\OtherService;
 use App\Meedu\ServiceV2\Dao\CourseDaoInterface;
+use App\Meedu\ServiceV2\Dao\SearchDaoInterface;
 use App\Meedu\ServiceV2\Services\AliVodService;
 use App\Meedu\ServiceV2\Services\ConfigService;
 use App\Meedu\ServiceV2\Services\CourseService;
+use App\Meedu\ServiceV2\Services\SearchService;
 use App\Meedu\ServiceV2\Services\SettingService;
 use App\Meedu\ServiceV2\Services\TencentVodService;
 use App\Meedu\ServiceV2\Services\AnnouncementService;
@@ -41,6 +44,7 @@ use App\Meedu\ServiceV2\Services\OtherServiceInterface;
 use App\Meedu\ServiceV2\Services\AliVodServiceInterface;
 use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
+use App\Meedu\ServiceV2\Services\SearchServiceInterface;
 use App\Meedu\ServiceV2\Services\SettingServiceInterface;
 use App\Meedu\ServiceV2\Services\RuntimeStatusStatusService;
 use App\Meedu\ServiceV2\Services\TencentVodServiceInterface;
@@ -57,6 +61,7 @@ class ServiceInit
         VodDaoInterface::class => VodDao::class,
         OrderDaoInterface::class => OrderDao::class,
         RoleDaoInterface::class => RoleDao::class,
+        SearchDaoInterface::class=>SearchDao::class
     ];
 
     public $service = [
@@ -72,6 +77,7 @@ class ServiceInit
         RoleServiceInterface::class => RoleService::class,
         AnnouncementServiceInterface::class => AnnouncementService::class,
         SmsServiceInterface::class => SmsService::class,
+        SearchServiceInterface::class => SearchService::class,
     ];
 
     public function run()

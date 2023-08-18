@@ -8,10 +8,8 @@
 
 namespace App\Meedu\Search;
 
-use App\Services\Base\Services\ConfigService;
-use App\Services\Other\Services\SearchRecordService;
-use App\Services\Base\Interfaces\ConfigServiceInterface;
-use App\Services\Other\Interfaces\SearchRecordServiceInterface;
+use App\Meedu\ServiceV2\Services\ConfigServiceInterface;
+use App\Meedu\ServiceV2\Services\SearchServiceInterface;
 
 class VideoSearchNotify implements SearchNotifyContract
 {
@@ -20,7 +18,7 @@ class VideoSearchNotify implements SearchNotifyContract
     public function closed()
     {
         /**
-         * @var ConfigService $configService
+         * @var ConfigServiceInterface $configService
          */
         $configService = app()->make(ConfigServiceInterface::class);
         return $configService->enabledFullSearch() === false;
@@ -33,16 +31,10 @@ class VideoSearchNotify implements SearchNotifyContract
         }
 
         /**
-         * @var SearchRecordService $searchRecordService
+         * @var SearchServiceInterface $service
          */
-        $searchRecordService = app()->make(SearchRecordServiceInterface::class);
-
-        if ($searchRecordService->exists(self::RESOURCE_TYPE, $resourceId)) {
-            $searchRecordService->update(self::RESOURCE_TYPE, $resourceId, $data);
-            return;
-        }
-
-        $searchRecordService->store(self::RESOURCE_TYPE, $resourceId, $data);
+        $service = app()->make(SearchServiceInterface::class);
+        $service->updateOrCreate(self::RESOURCE_TYPE, $resourceId, $data);
     }
 
     public function update(int $resourceId, array $data)
@@ -52,16 +44,10 @@ class VideoSearchNotify implements SearchNotifyContract
         }
 
         /**
-         * @var SearchRecordService $searchRecordService
+         * @var SearchServiceInterface $service
          */
-        $searchRecordService = app()->make(SearchRecordServiceInterface::class);
-
-        if (!$searchRecordService->exists(self::RESOURCE_TYPE, $resourceId)) {
-            $searchRecordService->store(self::RESOURCE_TYPE, $resourceId, $data);
-            return;
-        }
-
-        $searchRecordService->update(self::RESOURCE_TYPE, $resourceId, $data);
+        $service = app()->make(SearchServiceInterface::class);
+        $service->updateOrCreate(self::RESOURCE_TYPE, $resourceId, $data);
     }
 
     public function delete(int $resourceId)
@@ -71,10 +57,10 @@ class VideoSearchNotify implements SearchNotifyContract
         }
 
         /**
-         * @var SearchRecordService $searchRecordService
+         * @var SearchServiceInterface $service
          */
-        $searchRecordService = app()->make(SearchRecordServiceInterface::class);
-        $searchRecordService->destroy(self::RESOURCE_TYPE, $resourceId);
+        $service = app()->make(SearchServiceInterface::class);
+        $service->destroy(self::RESOURCE_TYPE, $resourceId);
     }
 
     public function deleteBatch(array $ids)
@@ -84,12 +70,12 @@ class VideoSearchNotify implements SearchNotifyContract
         }
 
         /**
-         * @var SearchRecordService $searchRecordService
+         * @var SearchServiceInterface $service
          */
-        $searchRecordService = app()->make(SearchRecordServiceInterface::class);
+        $service = app()->make(SearchServiceInterface::class);
 
         foreach ($ids as $id) {
-            $searchRecordService->destroy(self::RESOURCE_TYPE, $id);
+            $service->destroy(self::RESOURCE_TYPE, $id);
         }
     }
 }
