@@ -6,14 +6,14 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Cache;
+namespace App\Meedu\Cache\Impl;
 
 use Illuminate\Support\Facades\Cache;
 use App\Meedu\ServiceV2\Services\OtherServiceInterface;
 
-class ViewBlockH5IndexPageCache
+class ViewBlockPCIndexPageCache
 {
-    public const KEY = 'system-h5-index-view-block';
+    public const KEY = 'system-pc-index-view-block';
     public const EXPIRE = 259200;
 
     private $otherService;
@@ -27,7 +27,7 @@ class ViewBlockH5IndexPageCache
     {
         $data = Cache::get(self::KEY);
         if (!$data) {
-            $data = $this->otherService->viewBlocks('h5-page-index', 'h5');
+            $data = $this->otherService->viewBlocks('pc-page-index', 'pc');
             Cache::put(self::KEY, $data, self::EXPIRE);
         }
         return $data;

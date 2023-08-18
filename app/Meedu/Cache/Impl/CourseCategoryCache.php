@@ -6,28 +6,28 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Cache;
+namespace App\Meedu\Cache\Impl;
 
 use Illuminate\Support\Facades\Cache;
-use App\Meedu\ServiceV2\Services\OtherServiceInterface;
+use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 
-class ViewBlockPCIndexPageCache
+class CourseCategoryCache
 {
-    public const KEY = 'system-pc-index-view-block';
+    public const KEY = 'vod-categories';
     public const EXPIRE = 259200;
 
-    private $otherService;
+    private $courseService;
 
-    public function __construct(OtherServiceInterface $otherService)
+    public function __construct(CourseServiceInterface $courseService)
     {
-        $this->otherService = $otherService;
+        $this->courseService = $courseService;
     }
 
     public function get()
     {
         $data = Cache::get(self::KEY);
         if (!$data) {
-            $data = $this->otherService->viewBlocks('pc-page-index', 'pc');
+            $data = $this->courseService->categories();
             Cache::put(self::KEY, $data, self::EXPIRE);
         }
         return $data;

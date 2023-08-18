@@ -6,14 +6,14 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Cache;
+namespace App\Meedu\Cache\Impl;
 
 use Illuminate\Support\Facades\Cache;
 use App\Meedu\ServiceV2\Services\OtherServiceInterface;
 
-class NavCache
+class LinkCache
 {
-    public const KEY = 'system-pc-nav';
+    public const KEY = 'system-pc-link';
     public const EXPIRE = 259200;
 
     private $otherService;
@@ -27,7 +27,7 @@ class NavCache
     {
         $data = Cache::get(self::KEY);
         if (!$data) {
-            $data = $this->otherService->navs();
+            $data = $this->otherService->links();
             Cache::put(self::KEY, $data, self::EXPIRE);
         }
         return $data;

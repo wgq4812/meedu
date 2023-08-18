@@ -6,7 +6,7 @@
  * (c) 杭州白书科技有限公司
  */
 
-namespace App\Meedu\Cache;
+namespace App\Meedu\Cache\Impl;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;

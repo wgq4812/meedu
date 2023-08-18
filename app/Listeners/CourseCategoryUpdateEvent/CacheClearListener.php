@@ -8,8 +8,8 @@
 
 namespace App\Listeners\CourseCategoryUpdateEvent;
 
-use App\Meedu\Cache\CourseCategoryCache;
 use App\Events\CourseCategoryUpdateEvent;
+use App\Meedu\Cache\Impl\CourseCategoryCache;
 
 class CacheClearListener
 {

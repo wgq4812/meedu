@@ -8,7 +8,7 @@
 
 namespace App\Http\Controllers\Api\V3;
 
-use App\Meedu\Cache\SmsCodeCache;
+use App\Meedu\Cache\Impl\SmsCodeCache;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Requests\Api\V3\SendSmsRequest;
 use App\Meedu\ServiceV2\Services\SmsServiceInterface;

@@ -8,8 +8,8 @@
 
 namespace App\Listeners\LinkUpdateEvent;
 
-use App\Meedu\Cache\LinkCache;
 use App\Events\LinkUpdateEvent;
+use App\Meedu\Cache\Impl\LinkCache;
 
 class CacheClearListener
 {

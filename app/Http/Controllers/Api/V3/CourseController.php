@@ -10,8 +10,8 @@ namespace App\Http\Controllers\Api\V3;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Meedu\Cache\CourseCategoryCache;
 use App\Http\Controllers\Api\BaseController;
+use App\Meedu\Cache\Impl\CourseCategoryCache;
 use App\Meedu\ServiceV2\Services\CourseServiceInterface;
 
 class CourseController extends BaseController

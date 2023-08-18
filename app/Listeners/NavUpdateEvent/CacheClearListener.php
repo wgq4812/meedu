@@ -8,8 +8,8 @@
 
 namespace App\Listeners\NavUpdateEvent;
 
-use App\Meedu\Cache\NavCache;
 use App\Events\NavUpdateEvent;
+use App\Meedu\Cache\Impl\NavCache;
 
 class CacheClearListener
 {

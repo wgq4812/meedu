@@ -9,8 +9,8 @@
 namespace App\Listeners\ViewBlockUpdateEvent;
 
 use App\Events\ViewBlockUpdateEvent;
-use App\Meedu\Cache\ViewBlockH5IndexPageCache;
-use App\Meedu\Cache\ViewBlockPCIndexPageCache;
+use App\Meedu\Cache\Impl\ViewBlockH5IndexPageCache;
+use App\Meedu\Cache\Impl\ViewBlockPCIndexPageCache;
 
 class CacheClearListener
 {
