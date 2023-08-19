@@ -12,8 +12,6 @@ Route::get('/courses', 'CourseController@paginate');
 Route::get('/course/{id}', 'CourseController@detail');
 // 录播课-评论-列表
 Route::get('/course/{id}/comments', 'CourseController@comments');
-// 全部课程分类
-Route::get('/course_categories', 'CourseCategoryController@all');
 // 录播课-课时-详情
 Route::get('/video/{id}', 'VideoController@detail');
 // 公开的视频播放

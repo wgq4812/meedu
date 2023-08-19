@@ -60,8 +60,12 @@ Route::group([
 
 // 录播课分页列表
 Route::get('/courses', 'CourseController@index');
-// 课程附件下载
-Route::get('/course/{courseId}/attach/{id}/download', 'CourseAttachController@download')->name('course.attachment.download');
+Route::group(['prefix' => 'course'], function () {
+    // 课程分类
+    Route::get('/categories', 'CourseController@categories');
+    // 课程附件下载
+    Route::get('/course/{courseId}/attach/{id}/download', 'CourseAttachController@download')->name('course.attachment.download');
+});
 
 // VIP
 Route::get('/roles', 'RoleController@index');

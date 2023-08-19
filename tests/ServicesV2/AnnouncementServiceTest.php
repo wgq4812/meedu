@@ -1,10 +1,16 @@
 <?php
 
+/*
+ * This file is part of the Qsnh/meedu.
+ *
+ * (c) 杭州白书科技有限公司
+ */
+
 namespace Tests\ServicesV2;
 
 use PHPUnit\Framework\TestCase;
-use App\Meedu\ServiceV2\Services\AnnouncementService;
 use App\Meedu\ServiceV2\Dao\OtherDaoInterface;
+use App\Meedu\ServiceV2\Services\AnnouncementService;
 
 class AnnouncementServiceTest extends TestCase
 {

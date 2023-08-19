@@ -604,3 +604,12 @@ if (!function_exists('is_backend_api')) {
         return \Illuminate\Support\Str::startsWith($uri, 'backend');
     }
 }
+
+if (!function_exists('paginate_items_2array')) {
+    function paginate_items_2array(array $items)
+    {
+        return array_map(function ($item) {
+            return $item->toArray();
+        }, $items);
+    }
+}

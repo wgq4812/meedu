@@ -141,6 +141,7 @@ class CourseDao implements CourseDaoInterface
                     $query->where('is_free', $params['is_free']);
                 }
             })
+            ->orderByDesc('published_at')
             ->paginate(
                 $size,
                 ['*'],
@@ -149,7 +150,7 @@ class CourseDao implements CourseDaoInterface
             );
 
         return [
-            'data' => $data->items(),
+            'data' => paginate_items_2array($data->items()),
             'total' => $data->total(),
         ];
     }

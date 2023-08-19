@@ -19,10 +19,13 @@ class Course extends Model
     protected $table = 'courses';
 
     protected $fillable = [
-        'user_id', 'title', 'slug', 'thumb', 'charge',
-        'short_description', 'original_desc', 'render_desc', 'seo_keywords',
-        'seo_description', 'published_at', 'is_show', 'category_id',
-        'is_rec', 'user_count', 'is_free',
+        'title', 'thumb', 'charge',
+        'short_description', 'original_desc', 'render_desc',
+        'published_at', 'is_show', 'category_id',
+        'user_count', 'is_free',
+
+        // 废弃
+        'user_id', 'slug', 'seo_keywords', 'seo_description', 'is_rec',
     ];
 
     protected $hidden = [
